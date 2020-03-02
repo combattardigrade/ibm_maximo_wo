@@ -25,12 +25,14 @@ import WoActual from './WoActual'
 // Modals
 import LaborModal from './LaborModal'
 import MaterialModal from './MaterialModal'
+import CommentModal from './CommentModal'
 
 class WorkOrder extends Component {
 
     state = {
         showLaborModal: false,
-        showMaterialModal: true
+        showMaterialModal: false,
+        showCommentModal: false
     }
 
     handleToggleLaborModal = (value) => {
@@ -42,9 +44,13 @@ class WorkOrder extends Component {
         this.setState({ showMaterialModal: value })
     }
 
+    handleToggleCommentModal = (value) => {
+        this.setState({ showCommentModal: value})
+    }
+
     render() {
         const { match } = this.props
-        const { showLaborModal, showMaterialModal } = this.state
+        const { showLaborModal, showMaterialModal, showCommentModal } = this.state
 
         return (
             <IonPage>
@@ -113,7 +119,7 @@ class WorkOrder extends Component {
                             <ion-fab-button color="light">
                                 <ion-icon icon={cameraOutline}></ion-icon>
                             </ion-fab-button>
-                            <ion-fab-button color="light">
+                            <ion-fab-button color="light" onClick={() => this.handleToggleCommentModal(true)}>
                                 <ion-icon icon={documentTextOutline}></ion-icon>
                             </ion-fab-button>
                             <ion-fab-button color="light" onClick={() => this.handleToggleMaterialModal(true)}>
@@ -129,6 +135,7 @@ class WorkOrder extends Component {
                     {/* Modals */}                    
                     <LaborModal handleToggleLaborModal={this.handleToggleLaborModal} showLaborModal={showLaborModal} />
                     <MaterialModal handleToggleMaterialModal={this.handleToggleMaterialModal} showMaterialModal={showMaterialModal} />
+                    <CommentModal handleToggleCommentModal={this.handleToggleCommentModal} showCommentModal={showCommentModal} />
 
 
                 </IonContent>

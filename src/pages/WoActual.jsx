@@ -127,6 +127,27 @@ class WoActual extends Component {
                     </IonGrid>
 
                 </IonItem>
+                <IonItem>
+                    <IonGrid>                        
+                        <IonRow>
+                            <IonCol><IonTextarea
+                                placeholder="Ingresar comentarios...">
+                            </IonTextarea></IonCol>
+                        </IonRow>
+                    </IonGrid>
+                </IonItem>
+
+                <IonItem>
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol><IonLabel>"Adjuntos":</IonLabel></IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol></IonCol>
+                        </IonRow>
+                    </IonGrid>
+
+                </IonItem>
 
             </IonContent>
 
