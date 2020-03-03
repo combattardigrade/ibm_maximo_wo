@@ -9,3 +9,13 @@ export function login(params) {
         }
     })
 }
+
+export function getWorkOrders(params) {
+    return fetch(API + '/workOrders', {
+        method: 'GET',        
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}

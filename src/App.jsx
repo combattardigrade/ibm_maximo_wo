@@ -54,7 +54,7 @@ class App extends Component {
               }} exact={true} />
               <Route path="/" render={() => <Redirect to="/login" />} exact={true} />
               <Route path="/login" component={Login} />
-              <Route path="/wo" component={WorkOrder} />
+              <Route path="/wo/:wonum" component={WorkOrder} />
               <Route path="/wo_details" component={WoDetails} />
               <Route path="/workDone" component={WorkDone} />
             </IonRouterOutlet>

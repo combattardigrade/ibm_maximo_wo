@@ -48,6 +48,11 @@ class WorkOrder extends Component {
         this.setState({ showCommentModal: value})
     }
 
+    componentDidMount() {
+        const { wonum } = this.props.match.params
+        console.log(wonum)
+    }
+
     render() {
         const { match } = this.props
         const { showLaborModal, showMaterialModal, showCommentModal } = this.state

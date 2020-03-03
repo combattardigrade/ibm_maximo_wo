@@ -4,10 +4,10 @@ import { login } from '../utils/api'
 import { saveToken } from '../actions/auth'
 
 import { IonInput, IonContent, IonItem, IonLabel, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
-import { save } from 'ionicons/icons';
-import { Plugins } from '@capacitor/core';
-const { Modals } = Plugins;
+import ExploreContainer from '../components/ExploreContainer'
+import { save } from 'ionicons/icons'
+import { Plugins } from '@capacitor/core'
+const { Modals } = Plugins
 
 class Login extends Component {
 
@@ -54,7 +54,7 @@ class Login extends Component {
         this.props.dispatch(saveToken(response.payload))
 
         // redirect to dashboard
-        this.props.history.replace('/wo')
+        this.props.history.replace('/dashboard')
     }
 
     
