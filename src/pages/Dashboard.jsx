@@ -40,7 +40,7 @@ class Dashboard extends Component {
     handleWorkOrderClick = async (wonum) => {
         console.log(wonum)
         // got to wo details
-        this.props.history.replace('/wo/' + wonum)
+        this.props.history.push('/wo/' + wonum)
     }
 
     async showAlert(message) {

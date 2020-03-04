@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonNote, IonIcon } from '@ionic/react';
 import { checkmarkOutline, closeOutline } from 'ionicons/icons'
 
@@ -6,64 +7,78 @@ import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
 import './Page.css';
 
-class WoTasks extends Component {
+
+
+class WoTasks extends Component {    
+
+    // async componentDidMount() {
+    //     const { currentWorkOrder, dispatch, token } = this.props
+    //     if ('jpnum' in currentWorkOrder) {
+    //         console.log('fetching job plan')
+    //         let response = await (await getJobPlan({ jpnum: currentWorkOrder.jpnum, token: token })).json()
+    //         this.setState({ jobPlan: response.status == 'OK' ? response.payload : {} })
+    //     }
+    // }
 
     render() {
-        const { match } = this.props
+        const { currentWorkOrder, jobPlan } = this.props        
+
+        // Check if jobPlan has attributes
+        if (!jobPlan) {
+            return <div>No tasks in Work Order</div>
+        }
 
         return (
             <IonContent>
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>00121</IonLabel></IonCol>
-                            <IonCol><IonLabel>23/02/2020</IonLabel></IonCol>
+                            <IonCol><IonLabel>{currentWorkOrder.wonum}</IonLabel></IonCol>
+                            <IonCol><IonLabel>{currentWorkOrder.targstartdate}</IonLabel></IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>MANTENIMIENTO EP HORNO</IonLabel>
+                                <IonLabel>{currentWorkOrder.description}</IonLabel>
                             </IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>APV PAN CARGADOR MENSUAL</IonLabel>
+                                <IonLabel>{currentWorkOrder.asset.description}</IonLabel>
                             </IonCol>
                         </IonRow>
                     </IonGrid>
                 </IonItem>
 
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol size="1">
-                                <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
-                            </IonCol>
-                            <IonCol>
-                                <IonRow> <IonLabel>"Tarea:"10</IonLabel></IonRow>
-                                <IonRow><IonCol size="12"><IonNote>Descripción de la tarea,Descripción de la tarea,Descripción de la tarea,Descripción de la tarea,Descripción de la tarea,</IonNote></IonCol></IonRow>
-                            </IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
+                {
 
-                <IonItem>
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol size="1">
-                                <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={closeOutline}></IonIcon>
-                            </IonCol>
-                            <IonCol>
-                                <IonRow> <IonLabel>"Tarea:"20</IonLabel></IonRow>
-                                <IonRow><IonCol size="12"><IonNote>Descripción de la tarea,Descripción de la tarea,Descripción de la tarea,Descripción de la tarea,Descripción de la tarea,</IonNote></IonCol></IonRow>
-                            </IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
+                    jobPlan.jobtask.sort((t1, t2) => parseInt(t1.jptask) - parseInt(t2.jptask)).map(task => (
+                        <IonItem lines="full" key={task.jobtaskid} button detail>
+                            <IonGrid>
+                                <IonRow>
+                                    <IonCol size="1">
+                                        <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
+                                    </IonCol>
+                                    <IonCol>
+                                        <IonRow> <IonLabel>Tarea: {task.jptask}</IonLabel></IonRow>
+                                        <IonRow><IonCol size="12"><IonNote>{task.description}</IonNote></IonCol></IonRow>
+                                    </IonCol>
+                                </IonRow>
+                            </IonGrid>
+                        </IonItem>
+                    ))
+                }
 
             </IonContent>
-
         );
     }
 };
 
-export default WoTasks;
+function mapStateToProps({ auth, workOrders }) {
+    return {
+        token: auth.token,
+
+
+    }
+}
+
+export default connect(mapStateToProps)(WoTasks)

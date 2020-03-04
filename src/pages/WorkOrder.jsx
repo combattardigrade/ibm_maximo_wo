@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
 import {
     IonButtons,
     IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar,
@@ -27,12 +29,15 @@ import LaborModal from './LaborModal'
 import MaterialModal from './MaterialModal'
 import CommentModal from './CommentModal'
 
+import { getJobPlan } from '../utils/api'
+
 class WorkOrder extends Component {
 
     state = {
         showLaborModal: false,
         showMaterialModal: false,
-        showCommentModal: false
+        showCommentModal: false,
+        currentWorkOrder: {}
     }
 
     handleToggleLaborModal = (value) => {
@@ -45,23 +50,43 @@ class WorkOrder extends Component {
     }
 
     handleToggleCommentModal = (value) => {
-        this.setState({ showCommentModal: value})
+        this.setState({ showCommentModal: value })
     }
 
-    componentDidMount() {
+    handleBackBtn = () => {
+        this.props.history.goBack()
+    }
+
+    async componentDidMount() {
         const { wonum } = this.props.match.params
-        console.log(wonum)
+        const { workOrders, token } = this.props
+        
+        
+        let currentWorkOrder = (workOrders.filter(wo => wo.wonum == wonum))[0]
+        this.setState({currentWorkOrder: currentWorkOrder})
+
+        if ('jpnum' in currentWorkOrder) {
+            console.log('fetching job plan')
+            let response = await (await getJobPlan({ jpnum: currentWorkOrder.jpnum, token: token })).json()
+            this.setState({ jobPlan: response.status == 'OK' ? response.payload : {} })
+        }
+             
     }
 
     render() {
         const { match } = this.props
-        const { showLaborModal, showMaterialModal, showCommentModal } = this.state
+        const { showLaborModal, showMaterialModal, showCommentModal, currentWorkOrder, jobPlan } = this.state
+
+        if(!currentWorkOrder || !('asset' in currentWorkOrder)) {
+            return (<div>Loading</div>)
+        }
+        
 
         return (
             <IonPage>
                 <IonHeader>
                     <IonToolbar>
-                        <IonButtons slot="start">
+                        <IonButtons slot="start" onClick={e => {e.preventDefault(); this.handleBackBtn()}}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
                         <IonTitle>Detalles de Orden de Trabajo</IonTitle>
@@ -72,11 +97,11 @@ class WorkOrder extends Component {
                     <ion-tabs>
 
                         <ion-tab tab="tab-details">
-                            <ion-nav><WoDetails /></ion-nav>
+                            <ion-nav><WoDetails currentWorkOrder={currentWorkOrder} /></ion-nav>
                         </ion-tab>
 
                         <ion-tab tab="tab-tasks">
-                            <ion-nav><WoTasks /></ion-nav>
+                            <ion-nav><WoTasks currentWorkOrder={currentWorkOrder} jobPlan={jobPlan} /></ion-nav>
                         </ion-tab>
 
                         <ion-tab tab="tab-planned" >
@@ -136,8 +161,8 @@ class WorkOrder extends Component {
                             </ion-fab-button>
                         </ion-fab-list>
                     </ion-fab>
-                    
-                    {/* Modals */}                    
+
+                    {/* Modals */}
                     <LaborModal handleToggleLaborModal={this.handleToggleLaborModal} showLaborModal={showLaborModal} />
                     <MaterialModal handleToggleMaterialModal={this.handleToggleMaterialModal} showMaterialModal={showMaterialModal} />
                     <CommentModal handleToggleCommentModal={this.handleToggleCommentModal} showCommentModal={showCommentModal} />
@@ -150,4 +175,13 @@ class WorkOrder extends Component {
     }
 };
 
-export default WorkOrder;
+
+function mapStateToProps({ auth, workOrders }) {
+    return {
+        token: auth.token,
+        workOrders: workOrders.workOrders
+
+    }
+}
+
+export default connect(mapStateToProps)(WorkOrder)

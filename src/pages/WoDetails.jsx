@@ -8,47 +8,36 @@ import './Page.css';
 class WoDetails extends Component {
 
     render() {
-        const { match } = this.props
-
+        const { match, currentWorkOrder } = this.props
+        if (!currentWorkOrder || !('asset' in currentWorkOrder)) {
+            return <div>Loading</div>
+        }
+        
         return (
             <IonContent>
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>00121</IonLabel></IonCol>
+                            <IonCol><IonLabel>{currentWorkOrder.wonum}</IonLabel></IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>MANTENIMIENTO EP HORNO</IonLabel>
+                                <IonLabel>{currentWorkOrder.description}</IonLabel>
                             </IonCol>
                         </IonRow>
-                        <IonRow>
-                            <IonCol>
-                                <IonLabel>APV PAN CARGADOR MENSUAL</IonLabel>
-                            </IonCol>
-                        </IonRow>
+
                     </IonGrid>
                 </IonItem>
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>HORNO APV PAN MODELO 25</IonLabel></IonCol>
-                        </IonRow>
-                        <IonRow>
                             <IonCol>
-                                <IonLabel>1250</IonLabel>
+                                <IonLabel>{currentWorkOrder.asset.description}</IonLabel>
                             </IonCol>
                         </IonRow>
-                    </IonGrid>
-                </IonItem>
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol><IonLabel>HORNEADO PAN2</IonLabel></IonCol>
-                        </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>ED2-0-PROD-L01-AS3</IonLabel>
+                                <IonLabel>{currentWorkOrder.assetnum}</IonLabel>
                             </IonCol>
                         </IonRow>
                     </IonGrid>
@@ -56,26 +45,38 @@ class WoDetails extends Component {
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>"CRITERIO:" A</IonLabel></IonCol>
-                            <IonCol><IonLabel>"PRIORIDAD:" 1</IonLabel></IonCol>
+                            <IonCol><IonLabel>{currentWorkOrder.location.description}</IonLabel></IonCol>
                         </IonRow>
                         <IonRow>
-                            <IonCol><IonLabel>"TIPO TRABAJO:" MP</IonLabel></IonCol>
-                            <IonCol><IonLabel>"DURACIÓN:" 1:00</IonLabel></IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol><IonLabel>"Inicio programado:" 02/02/2020 14:30</IonLabel></IonCol>
+                            <IonCol>
+                                <IonLabel>{currentWorkOrder.$alias_this_attr$location}</IonLabel>
+                            </IonCol>
                         </IonRow>
                     </IonGrid>
                 </IonItem>
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol size="8"><IonLabel>"Estado OT:" APPR</IonLabel></IonCol>
+                            <IonCol><IonLabel>CRITERIO: {currentWorkOrder.gb_abc}</IonLabel></IonCol>
+                            <IonCol><IonLabel>PRIORIDAD: {currentWorkOrder.wopriority}</IonLabel></IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol><IonLabel>TIPO TRABAJO: {currentWorkOrder.worktype}</IonLabel></IonCol>
+                            <IonCol><IonLabel>DURACIÓN:{currentWorkOrder.estdur.toFixed(2)}</IonLabel></IonCol>
+                        </IonRow>
+                    </IonGrid>
+                </IonItem>
+                <IonItem lines="full">
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol><IonLabel>Inicio programado: {currentWorkOrder.targstartdate}</IonLabel></IonCol>
+                        </IonRow>
+                    </IonGrid>
+                </IonItem>
+                <IonItem lines="full">
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol size="8"><IonLabel>Estado OT: {currentWorkOrder.status}</IonLabel></IonCol>
                             <IonCol size="4"><IonButton color="light">INICIAR</IonButton></IonCol>
                         </IonRow>
                     </IonGrid>
@@ -83,17 +84,17 @@ class WoDetails extends Component {
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>"Supervisor:" Pedro Medina Rodriguez</IonLabel></IonCol>
+                            <IonCol><IonLabel>Supervisor: {currentWorkOrder.supervisor}</IonLabel></IonCol>
                         </IonRow>
                         <IonRow>
-                            <IonCol><IonLabel>"Planta:" BIMBO Puebla</IonLabel></IonCol>
+                            <IonCol><IonLabel>Planta: BIMBO Puebla</IonLabel></IonCol>
                         </IonRow>
                     </IonGrid>
                 </IonItem>
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>"Riesgos:"</IonLabel></IonCol>
+                            <IonCol><IonLabel>Riesgos:</IonLabel></IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol><IonLabel>Trabajo en altura</IonLabel></IonCol>

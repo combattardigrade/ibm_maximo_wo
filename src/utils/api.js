@@ -19,3 +19,13 @@ export function getWorkOrders(params) {
         }
     })
 }
+
+export function getJobPlan(params) {
+    return fetch(API + '/jobPlan/' + params.jpnum, {
+        method: 'GET',        
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
