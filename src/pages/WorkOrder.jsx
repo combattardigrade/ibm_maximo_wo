@@ -105,11 +105,11 @@ class WorkOrder extends Component {
                         </ion-tab>
 
                         <ion-tab tab="tab-planned" >
-                            <ion-nav><WoPlanned /></ion-nav>
+                            <ion-nav><WoPlanned currentWorkOrder={currentWorkOrder} jobPlan={jobPlan} /></ion-nav>
                         </ion-tab>
 
                         <ion-tab tab="tab-actual" >
-                            <ion-nav><WoActual /></ion-nav>
+                            <ion-nav><WoActual currentWorkOrder={currentWorkOrder} /></ion-nav>
                         </ion-tab>
 
                         <ion-tab-bar slot="top">

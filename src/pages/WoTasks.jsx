@@ -23,9 +23,9 @@ class WoTasks extends Component {
     render() {
         const { currentWorkOrder, jobPlan } = this.props        
 
-        // Check if jobPlan has attributes
-        if (!jobPlan) {
-            return <div>No tasks in Work Order</div>
+        
+        if (!currentWorkOrder || !jobPlan) {
+            return <div>Loading...</div>
         }
 
         return (

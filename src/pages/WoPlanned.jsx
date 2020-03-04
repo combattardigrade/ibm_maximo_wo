@@ -9,24 +9,30 @@ import './Page.css';
 class WoPlanned extends Component {
 
     render() {
-        const { match } = this.props
+
+        const { currentWorkOrder, jobPlan } = this.props
+
+        // Check if jobPlan has attributes
+        if (!currentWorkOrder || !jobPlan) {
+            return <div>Loading...</div>
+        }
 
         return (
             <IonContent>
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>00121</IonLabel></IonCol>
-                            <IonCol><IonLabel>23/02/2020</IonLabel></IonCol>
+                            <IonCol><IonLabel>{currentWorkOrder.wonum}</IonLabel></IonCol>
+                            <IonCol><IonLabel>{currentWorkOrder.targstartdate}</IonLabel></IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>MANTENIMIENTO EP HORNO</IonLabel>
+                                <IonLabel>{currentWorkOrder.description}</IonLabel>
                             </IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>PAN CARGADOR MENSUAL</IonLabel>
+                                <IonLabel>{currentWorkOrder.asset.description}</IonLabel>
                             </IonCol>
                         </IonRow>
 
@@ -34,59 +40,38 @@ class WoPlanned extends Component {
                 </IonItem>
 
                 <IonItem>
-                    <IonLabel>"Mano de obra":</IonLabel>
+                    <IonLabel>Mano de obra:</IonLabel>
                 </IonItem>
-
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol size="1">
-                                <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
-                            </IonCol>
-                            <IonCol>
+                {
+                    jobPlan.joblabor.map((labor) => (
+                        <IonItem lines="full" button detail>
+                            <IonGrid>
                                 <IonRow>
-                                    <IonCol><IonLabel>DIGNIGRIO</IonLabel></IonCol>
-                                    <IonCol><IonLabel>"Tarea:"20</IonLabel></IonCol>
-                                </IonRow>
-                                <IonRow>
-                                    <IonCol size="12">
-                                        <IonLabel>"Duración:" 01_00</IonLabel>
+                                    <IonCol size="1">
+                                        <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
                                     </IonCol>
-                                </IonRow>
-                            </IonCol>
-                            <IonCol size="1">
-                                <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={addCircleOutline}></IonIcon>
-                            </IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
-
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol size="1">
-                                <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
-                            </IonCol>
-                            <IonCol>
-                                <IonRow>
-                                    <IonCol><IonLabel>DIGNIGRIO</IonLabel></IonCol>
-                                    <IonCol><IonLabel>"Tarea:"20</IonLabel></IonCol>
-                                </IonRow>
-                                <IonRow>
-                                    <IonCol size="12">
-                                        <IonLabel>"Duración:" 01_00</IonLabel>
+                                    <IonCol>
+                                        <IonRow>
+                                            <IonCol><IonLabel>{labor.craft}</IonLabel></IonCol>
+                                            <IonCol><IonLabel>LaborID: {labor.joblaborid}</IonLabel></IonCol>
+                                        </IonRow>
+                                        <IonRow>
+                                            <IonCol size="12">
+                                                <IonLabel>Labor Hrs: {labor.laborhrs}</IonLabel>
+                                            </IonCol>
+                                        </IonRow>
                                     </IonCol>
+                                    
                                 </IonRow>
-                            </IonCol>
-                            <IonCol size="1">
-                                <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={addCircleOutline}></IonIcon>
-                            </IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
+                            </IonGrid>
+                        </IonItem>
+                    ))
+                }
+
+
 
                 <IonItem>
-                    <IonLabel>"Materiales":</IonLabel>
+                    <IonLabel>Materiales:</IonLabel>
                 </IonItem>
 
                 <IonItem>
