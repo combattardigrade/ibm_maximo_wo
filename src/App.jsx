@@ -33,6 +33,7 @@ import WorkDone from './pages/WorkDone'
 
 import { getWhoAmI } from './utils/api'
 import { saveUser } from './actions/user'
+import AssetsList from './pages/AssetsList';
 
 
 class App extends Component {
@@ -85,6 +86,7 @@ class App extends Component {
               <Route path="/wo/:wonum" component={WorkOrder} />
               <Route path="/wo_details" component={WoDetails} />
               <Route path="/workDone" component={WorkDone} />
+              <Route path="/assets" component={AssetsList} />
             </IonRouterOutlet>
           </IonSplitPane>
         </IonReactRouter>

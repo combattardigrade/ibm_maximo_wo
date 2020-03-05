@@ -16,49 +16,51 @@ import { connect } from 'react-redux'
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp, personCircleOutline } from 'ionicons/icons';
 import './Menu.css';
+import { menuController } from '@ionic/core';
 
 
 
 class Menu extends Component {
+  handlePage = (page) => {
+
+    this.props.history.push(page)
+    menuController.close()
+    return
+  }
+
   render() {
     const { user } = this.props
-    
-    
+
     return (
       <IonMenu contentId="main" type="overlay">
         <IonContent>
           <IonList id="inbox-list">
             <IonRow>
               <IonCol size="2"><IonIcon style={{ fontSize: '50px' }} icon={personCircleOutline} /></IonCol>
-              <IonCol size="8"><IonListHeader style={{ paddingTop: '10px' }}>{ user && user.displayName}</IonListHeader></IonCol>
+              <IonCol size="8"><IonListHeader style={{ paddingTop: '10px' }}>{user && user.displayName}</IonListHeader></IonCol>
             </IonRow>
           </IonList>
 
           <IonList id="labels-list">
             <IonListHeader>Menú</IonListHeader>
 
-            <IonItem lines="none" >
-
+            <IonItem lines="none" onClick={ e => { e.preventDefault(); this.handlePage('workDone') }}>
               <IonLabel>Reporte de trabajo realizado</IonLabel>
             </IonItem>
 
             <IonItem lines="none" >
-
               <IonLabel>Reporte de trabajo a programar</IonLabel>
             </IonItem>
 
             <IonItem lines="none" >
-
               <IonLabel>Búsqueda de Órdenes</IonLabel>
             </IonItem>
 
             <IonItem lines="none" >
-
               <IonLabel>Inventario</IonLabel>
             </IonItem>
 
-            <IonItem lines="none" >
-
+            <IonItem lines="none" onClick={ e => { e.preventDefault(); this.handlePage('assets') }} >
               <IonLabel>Activos</IonLabel>
             </IonItem>
 
@@ -70,8 +72,8 @@ class Menu extends Component {
 };
 function mapStateToProps({ user }) {
   return {
-      user
+    user
 
   }
 }
-export default withRouter( connect(mapStateToProps)(Menu));
+export default withRouter(connect(mapStateToProps)(Menu));

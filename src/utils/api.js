@@ -12,7 +12,7 @@ export function login(params) {
 
 export function getWorkOrders(params) {
     return fetch(API + '/workOrders', {
-        method: 'GET',        
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + params.token
@@ -22,7 +22,7 @@ export function getWorkOrders(params) {
 
 export function getJobPlan(params) {
     return fetch(API + '/jobPlan/' + params.jpnum, {
-        method: 'GET',        
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + params.token
@@ -63,6 +63,27 @@ export function getLabor(params) {
 export function getWhoAmI(params) {
     return fetch(API + '/whoami/', {
         method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function getAssets(params) {
+    return fetch(API + '/assets/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function findAsset(params) {
+    return fetch(API + '/findAsset', {
+        method: 'POST',
+        body: JSON.stringify({ method: params.method, value: params.value }),
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + params.token

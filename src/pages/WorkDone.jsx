@@ -23,6 +23,10 @@ class WorkDone extends Component {
         this.setState({ showMaterialModal: value })
     }
 
+    handleBackBtn = () => {
+        this.props.history.goBack()
+    }
+
     render() {
         const { currentWorkOrder, asset } = this.props
         const { showLaborModal, showMaterialModal, showCommentModal } = this.state
@@ -30,7 +34,7 @@ class WorkDone extends Component {
             <IonPage>
                 <IonHeader>
                     <IonToolbar>
-                        <IonButtons slot="start">
+                        <IonButtons slot="start" onClick={e => { e.preventDefault(); this.handleBackBtn() }}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
                         <IonTitle>Reporte de Trabajo Realizado</IonTitle>
