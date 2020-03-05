@@ -43,23 +43,25 @@ class WoTasks extends Component {
                 </IonItem>
 
                 {
-                    jobPlan && (
-                        jobPlan.jobtask.sort((t1, t2) => parseInt(t1.jptask) - parseInt(t2.jptask)).map(task => (
-                            <IonItem lines="full" key={task.jobtaskid} button detail>
+                    currentWorkOrder && 'woactivity' in currentWorkOrder 
+                    ?
+                        currentWorkOrder.woactivity.sort((t1, t2) => parseInt(t1.taskid) - parseInt(t2.taskid)).map(task => (
+                            <IonItem lines="full" key={task.taskid} button detail>
                                 <IonGrid>
                                     <IonRow>
                                         <IonCol size="1">
                                             <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
                                         </IonCol>
                                         <IonCol>
-                                            <IonRow> <IonLabel>Tarea: {task.jptask}</IonLabel></IonRow>
+                                            <IonRow> <IonLabel>Tarea: {task.taskid}</IonLabel></IonRow>
                                             <IonRow><IonCol size="12"><IonNote>{task.description}</IonNote></IonCol></IonRow>
                                         </IonCol>
                                     </IonRow>
                                 </IonGrid>
                             </IonItem>
                         ))
-                    )
+                    :
+                    <IonItem><IonLabel>No se encontraron resultados</IonLabel></IonItem>
                 }
 
             </IonContent>
