@@ -79,11 +79,11 @@ class WorkOrder extends Component {
             this.setState({ asset: response.status == 'OK' ? response.payload : '' })
         }
 
-        if ('jpnum' in currentWorkOrder) {
-            console.log('fetching job plan')
-            let response = await (await getJobPlan({ jpnum: currentWorkOrder.jpnum, token: token })).json()
-            this.setState({ jobPlan: response.status == 'OK' ? response.payload : '' })
-        }
+        // if ('jpnum' in currentWorkOrder) {
+        //     console.log('fetching job plan')
+        //     let response = await (await getJobPlan({ jpnum: currentWorkOrder.jpnum, token: token })).json()
+        //     this.setState({ jobPlan: response.status == 'OK' ? response.payload : '' })
+        // }
 
     }
 
