@@ -5,8 +5,9 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
 import './Page.css';
-import { getWorkOrders } from '../utils/api'
+import { getWorkOrders, getWhoAmI } from '../utils/api'
 import { saveWorkOrders } from '../actions/workOrders'
+import { saveUser } from '../actions/user'
 import { Plugins } from '@capacitor/core'
 const { Modals } = Plugins
 
@@ -23,10 +24,10 @@ class Dashboard extends Component {
                 this.showAlert('Ocurrió un error al intentar obtener las órdenes de trabajo. Por favor, inténtalo nuevamente')
                 return
             }
-            
+
             dispatch(saveWorkOrders(response.payload))
 
-            // render work orders
+            
 
 
         }
@@ -97,7 +98,7 @@ class Dashboard extends Component {
                                         <IonCol size="12">{wo.description}</IonCol>
                                     </IonRow>
                                     <IonRow>
-                                        <IonCol size="12" style={{fontSize:'12px'}}>{wo.asset.description}</IonCol>
+                                        <IonCol size="12" style={{ fontSize: '12px' }}>{wo.asset.description}</IonCol>
                                     </IonRow>
                                     <IonRow style={{ fontSize: '12px' }}>
                                         <IonCol >{wo.assetnum}</IonCol>

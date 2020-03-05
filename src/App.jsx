@@ -31,6 +31,10 @@ import WorkOrder from './pages/WorkOrder'
 import WoDetails from './pages/WoDetails'
 import WorkDone from './pages/WorkDone'
 
+import { getWhoAmI } from './utils/api'
+import { saveUser } from './actions/user'
+
+
 class App extends Component {
 
   state = {
@@ -38,18 +42,42 @@ class App extends Component {
     setSelectedPage: ''
   }
 
+  async componentDidMount() {
+    const { token, dispatch } = this.props
+
+    let response
+    try {
+      
+
+      response = await (await getWhoAmI({ token: token })).json()
+      if (!('status' in response) || response.status == 'ERROR') {
+        console.log(response)        
+        return
+      }
+
+      dispatch(saveUser(response.payload))
+
+
+    }
+    catch (e) {
+      console.log(e)      
+      return
+    }
+  }
+
   render() {
     const { selectedPage, setSelectedPage } = this.state
+    
 
     return (
       <IonApp>
         <IonReactRouter>
           <IonSplitPane contentId="main">
-            <Menu selectedPage={selectedPage} />
+            <Menu selectedPage={selectedPage}  />
             <IonRouterOutlet id="main">
               <Route path="/dashboard" component={Dashboard} />
               <Route path="/page/:name" render={(props) => {
-                
+
                 return <Page {...props} />;
               }} exact={true} />
               <Route path="/" render={() => <Redirect to="/login" />} exact={true} />
@@ -65,4 +93,13 @@ class App extends Component {
   }
 };
 
-export default App;
+
+
+function mapStateToProps({ auth, workOrders }) {
+  return {
+      token: auth.token,   
+
+  }
+}
+
+export default connect(mapStateToProps)(App)

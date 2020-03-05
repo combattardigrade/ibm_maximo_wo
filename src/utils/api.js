@@ -59,3 +59,13 @@ export function getLabor(params) {
         }
     })
 }
+
+export function getWhoAmI(params) {
+    return fetch(API + '/whoami/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
