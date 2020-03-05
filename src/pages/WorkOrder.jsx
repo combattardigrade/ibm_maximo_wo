@@ -29,7 +29,7 @@ import LaborModal from './LaborModal'
 import MaterialModal from './MaterialModal'
 import CommentModal from './CommentModal'
 
-import { getJobPlan } from '../utils/api'
+import { getJobPlan, getWorkOrder, getAsset } from '../utils/api'
 
 class WorkOrder extends Component {
 
@@ -37,7 +37,9 @@ class WorkOrder extends Component {
         showLaborModal: false,
         showMaterialModal: false,
         showCommentModal: false,
-        currentWorkOrder: {}
+        currentWorkOrder: '',
+        jobPlan: '',
+        asset: ''
     }
 
     handleToggleLaborModal = (value) => {
@@ -60,33 +62,45 @@ class WorkOrder extends Component {
     async componentDidMount() {
         const { wonum } = this.props.match.params
         const { workOrders, token } = this.props
-        
-        
+
+
         let currentWorkOrder = (workOrders.filter(wo => wo.wonum == wonum))[0]
-        this.setState({currentWorkOrder: currentWorkOrder})
+
+        if (!currentWorkOrder) {
+            let response = await (await getWorkOrder({ wonum: wonum, token: token })).json()
+            currentWorkOrder = response.payload
+        }
+        
+
+        this.setState({ currentWorkOrder: currentWorkOrder })
+        
+        if ('assetnum' in currentWorkOrder) {
+            let response = await (await getAsset({ assetnum: currentWorkOrder.assetnum, token: token })).json()
+            this.setState({ asset: response.status == 'OK' ? response.payload : '' })
+        }
 
         if ('jpnum' in currentWorkOrder) {
             console.log('fetching job plan')
             let response = await (await getJobPlan({ jpnum: currentWorkOrder.jpnum, token: token })).json()
-            this.setState({ jobPlan: response.status == 'OK' ? response.payload : {} })
+            this.setState({ jobPlan: response.status == 'OK' ? response.payload : '' })
         }
-             
+
     }
 
     render() {
         const { match } = this.props
-        const { showLaborModal, showMaterialModal, showCommentModal, currentWorkOrder, jobPlan } = this.state
+        const { showLaborModal, showMaterialModal, showCommentModal, currentWorkOrder, asset, jobPlan } = this.state
 
-        if(!currentWorkOrder || !('asset' in currentWorkOrder)) {
-            return (<div>Loading</div>)
+        if (!currentWorkOrder) {
+            return (<div>Cargando Orden de Trabajo...</div>)
         }
-        
+
 
         return (
             <IonPage>
                 <IonHeader>
                     <IonToolbar>
-                        <IonButtons slot="start" onClick={e => {e.preventDefault(); this.handleBackBtn()}}>
+                        <IonButtons slot="start" onClick={e => { e.preventDefault(); this.handleBackBtn() }}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
                         <IonTitle>Detalles de Orden de Trabajo</IonTitle>
@@ -97,19 +111,19 @@ class WorkOrder extends Component {
                     <ion-tabs>
 
                         <ion-tab tab="tab-details">
-                            <ion-nav><WoDetails currentWorkOrder={currentWorkOrder} /></ion-nav>
+                            <ion-nav><WoDetails currentWorkOrder={currentWorkOrder} asset={asset} /></ion-nav>
                         </ion-tab>
 
                         <ion-tab tab="tab-tasks">
-                            <ion-nav><WoTasks currentWorkOrder={currentWorkOrder} jobPlan={jobPlan} /></ion-nav>
+                            <ion-nav><WoTasks currentWorkOrder={currentWorkOrder} asset={asset} jobPlan={jobPlan} /></ion-nav>
                         </ion-tab>
 
                         <ion-tab tab="tab-planned" >
-                            <ion-nav><WoPlanned currentWorkOrder={currentWorkOrder} jobPlan={jobPlan} /></ion-nav>
+                            <ion-nav><WoPlanned currentWorkOrder={currentWorkOrder} asset={asset} jobPlan={jobPlan} /></ion-nav>
                         </ion-tab>
 
                         <ion-tab tab="tab-actual" >
-                            <ion-nav><WoActual currentWorkOrder={currentWorkOrder} /></ion-nav>
+                            <ion-nav><WoActual currentWorkOrder={currentWorkOrder} asset={asset}  /></ion-nav>
                         </ion-tab>
 
                         <ion-tab-bar slot="top">

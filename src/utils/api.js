@@ -29,3 +29,33 @@ export function getJobPlan(params) {
         }
     })
 }
+
+export function getWorkOrder(params) {
+    return fetch(API + '/workOrder/' + params.wonum, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function getAsset(params) {
+    return fetch(API + '/asset/' + params.assetnum, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function getLabor(params) {
+    return fetch(API + '/labor/' + params.laborid, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}

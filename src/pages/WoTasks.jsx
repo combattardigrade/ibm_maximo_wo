@@ -9,24 +9,17 @@ import './Page.css';
 
 
 
-class WoTasks extends Component {    
+class WoTasks extends Component {
 
-    // async componentDidMount() {
-    //     const { currentWorkOrder, dispatch, token } = this.props
-    //     if ('jpnum' in currentWorkOrder) {
-    //         console.log('fetching job plan')
-    //         let response = await (await getJobPlan({ jpnum: currentWorkOrder.jpnum, token: token })).json()
-    //         this.setState({ jobPlan: response.status == 'OK' ? response.payload : {} })
-    //     }
-    // }
 
     render() {
-        const { currentWorkOrder, jobPlan } = this.props        
+        const { currentWorkOrder, asset, jobPlan } = this.props
 
-        
-        if (!currentWorkOrder || !jobPlan) {
-            return <div>Loading...</div>
+
+        if (!currentWorkOrder) {
+            return (<div>Loading...</div>)
         }
+
 
         return (
             <IonContent>
@@ -43,29 +36,30 @@ class WoTasks extends Component {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>{currentWorkOrder.asset.description}</IonLabel>
+                                <IonLabel>{asset && asset.description}</IonLabel>
                             </IonCol>
                         </IonRow>
                     </IonGrid>
                 </IonItem>
 
                 {
-
-                    jobPlan.jobtask.sort((t1, t2) => parseInt(t1.jptask) - parseInt(t2.jptask)).map(task => (
-                        <IonItem lines="full" key={task.jobtaskid} button detail>
-                            <IonGrid>
-                                <IonRow>
-                                    <IonCol size="1">
-                                        <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
-                                    </IonCol>
-                                    <IonCol>
-                                        <IonRow> <IonLabel>Tarea: {task.jptask}</IonLabel></IonRow>
-                                        <IonRow><IonCol size="12"><IonNote>{task.description}</IonNote></IonCol></IonRow>
-                                    </IonCol>
-                                </IonRow>
-                            </IonGrid>
-                        </IonItem>
-                    ))
+                    jobPlan && (
+                        jobPlan.jobtask.sort((t1, t2) => parseInt(t1.jptask) - parseInt(t2.jptask)).map(task => (
+                            <IonItem lines="full" key={task.jobtaskid} button detail>
+                                <IonGrid>
+                                    <IonRow>
+                                        <IonCol size="1">
+                                            <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
+                                        </IonCol>
+                                        <IonCol>
+                                            <IonRow> <IonLabel>Tarea: {task.jptask}</IonLabel></IonRow>
+                                            <IonRow><IonCol size="12"><IonNote>{task.description}</IonNote></IonCol></IonRow>
+                                        </IonCol>
+                                    </IonRow>
+                                </IonGrid>
+                            </IonItem>
+                        ))
+                    )
                 }
 
             </IonContent>

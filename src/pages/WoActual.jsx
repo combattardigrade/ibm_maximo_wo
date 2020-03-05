@@ -9,24 +9,24 @@ import './Page.css';
 class WoActual extends Component {
 
     render() {
-        const { match } = this.props
+        const { currentWorkOrder, asset, jobPlan } = this.props
 
         return (
             <IonContent>
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>00121</IonLabel></IonCol>
-                            <IonCol><IonLabel>23/02/2020</IonLabel></IonCol>
+                            <IonCol><IonLabel>{currentWorkOrder.wonum}</IonLabel></IonCol>
+                            <IonCol><IonLabel>{currentWorkOrder.targstartdate}</IonLabel></IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>MANTENIMIENTO EP HORNO</IonLabel>
+                                <IonLabel>{currentWorkOrder.description}</IonLabel>
                             </IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>PAN CARGADOR MENSUAL</IonLabel>
+                                <IonLabel>{asset && asset.description}</IonLabel>
                             </IonCol>
                         </IonRow>
 

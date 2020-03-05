@@ -8,14 +8,16 @@ import './Page.css';
 
 class WoPlanned extends Component {
 
+
     render() {
 
-        const { currentWorkOrder, jobPlan } = this.props
+        const { currentWorkOrder, asset, jobPlan } = this.props
 
         // Check if jobPlan has attributes
-        if (!currentWorkOrder || !jobPlan) {
-            return <div>Loading...</div>
+        if (!currentWorkOrder) {
+            return (<div>Loading...</div>)
         }
+
 
         return (
             <IonContent>
@@ -32,7 +34,7 @@ class WoPlanned extends Component {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>{currentWorkOrder.asset.description}</IonLabel>
+                                <IonLabel>{asset && asset.description}</IonLabel>
                             </IonCol>
                         </IonRow>
 
@@ -43,29 +45,31 @@ class WoPlanned extends Component {
                     <IonLabel>Mano de obra:</IonLabel>
                 </IonItem>
                 {
-                    jobPlan.joblabor.map((labor) => (
-                        <IonItem lines="full" button detail>
-                            <IonGrid>
-                                <IonRow>
-                                    <IonCol size="1">
-                                        <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
-                                    </IonCol>
-                                    <IonCol>
-                                        <IonRow>
-                                            <IonCol><IonLabel>{labor.craft}</IonLabel></IonCol>
-                                            <IonCol><IonLabel>LaborID: {labor.joblaborid}</IonLabel></IonCol>
-                                        </IonRow>
-                                        <IonRow>
-                                            <IonCol size="12">
-                                                <IonLabel>Labor Hrs: {labor.laborhrs}</IonLabel>
-                                            </IonCol>
-                                        </IonRow>
-                                    </IonCol>
-                                    
-                                </IonRow>
-                            </IonGrid>
-                        </IonItem>
-                    ))
+                    'wplabor' in currentWorkOrder && (
+                        currentWorkOrder.wplabor.map((labor) => (
+                            <IonItem lines="full" button detail key={labor.wplaborid}>
+                                <IonGrid>
+                                    <IonRow>
+                                        <IonCol size="1">
+                                            <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
+                                        </IonCol>
+                                        <IonCol>
+                                            <IonRow>
+                                                <IonCol><IonLabel>{labor.craft}</IonLabel></IonCol>
+                                                <IonCol><IonLabel>LaborCode: {labor.laborcode}</IonLabel></IonCol>
+                                            </IonRow>
+                                            <IonRow>
+                                                <IonCol size="12">
+                                                    <IonLabel>Labor Hrs: {labor.laborhrs}</IonLabel>
+                                                </IonCol>
+                                            </IonRow>
+                                        </IonCol>
+
+                                    </IonRow>
+                                </IonGrid>
+                            </IonItem>
+                        ))
+                    )
                 }
 
 
@@ -74,33 +78,39 @@ class WoPlanned extends Component {
                     <IonLabel>Materiales:</IonLabel>
                 </IonItem>
 
-                <IonItem>
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol size="1">
-                                <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={closeOutline}></IonIcon>
-                            </IonCol>
-                            <IonCol>
-                                <IonRow> <IonNote>Rodameinto 630102Z Interior 2 Pulgada, exterior 3 Pulgada</IonNote></IonRow>
-                                <IonRow>
-                                    <IonCol size="12">
-                                        <IonLabel>100-002-001</IonLabel>
-                                    </IonCol>
-                                </IonRow>
-                                <IonRow>
-                                    <IonCol size="12">
-                                        <IonLabel>"Cantidad:" 2</IonLabel>
-                                    </IonCol>
-                                </IonRow>
-                                <IonRow>
-                                    <IonCol size="12">
-                                        <IonLabel>"Almacen:" ALMC_1062</IonLabel>
-                                    </IonCol>
-                                </IonRow>
-                            </IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
+                {
+                    'wpmaterial' in currentWorkOrder && (
+                        currentWorkOrder.wpmaterial.map((material) => (
+                            <IonItem button detail key={material.wpitemid}>
+                                <IonGrid>
+                                    <IonRow>
+                                        <IonCol size="1">
+                                            <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={closeOutline}></IonIcon>
+                                        </IonCol>
+                                        <IonCol>
+                                            <IonRow> <IonNote>{material.description}</IonNote></IonRow>
+                                            <IonRow>
+                                                <IonCol size="12">
+                                                    <IonLabel>{material.itemnum}</IonLabel>
+                                                </IonCol>
+                                            </IonRow>
+                                            <IonRow>
+                                                <IonCol size="12">
+                                                    <IonLabel>Cantidad: {material.itemqty}</IonLabel>
+                                                </IonCol>
+                                            </IonRow>
+                                            <IonRow>
+                                                <IonCol size="12">
+                                                    <IonLabel>Almacen: {material.storelocsite}</IonLabel>
+                                                </IonCol>
+                                            </IonRow>
+                                        </IonCol>
+                                    </IonRow>
+                                </IonGrid>
+                            </IonItem>
+                        ))
+                    )
+                }
 
             </IonContent>
 

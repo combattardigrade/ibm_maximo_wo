@@ -24,7 +24,7 @@ class WorkDone extends Component {
     }
 
     render() {
-        const { match } = this.props
+        const { currentWorkOrder, asset } = this.props
         const { showLaborModal, showMaterialModal, showCommentModal } = this.state
         return (
             <IonPage>

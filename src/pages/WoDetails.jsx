@@ -1,16 +1,23 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonButton } from '@ionic/react';
 
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
 import './Page.css';
 
+import { getAsset } from '../utils/api'
+
 class WoDetails extends Component {
 
+    
+    
+
     render() {
-        const { match, currentWorkOrder } = this.props
-        if (!currentWorkOrder || !('asset' in currentWorkOrder)) {
-            return <div>Loading</div>
+        const { match, currentWorkOrder, asset } = this.props
+       
+        if (!currentWorkOrder || !asset) {
+            return <div>Loading1</div>
         }
         
         return (
@@ -32,7 +39,7 @@ class WoDetails extends Component {
                     <IonGrid>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>{currentWorkOrder.asset.description}</IonLabel>
+                                <IonLabel>{asset.description}</IonLabel>
                             </IonCol>
                         </IonRow>
                         <IonRow>
@@ -49,7 +56,7 @@ class WoDetails extends Component {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>{currentWorkOrder.$alias_this_attr$location}</IonLabel>
+                                <IonLabel>{currentWorkOrder.location}</IonLabel>
                             </IonCol>
                         </IonRow>
                     </IonGrid>
@@ -117,4 +124,10 @@ class WoDetails extends Component {
     }
 };
 
-export default WoDetails;
+function mapStateToProps({ auth, workOrders }) {
+    return {
+        token: auth.token,
+    }
+}
+
+export default connect(mapStateToProps)(WoDetails)
