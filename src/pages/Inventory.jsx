@@ -80,12 +80,10 @@ class Inventory extends Component {
     }
 
     handleToggleItemModal = (value) => {
-        this.setState({ showItemModal: value })
-        console.log(this.state.currentItemNum)
+        this.setState({ showItemModal: value })        
     }
 
-    handleItemClick = (_rowstamp) => {
-        const { token } = this.props
+    handleItemClick = (_rowstamp) => {        
         const { inventory } = this.state
         this.setState({ showItemModal: true, modalLoading: true })
         const item = inventory.filter(i => i._rowstamp == _rowstamp)
@@ -106,8 +104,7 @@ class Inventory extends Component {
     }
 
     render() {
-        const { inventory, loading, showItemModal } = this.state
-        const { token } = this.props
+        const { inventory, loading, showItemModal } = this.state        
 
         return (
             <IonPage>

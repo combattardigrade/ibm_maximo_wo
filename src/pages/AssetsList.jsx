@@ -17,6 +17,7 @@ import './Page.css';
 import './Maximo.css'
 import { Plugins } from '@capacitor/core'
 import { getAssets, findAsset } from '../utils/api'
+import AssetModal from './AssetModal'
 const { Modals } = Plugins
 
 
@@ -26,7 +27,10 @@ class AssetsList extends Component {
         assets: '',
         loading: true,
         searchMethod: 'assetnum',
-        searchValue: ''
+        searchValue: '',
+        showAssetModal: false,
+        asset: '',
+        modalLoading: false
     }
 
     handleBackBtn = () => {
@@ -45,7 +49,7 @@ class AssetsList extends Component {
         e.preventDefault()
         const { searchMethod, searchValue } = this.state
         const { token } = this.props
-        this.setState({loading: true, assets: ''})
+        this.setState({ loading: true, assets: '' })
 
         if (!searchValue || !searchMethod) {
             getAssets({ token: token })
@@ -67,11 +71,25 @@ class AssetsList extends Component {
                 }
             })
     }
+
     showAlert(message) {
         Modals.alert({
             title: 'Error',
             message,
         })
+    }
+
+    handleToggleAssetModal = (value) => {
+        this.setState({ showAssetModal: value })        
+    }
+
+    handleAssetClick = (_rowstamp) => {       
+        const { assets } = this.state
+        this.setState({ showAssetModal: true, modalLoading: true })
+        const asset = assets.filter(a => a._rowstamp == _rowstamp)
+        console.log(asset)
+        this.setState({ asset: asset[0], loading: false })
+        return false
     }
 
     componentDidMount() {
@@ -86,7 +104,7 @@ class AssetsList extends Component {
     }
 
     render() {
-        const { assets, loading } = this.state
+        const { assets, loading, showAssetModal } = this.state
 
 
 
@@ -128,13 +146,13 @@ class AssetsList extends Component {
                         assets.length > 0
                             ?
                             assets.map((asset) => (
-                                <IonItem key={asset._rowstamp} button detail>
+                                <IonItem key={asset._rowstamp} button detail onClick={e => { e.preventDefault(); this.handleAssetClick(asset._rowstamp) }}>
                                     <IonGrid>
                                         <IonRow>
-                                            <IonCol size="3" style={{ textAlign: 'center' }}>
+                                            <IonCol size="2" style={{ textAlign: 'center' }}>
                                                 <IonIcon className="searchResultIcon" icon={cubeOutline}></IonIcon>
                                             </IonCol>
-                                            <IonCol size="9">
+                                            <IonCol size="10">
                                                 <IonRow>
 
                                                     <IonCol>
@@ -168,7 +186,7 @@ class AssetsList extends Component {
                                 }
                             </div>
                     }
-
+                    <AssetModal handleToggleAssetModal={this.handleToggleAssetModal} showAssetModal={showAssetModal} asset={this.state.asset} modalLoading={this.state.modalLoading} />
                 </IonContent>
             </IonPage>
         );
