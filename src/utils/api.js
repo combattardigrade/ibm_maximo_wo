@@ -90,3 +90,24 @@ export function findAsset(params) {
         }
     })
 }
+
+export function getInventory(params) {
+    return fetch(API + '/inventory/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function findInventoryItem(params) {
+    return fetch(API + '/findInventoryItem', {
+        method: 'POST',
+        body: JSON.stringify({ method: params.method, value: params.value }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}

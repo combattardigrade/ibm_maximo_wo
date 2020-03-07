@@ -56,7 +56,7 @@ class Menu extends Component {
               <IonLabel>Búsqueda de Órdenes</IonLabel>
             </IonItem>
 
-            <IonItem lines="none" >
+            <IonItem lines="none" onClick={ e => { e.preventDefault(); this.handlePage('inventory') }}>
               <IonLabel>Inventario</IonLabel>
             </IonItem>
 

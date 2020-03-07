@@ -17,8 +17,9 @@ class WoDetails extends Component {
         const { match, currentWorkOrder, asset } = this.props
        
         if (!currentWorkOrder || !asset) {
-            return <div>Loading1</div>
+            return <div>Loading</div>
         }
+        console.log(currentWorkOrder)
         
         return (
             <IonContent>
@@ -52,11 +53,11 @@ class WoDetails extends Component {
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>{currentWorkOrder.location.description}</IonLabel></IonCol>
+                            <IonCol><IonLabel>{ 'location' in currentWorkOrder && currentWorkOrder.location.description }</IonLabel></IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>{currentWorkOrder.location}</IonLabel>
+                                <IonLabel>{ 'location' in currentWorkOrder && currentWorkOrder.location }</IonLabel>
                             </IonCol>
                         </IonRow>
                     </IonGrid>
