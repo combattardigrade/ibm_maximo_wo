@@ -15,8 +15,11 @@ class AssetModal extends Component {
 
 
     render() {
-        const { showAssetModal, asset, modalLoading } = this.props
+        const { showAssetModal, asset, modalLoading, assetSafety } = this.props
 
+        if(assetSafety) {
+            console.log(assetSafety)
+        }
 
         return (
             <IonModal isOpen={showAssetModal}>
@@ -275,7 +278,7 @@ class AssetModal extends Component {
                                             <IonCol><IonLabel className="dataTitle">Código de riesgo</IonLabel></IonCol>
                                         </IonRow>
                                         <IonRow>
-                                            <IonCol><IonLabel>-</IonLabel></IonCol>
+                                            <IonCol><IonLabel>{ assetSafety.length > 0 ? assetSafety[0].hazardId : '-'}</IonLabel></IonCol>
                                         </IonRow>
                                     </IonGrid>
                                 </IonItem>
@@ -285,7 +288,7 @@ class AssetModal extends Component {
                                             <IonCol><IonLabel className="dataTitle">Descripción de riesgo</IonLabel></IonCol>
                                         </IonRow>
                                         <IonRow>
-                                            <IonCol><IonLabel>-</IonLabel></IonCol>
+                                            <IonCol><IonLabel>{ assetSafety.length > 0 ? assetSafety[0].hazardDescription : '-'}</IonLabel></IonCol>
                                         </IonRow>
                                     </IonGrid>
                                 </IonItem>
@@ -295,7 +298,17 @@ class AssetModal extends Component {
                                             <IonCol><IonLabel className="dataTitle">Código de precaución</IonLabel></IonCol>
                                         </IonRow>
                                         <IonRow>
-                                            <IonCol><IonLabel>-</IonLabel></IonCol>
+                                            <IonCol><IonLabel>{ assetSafety.length > 0 ? assetSafety[0].precautionId : '-'}</IonLabel></IonCol>
+                                        </IonRow>
+                                    </IonGrid>
+                                </IonItem>
+                                <IonItem>
+                                    <IonGrid>
+                                        <IonRow>
+                                            <IonCol><IonLabel className="dataTitle">Descripción de precaución</IonLabel></IonCol>
+                                        </IonRow>
+                                        <IonRow>
+                                            <IonCol><IonLabel>{ assetSafety.length > 0 ? assetSafety[0].precautionDescription : '-'}</IonLabel></IonCol>
                                         </IonRow>
                                     </IonGrid>
                                 </IonItem>

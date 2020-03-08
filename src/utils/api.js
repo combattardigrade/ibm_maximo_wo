@@ -111,3 +111,23 @@ export function findInventoryItem(params) {
         }
     })
 }
+
+export function getAssetSafety(params) {
+    return fetch(API + '/assetSafety/' + params.assetnum, {
+        method: 'GET',        
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function getWOSafety(params) {
+    return fetch(API + '/woSafety/' + params.wonum, {
+        method: 'GET',        
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}

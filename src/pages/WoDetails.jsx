@@ -5,32 +5,85 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
 import './Page.css';
+import './Maximo.css'
 
-import { getAsset } from '../utils/api'
 
 class WoDetails extends Component {
 
-    
-    
+
+
 
     render() {
-        const { match, currentWorkOrder, asset } = this.props
-       
-        if (!currentWorkOrder || !asset) {
+        const { currentWorkOrder, safetyDetails } = this.props
+
+        if (!currentWorkOrder) {
             return <div>Loading</div>
         }
         console.log(currentWorkOrder)
-        
+
         return (
             <IonContent>
+                {/* WO */}
+                <IonItem lines="full" detail button>
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol className="dataTitle">Orden de Trabajo</IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol size="12">
+                                <IonLabel className="dataField">{'wonum' in currentWorkOrder ? currentWorkOrder.wonum : '-'}</IonLabel>
+                                <IonLabel className="dataField">{'description' in currentWorkOrder ? currentWorkOrder.description : '-'}</IonLabel>
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
+                </IonItem>
+                {/* ASSET */}
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>{currentWorkOrder.wonum}</IonLabel></IonCol>
+                            <IonCol className="dataTitle">Activo</IonCol>
                         </IonRow>
                         <IonRow>
-                            <IonCol>
-                                <IonLabel>{currentWorkOrder.description}</IonLabel>
+                            <IonCol size="12">
+                                <IonLabel className="dataField">{'assetDescription' in currentWorkOrder ? currentWorkOrder.assetDescription : '-'}</IonLabel>
+                                <IonLabel className="dataField">{'assetnum' in currentWorkOrder ? currentWorkOrder.assetnum : '-'}</IonLabel>
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
+                </IonItem>
+                <IonItem lines="full">
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol className="dataTitle">Ubicación</IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol size="12">
+                                <IonLabel className="dataField">{'locationDetails' in currentWorkOrder ? currentWorkOrder.locationDetails.locations.description : '-'}</IonLabel>
+                                <IonLabel className="dataField">{'location' in currentWorkOrder ? currentWorkOrder.location : '-'}</IonLabel>
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
+                </IonItem>
+                <IonItem lines="full">
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol size="6">
+                                <IonLabel className="dataTitle">Criterio: </IonLabel>
+                                <IonLabel className="dataField">{'gb_abc' in currentWorkOrder ? currentWorkOrder.gb_abc : '-'}</IonLabel>
+                            </IonCol>
+                            <IonCol size="6">
+                                <IonLabel className="dataTitle">Prioridad: </IonLabel>
+                                <IonLabel className="dataField">{'wopriority' in currentWorkOrder ? currentWorkOrder.wopriority : '-'}</IonLabel>
+                            </IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol size="6">
+                                <IonLabel className="dataTitle">Tipo: </IonLabel>
+                                <IonLabel className="dataField">{'worktype' in currentWorkOrder ? currentWorkOrder.worktype : '-'}</IonLabel>
+                            </IonCol>
+                            <IonCol size="6">
+                                <IonLabel className="dataTitle">Duración: </IonLabel>
+                                <IonLabel className="dataField">{'estdur' in currentWorkOrder ? currentWorkOrder.estdur.toFixed(2) : '-'} hrs</IonLabel>
                             </IonCol>
                         </IonRow>
 
@@ -40,12 +93,35 @@ class WoDetails extends Component {
                     <IonGrid>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>{asset.description}</IonLabel>
+                                <IonLabel className="dataTitle">Inicio programado</IonLabel>
+                                <IonLabel className="dataField">{'targstartdate' in currentWorkOrder ? currentWorkOrder.targstartdate : '-'}</IonLabel>
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
+                </IonItem>
+                <IonItem lines="full">
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol size="6">
+                                <IonLabel className="dataTitle">Estado OT: </IonLabel>
+                                <IonLabel className="dataField">{'status' in currentWorkOrder ? currentWorkOrder.status : '-'}</IonLabel>
+                            </IonCol>
+                            <IonCol size="6">
+                                <IonButton color="light" expand="full">INICIAR</IonButton>
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
+                </IonItem>
+                <IonItem lines="full">
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol>
+                                <IonLabel className="dataTitle">Supervisor</IonLabel>
                             </IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>{currentWorkOrder.assetnum}</IonLabel>
+                                <IonLabel className="dataField">{'supervisor' in currentWorkOrder ? currentWorkOrder.supervisor : '-'}</IonLabel>
                             </IonCol>
                         </IonRow>
                     </IonGrid>
@@ -53,72 +129,61 @@ class WoDetails extends Component {
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>{ 'location' in currentWorkOrder && currentWorkOrder.location.description }</IonLabel></IonCol>
+                            <IonCol>
+                                <IonLabel className="dataTitle">Planta</IonLabel>
+                            </IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel>{ 'location' in currentWorkOrder && currentWorkOrder.location }</IonLabel>
+                                <IonLabel className="dataField">{'siteid' in currentWorkOrder ? currentWorkOrder.siteid : '-'}</IonLabel>
                             </IonCol>
                         </IonRow>
                     </IonGrid>
                 </IonItem>
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol><IonLabel>CRITERIO: {currentWorkOrder.gb_abc}</IonLabel></IonCol>
-                            <IonCol><IonLabel>PRIORIDAD: {currentWorkOrder.wopriority}</IonLabel></IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol><IonLabel>TIPO TRABAJO: {currentWorkOrder.worktype}</IonLabel></IonCol>
-                            <IonCol><IonLabel>DURACIÓN:{currentWorkOrder.estdur.toFixed(2)}</IonLabel></IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol><IonLabel>Inicio programado: {currentWorkOrder.targstartdate}</IonLabel></IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol size="8"><IonLabel>Estado OT: {currentWorkOrder.status}</IonLabel></IonCol>
-                            <IonCol size="4"><IonButton color="light">INICIAR</IonButton></IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol><IonLabel>Supervisor: {currentWorkOrder.supervisor}</IonLabel></IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol><IonLabel>Planta: BIMBO Puebla</IonLabel></IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol><IonLabel>Riesgos:</IonLabel></IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol><IonLabel>Trabajo en altura</IonLabel></IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol><IonLabel>"Precauciones:"</IonLabel></IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol><IonLabel>Contar con permiso de trabajo</IonLabel></IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
+
+                {
+                    safetyDetails && (
+                        <div>
+                            <IonItem lines="full">
+                                <IonGrid>
+                                    <IonRow>
+                                        <IonCol>
+                                            <IonLabel className="dataTitle">Riesgos</IonLabel>
+                                        </IonCol>
+                                    </IonRow>
+                                    {
+                                        safetyDetails.map((hazard) => (
+                                            <IonRow>
+                                                <IonCol>
+                                                    <IonLabel className="dataField">{hazard.hazardId} - {hazard.hazardDescription}</IonLabel>
+                                                </IonCol>
+                                            </IonRow>
+                                        ))
+                                    }
+                                </IonGrid>
+                            </IonItem>
+                            <IonItem lines="full">
+                                <IonGrid>
+                                    <IonRow>
+                                        <IonCol>
+                                            <IonLabel className="dataTitle">Precauciones</IonLabel>
+                                        </IonCol>
+                                    </IonRow>
+                                    {
+                                        safetyDetails.map((hazard) => (
+                                            <IonRow>
+                                                <IonCol>
+                                                    <IonLabel className="dataField">{hazard.precautionId} - {hazard.precautionDescription}</IonLabel>
+                                                </IonCol>
+                                            </IonRow>
+                                        ))
+                                    }
+                                </IonGrid>
+                            </IonItem>
+                        </div>
+                    )
+                }
+
             </IonContent>
 
         );

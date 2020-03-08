@@ -6,7 +6,7 @@ import {
     IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar,
     IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow,
     IonCol, IonTabs, IonTab, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon,
-    IonFab, IonFabButton, IonModal, IonButton, IonBackButton, IonInput
+    IonFab, IonFabButton, IonModal, IonButton, IonBackButton, IonInput, IonSpinner
 } from '@ionic/react';
 import { Redirect, Route } from 'react-router-dom';
 import {
@@ -16,7 +16,8 @@ import {
 
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
-import './Page.css';
+import './Page.css'
+import './Maximo.css'
 
 import Dashboard from './Dashboard'
 import WoDetails from './WoDetails'
@@ -29,7 +30,7 @@ import LaborModal from './LaborModal'
 import MaterialModal from './MaterialModal'
 import CommentModal from './CommentModal'
 
-import { getJobPlan, getWorkOrder, getAsset } from '../utils/api'
+import { getJobPlan, getWorkOrder, getAsset, getWOSafety } from '../utils/api'
 
 class WorkOrder extends Component {
 
@@ -39,7 +40,9 @@ class WorkOrder extends Component {
         showCommentModal: false,
         currentWorkOrder: '',
         jobPlan: '',
-        asset: ''
+        asset: '',
+        loading: true,
+        safetyDetails: ''
     }
 
     handleToggleLaborModal = (value) => {
@@ -47,7 +50,6 @@ class WorkOrder extends Component {
     }
 
     handleToggleMaterialModal = (value) => {
-        console.log('SHOW_MATERIAL_MODAL')
         this.setState({ showMaterialModal: value })
     }
 
@@ -64,35 +66,37 @@ class WorkOrder extends Component {
         const { workOrders, token } = this.props
 
 
-        let currentWorkOrder = (workOrders.filter(wo => wo.wonum == wonum))[0]
+        getWorkOrder({ wonum: wonum, token: token })
+            .then((data) => data.json())
+            .then((response) => {
+                if (response.status == 'OK') {
+                    this.setState({ currentWorkOrder: response.payload, loading: false })
+                }
+            })
 
-        if (!currentWorkOrder) {
-            let response = await (await getWorkOrder({ wonum: wonum, token: token })).json()
-            currentWorkOrder = response.payload
-        }
-        
+        getWOSafety({wonum: wonum, token: token})
+            .then((data) => data.json())
+            .then((response) => {
+                if(response.status == 'OK') {
+                    this.setState({safetyDetails: response.payload})
+                }
+            })
 
-        this.setState({ currentWorkOrder: currentWorkOrder })
-        
-        if ('assetnum' in currentWorkOrder) {
-            let response = await (await getAsset({ assetnum: currentWorkOrder.assetnum, token: token })).json()
-            this.setState({ asset: response.status == 'OK' ? response.payload : '' })
-        }
 
-        // if ('jpnum' in currentWorkOrder) {
-        //     console.log('fetching job plan')
-        //     let response = await (await getJobPlan({ jpnum: currentWorkOrder.jpnum, token: token })).json()
-        //     this.setState({ jobPlan: response.status == 'OK' ? response.payload : '' })
-        // }
+
 
     }
 
     render() {
         const { match } = this.props
-        const { showLaborModal, showMaterialModal, showCommentModal, currentWorkOrder, asset, jobPlan } = this.state
+        const { showLaborModal, showMaterialModal, showCommentModal, currentWorkOrder, loading } = this.state
 
         if (!currentWorkOrder) {
-            return (<div>Cargando Orden de Trabajo...</div>)
+            return <div className="spinnerCenter">
+                {
+                    loading == true && <IonSpinner name="crescent" style={{ textAlign: 'center' }} />
+                }
+            </div>
         }
 
 
@@ -109,22 +113,34 @@ class WorkOrder extends Component {
 
                 <IonContent>
                     <ion-tabs>
+                        {
+                            loading == false
+                                ?
+                                <div>
+                                    <ion-tab tab="tab-details">
+                                        <ion-nav><WoDetails currentWorkOrder={currentWorkOrder} safetyDetails={this.state.safetyDetails && this.state.safetyDetails} /></ion-nav>
+                                    </ion-tab>
 
-                        <ion-tab tab="tab-details">
-                            <ion-nav><WoDetails currentWorkOrder={currentWorkOrder} asset={asset} /></ion-nav>
-                        </ion-tab>
+                                    <ion-tab tab="tab-tasks">
+                                        <ion-nav><WoTasks currentWorkOrder={currentWorkOrder} /></ion-nav>
+                                    </ion-tab>
 
-                        <ion-tab tab="tab-tasks">
-                            <ion-nav><WoTasks currentWorkOrder={currentWorkOrder} asset={asset} jobPlan={jobPlan} /></ion-nav>
-                        </ion-tab>
+                                    <ion-tab tab="tab-planned" >
+                                        <ion-nav><WoPlanned currentWorkOrder={currentWorkOrder} /></ion-nav>
+                                    </ion-tab>
 
-                        <ion-tab tab="tab-planned" >
-                            <ion-nav><WoPlanned currentWorkOrder={currentWorkOrder} asset={asset} jobPlan={jobPlan} /></ion-nav>
-                        </ion-tab>
+                                    <ion-tab tab="tab-actual" >
+                                        <ion-nav><WoActual currentWorkOrder={currentWorkOrder} /></ion-nav>
+                                    </ion-tab>
+                                </div>
+                                :
+                                <div className="spinnerCenter">
+                                    {
+                                        loading == true && <IonSpinner name="crescent" style={{ textAlign: 'center' }} />
+                                    }
+                                </div>
+                        }
 
-                        <ion-tab tab="tab-actual" >
-                            <ion-nav><WoActual currentWorkOrder={currentWorkOrder} asset={asset}  /></ion-nav>
-                        </ion-tab>
 
                         <ion-tab-bar slot="top">
                             <ion-tab-button tab="tab-details">
@@ -179,7 +195,7 @@ class WorkOrder extends Component {
                     {/* Modals */}
                     <LaborModal handleToggleLaborModal={this.handleToggleLaborModal} showLaborModal={showLaborModal} />
                     <MaterialModal handleToggleMaterialModal={this.handleToggleMaterialModal} showMaterialModal={showMaterialModal} />
-                    <CommentModal handleToggleCommentModal={this.handleToggleCommentModal} showCommentModal={showCommentModal} />
+                    <CommentModal handleToggleCommentModal={this.handleToggleCommentModal} showCommentModal={showCommentModal}  />
 
 
                 </IonContent>

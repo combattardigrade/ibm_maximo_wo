@@ -16,7 +16,7 @@ import ExploreContainer from '../components/ExploreContainer';
 import './Page.css';
 import './Maximo.css'
 import { Plugins } from '@capacitor/core'
-import { getAssets, findAsset } from '../utils/api'
+import { getAssets, findAsset, getAssetSafety } from '../utils/api'
 import AssetModal from './AssetModal'
 const { Modals } = Plugins
 
@@ -30,6 +30,7 @@ class AssetsList extends Component {
         searchValue: '',
         showAssetModal: false,
         asset: '',
+        assetSafety: '',
         modalLoading: false
     }
 
@@ -80,16 +81,22 @@ class AssetsList extends Component {
     }
 
     handleToggleAssetModal = (value) => {
-        this.setState({ showAssetModal: value })        
+        this.setState({ showAssetModal: value })
     }
 
-    handleAssetClick = (_rowstamp) => {       
+    handleAssetClick = (_rowstamp) => {
         const { assets } = this.state
+        const { token } = this.props
         this.setState({ showAssetModal: true, modalLoading: true })
         const asset = assets.filter(a => a._rowstamp == _rowstamp)
-        console.log(asset)
         this.setState({ asset: asset[0], loading: false })
-        return false
+        getAssetSafety({ assetnum: asset[0].assetnum, token: token })
+            .then(data => data.json())
+            .then(res => {
+                this.setState({ assetSafety: res.status == 'OK' && res.payload })
+                return false
+            })
+
     }
 
     componentDidMount() {
@@ -186,7 +193,7 @@ class AssetsList extends Component {
                                 }
                             </div>
                     }
-                    <AssetModal handleToggleAssetModal={this.handleToggleAssetModal} showAssetModal={showAssetModal} asset={this.state.asset} modalLoading={this.state.modalLoading} />
+                    <AssetModal handleToggleAssetModal={this.handleToggleAssetModal} showAssetModal={showAssetModal} asset={this.state.asset} assetSafety={this.state.assetSafety} modalLoading={this.state.modalLoading} />
                 </IonContent>
             </IonPage>
         );

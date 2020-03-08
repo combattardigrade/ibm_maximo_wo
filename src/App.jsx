@@ -47,24 +47,7 @@ class App extends Component {
   async componentDidMount() {
     const { token, dispatch } = this.props
 
-    let response
-    try {
-      
-
-      response = await (await getWhoAmI({ token: token })).json()
-      if (!('status' in response) || response.status == 'ERROR') {
-        console.log(response)        
-        return
-      }
-
-      dispatch(saveUser(response.payload))
-
-
-    }
-    catch (e) {
-      console.log(e)      
-      return
-    }
+    
   }
 
   render() {
