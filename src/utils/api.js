@@ -131,3 +131,20 @@ export function getWOSafety(params) {
         }
     })
 }
+
+export function updateTaskStatus(params) {    
+    return fetch(API + '/task/updateStatus', {
+        method: 'POST',
+        body: JSON.stringify({
+            woHref: params.woHref,
+            taskHref: params.taskHref,
+            status: params.status
+        }),     
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        },
+        
+    })  
+    .catch((err) => console.log(err))
+}
