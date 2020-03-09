@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonNote, IonIcon } from '@ionic/react';
-import { checkmarkOutline, closeOutline, addCircleOutline } from 'ionicons/icons'
+import { IonButton, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonNote, IonIcon } from '@ionic/react';
+import { checkmarkOutline, closeOutline, hourglassOutline, addCircleOutline } from 'ionicons/icons'
 
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
 import WoDetailsHeader from '../components/WODetailsHeader'
 import './Page.css';
+import { parse } from 'url';
 
 class WoPlanned extends Component {
 
@@ -30,25 +31,35 @@ class WoPlanned extends Component {
                 {
                     'wplabor' in currentWorkOrder && (
                         currentWorkOrder.wplabor.map((labor) => (
-                            <IonItem lines="full" button detail key={labor.wplaborid}>
+                            <IonItem lines="full"  key={labor.wplaborid}>
                                 <IonGrid>
                                     <IonRow>
-                                        <IonCol size="1">
-                                            <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
+                                        <IonCol size="2" style={{ textAlign: 'center' }}>
+                                            {
+                                                parseInt(labor.laborhrscompleted) >= parseInt(labor.laborhrs)
+                                                    ?
+                                                    <IonIcon style={{ fontSize: '28px', paddingTop: '10px' }} icon={checkmarkOutline}></IonIcon>
+                                                    :
+                                                    <IonIcon style={{ fontSize: '28px', paddingTop: '10px' }} icon={hourglassOutline} />
+                                            }
                                         </IonCol>
                                         <IonCol>
                                             <IonRow>
-                                                <IonCol><IonLabel>{labor.craft}</IonLabel></IonCol>
-                                                <IonCol><IonLabel>LaborCode: {labor.laborcode}</IonLabel></IonCol>
-                                            </IonRow>
-                                            <IonRow>
-                                                <IonCol size="12">
-                                                    <IonLabel>Labor Hrs: {labor.laborhrs}</IonLabel>
+                                                <IonCol size="5">
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Oficio:</span> {labor.craft}</IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Duración:</span> {labor.laborhrs} hrs</IonLabel>
+                                                </IonCol>
+                                                <IonCol size="5">
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Tarea:</span> {labor.taskid}</IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Completado:</span> {labor.laborhrscompleted} hrs</IonLabel>
+                                                </IonCol>
+                                                <IonCol size="2">
+                                                    <IonButton fill="clear" style={{ height: '100%', width: '100%' }}><IonIcon style={{ fontSize: '28px',  }} icon={addCircleOutline}></IonIcon></IonButton>
                                                 </IonCol>
                                             </IonRow>
                                         </IonCol>
-
                                     </IonRow>
+
                                 </IonGrid>
                             </IonItem>
                         ))
@@ -64,33 +75,39 @@ class WoPlanned extends Component {
                 {
                     'wpmaterial' in currentWorkOrder && (
                         currentWorkOrder.wpmaterial.map((material) => (
-                            <IonItem button detail key={material.wpitemid}>
+                            <IonItem lines="full"  key={material.wpitemid}>
                                 <IonGrid>
                                     <IonRow>
-                                        <IonCol size="1">
-                                            <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={closeOutline}></IonIcon>
+                                        <IonCol size="2" style={{ textAlign: 'center' }}>
+                                            {
+                                                parseInt(material.itemqtyused) >= parseInt(material.itemqty)
+                                                    ?
+                                                    <IonIcon style={{ fontSize: '28px', paddingTop: '10px' }} icon={checkmarkOutline}></IonIcon>
+                                                    :
+                                                    <IonIcon style={{ fontSize: '28px', paddingTop: '10px' }} icon={hourglassOutline} />
+                                            }
                                         </IonCol>
                                         <IonCol>
-                                            <IonRow> <IonNote>{material.description}</IonNote></IonRow>
                                             <IonRow>
-                                                <IonCol size="12">
-                                                    <IonLabel>{material.itemnum}</IonLabel>
+                                                <IonCol size="5">
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Material:</span> {material.description}</IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Código:</span> {material.itemnum} hrs</IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Almacén:</span> {material.storelocsite} hrs</IonLabel>
                                                 </IonCol>
-                                            </IonRow>
-                                            <IonRow>
-                                                <IonCol size="12">
-                                                    <IonLabel>Cantidad: {material.itemqty}</IonLabel>
+                                                <IonCol size="5">
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Cantidad:</span> {material.itemqty}</IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Cantidad usada:</span> {material.itemqtyused}</IonLabel>
                                                 </IonCol>
-                                            </IonRow>
-                                            <IonRow>
-                                                <IonCol size="12">
-                                                    <IonLabel>Almacen: {material.storelocsite}</IonLabel>
+                                                <IonCol size="2">
+                                                    <IonButton fill="clear" style={{ height: '100%', width: '100%' }}><IonIcon style={{ fontSize: '28px',  }} icon={addCircleOutline}></IonIcon></IonButton>
                                                 </IonCol>
                                             </IonRow>
                                         </IonCol>
                                     </IonRow>
+
                                 </IonGrid>
                             </IonItem>
+                            
                         ))
                     )
                 }
