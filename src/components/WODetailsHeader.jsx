@@ -16,7 +16,7 @@ class WoDetailsHeader extends Component {
     render() {
         const { currentWorkOrder } = this.props
         const { showLongDescModal } = this.state
-        console.log(currentWorkOrder)
+       
         return (
             <Fragment>
                 <IonItem lines="full" detail button onClick={e => { e.preventDefault();  this.handleToggleLongDescModal(true)} }>

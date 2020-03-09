@@ -10,22 +10,22 @@ import {
 } from 'ionicons/icons'
 import { findItem } from '../utils/api'
 import './Maximo.css'
-import { saveCurrentWorkOrder } from '../actions/workOrders';
 
-class WoLongDescModal extends Component {
+
+class TaskDescModal extends Component {
 
 
     render() {
-        const { showLongDescModal, handleToggleLongDescModal, currentWorkOrder } = this.props
+        const { showTaskDescModal, handleToggleTaskDescModal, taskLongDescription } = this.props
 
 
         return (
-            <IonModal isOpen={showLongDescModal}>
+            <IonModal isOpen={showTaskDescModal}>
                 <IonHeader>
                     <IonToolbar>
                         <IonTitle>Descripción completa</IonTitle>
                         <ion-buttons slot="end">
-                            <ion-button onClick={() => handleToggleLongDescModal(false)}>Cerrar</ion-button>
+                            <ion-button onClick={() => handleToggleTaskDescModal(false)}>Cerrar</ion-button>
                         </ion-buttons>
                     </IonToolbar>
                 </IonHeader>
@@ -35,9 +35,9 @@ class WoLongDescModal extends Component {
                         <IonGrid>
                             <IonRow>
                                 <IonCol size="12">
-                                    
-                                        <IonNote style={{textAlign:'justify', borderBottom: 'none'}}>{'description_longdescription' in currentWorkOrder ? currentWorkOrder.description_longdescription.replace(/<[^>]+>/g, '') : 'Descripción no disponible'}</IonNote>
-                                    
+
+                                    <IonNote style={{ textAlign: 'justify', borderBottom: 'none' }}>{taskLongDescription ? taskLongDescription.replace(/<[^>]+>/g, '') : 'Descripción no disponible'}</IonNote>
+
                                 </IonCol>
                             </IonRow>
                         </IonGrid>
@@ -50,4 +50,4 @@ class WoLongDescModal extends Component {
     }
 }
 
-export default WoLongDescModal;
+export default TaskDescModal;

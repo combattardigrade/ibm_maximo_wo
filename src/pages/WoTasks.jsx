@@ -8,6 +8,7 @@ import ExploreContainer from '../components/ExploreContainer';
 import WoDetailsHeader from '../components/WODetailsHeader';
 import { updateTaskStatus } from '../utils/api'
 import { saveCurrentWorkOrder } from '../actions/workOrders'
+import TaskDescModal from './TaskDescModal'
 import './Page.css';
 import './Maximo.css'
 import { Plugins } from '@capacitor/core'
@@ -15,6 +16,10 @@ const { Modals } = Plugins
 
 class WoTasks extends Component {
 
+    state = {
+        showTaskDescModal: false,
+        taskLongDescription: ''
+    }
 
     handleCompleteTaskClick = (taskHref) => {
         const { currentWorkOrder, dispatch, token } = this.props
@@ -55,6 +60,10 @@ class WoTasks extends Component {
         })
     }
 
+    handleToggleTaskDescModal = (value) => {
+        this.setState({ showTaskDescModal: value })
+    }
+
     render() {
         const { currentWorkOrder } = this.props
 
@@ -73,7 +82,7 @@ class WoTasks extends Component {
                     currentWorkOrder && 'woactivity' in currentWorkOrder 
                         ?
                         currentWorkOrder.woactivity.sort((t1, t2) => parseInt(t1.taskid) - parseInt(t2.taskid)).map(task => (
-                            <IonItem lines="full" key={task.taskid} button detail>
+                            <IonItem lines="full" key={task.taskid} button detail onClick={e => {e.preventDefault(); this.setState({taskLongDescription:task.description_longdescription,showTaskDescModal:true})}}>
                                 <IonGrid>
                                     <IonRow>
                                         <IonCol size="2" style={{ textAlign: 'center' }}>
@@ -103,7 +112,7 @@ class WoTasks extends Component {
                         :
                         <IonItem><IonLabel>No se encontraron resultados</IonLabel></IonItem>
                 }
-
+                <TaskDescModal handleToggleTaskDescModal={this.handleToggleTaskDescModal} showTaskDescModal={this.state.showTaskDescModal} taskLongDescription={this.state.taskLongDescription} />
             </IonContent>
         );
     }
