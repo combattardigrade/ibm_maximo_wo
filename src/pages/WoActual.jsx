@@ -4,6 +4,7 @@ import { checkmarkOutline, closeOutline, addCircleOutline } from 'ionicons/icons
 
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
+import WoDetailsHeader from '../components/WODetailsHeader'
 import './Page.css';
 const moment = require('moment')
 
@@ -14,25 +15,7 @@ class WoActual extends Component {
 
         return (
             <IonContent>
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol><IonLabel>{currentWorkOrder.wonum}</IonLabel></IonCol>
-                            <IonCol><IonLabel>{currentWorkOrder.targstartdate}</IonLabel></IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol>
-                                <IonLabel>{currentWorkOrder.description}</IonLabel>
-                            </IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol>
-                                <IonLabel>{asset && asset.description}</IonLabel>
-                            </IonCol>
-                        </IonRow>
-
-                    </IonGrid>
-                </IonItem>
+                <WoDetailsHeader currentWorkOrder={currentWorkOrder} />
 
                 <IonItem>
                     <IonLabel>"Mano de obra":</IonLabel>

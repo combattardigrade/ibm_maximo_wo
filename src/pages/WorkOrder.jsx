@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import {
+    withIonLifeCycle, useIonViewWillEnter,
     IonButtons,
     IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar,
     IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow,
@@ -30,6 +31,7 @@ import LaborModal from './LaborModal'
 import MaterialModal from './MaterialModal'
 import CommentModal from './CommentModal'
 
+import { saveCurrentWorkOrder, saveWorkOrderSafety } from '../actions/workOrders'
 import { getJobPlan, getWorkOrder, getAsset, getWOSafety } from '../utils/api'
 
 class WorkOrder extends Component {
@@ -61,43 +63,35 @@ class WorkOrder extends Component {
         this.props.history.goBack()
     }
 
-    async componentDidMount() {
+    ionViewWillEnter() {
         const { wonum } = this.props.match.params
-        const { workOrders, token } = this.props
+        const { currentWorkOrder, token, dispatch } = this.props
 
+        if (!currentWorkOrder || currentWorkOrder.wonum != wonum ) {
+            getWorkOrder({ wonum: wonum, token: token })
+                .then((data) => data.json())
+                .then((response) => {
+                    if (response.status == 'OK') {
+                        dispatch(saveCurrentWorkOrder(response.payload))
+                        // this.setState({ loading: false })
+                    }
+                })
 
-        getWorkOrder({ wonum: wonum, token: token })
-            .then((data) => data.json())
-            .then((response) => {
-                if (response.status == 'OK') {
-                    this.setState({ currentWorkOrder: response.payload, loading: false })
-                }
-            })
+            getWOSafety({ wonum: wonum, token: token })
+                .then((data) => data.json())
+                .then((response) => {
+                    if (response.status == 'OK') {
+                        dispatch(saveWorkOrderSafety(response.payload))
 
-        getWOSafety({wonum: wonum, token: token})
-            .then((data) => data.json())
-            .then((response) => {
-                if(response.status == 'OK') {
-                    this.setState({safetyDetails: response.payload})
-                }
-            })
-
-
-
+                    }
+                })
+        }
 
     }
 
     render() {
-        const { match } = this.props
-        const { showLaborModal, showMaterialModal, showCommentModal, currentWorkOrder, loading } = this.state
-
-        if (!currentWorkOrder) {
-            return <div className="spinnerCenter">
-                {
-                    loading == true && <IonSpinner name="crescent" style={{ textAlign: 'center' }} />
-                }
-            </div>
-        }
+        const { currentWorkOrder, safetyDetails } = this.props
+        const { showLaborModal, showMaterialModal, showCommentModal, loading } = this.state
 
 
         return (
@@ -112,13 +106,14 @@ class WorkOrder extends Component {
                 </IonHeader>
 
                 <IonContent>
-                    <ion-tabs>
-                        {
-                            loading == false
-                                ?
+                    {
+                        currentWorkOrder
+                            ?
+                            <ion-tabs selectedIndex="1">
+
                                 <div>
                                     <ion-tab tab="tab-details">
-                                        <ion-nav><WoDetails currentWorkOrder={currentWorkOrder} safetyDetails={this.state.safetyDetails && this.state.safetyDetails} /></ion-nav>
+                                        <ion-nav><WoDetails currentWorkOrder={currentWorkOrder} safetyDetails={safetyDetails && safetyDetails} /></ion-nav>
                                     </ion-tab>
 
                                     <ion-tab tab="tab-tasks">
@@ -133,39 +128,36 @@ class WorkOrder extends Component {
                                         <ion-nav><WoActual currentWorkOrder={currentWorkOrder} /></ion-nav>
                                     </ion-tab>
                                 </div>
-                                :
-                                <div className="spinnerCenter">
-                                    {
-                                        loading == true && <IonSpinner name="crescent" style={{ textAlign: 'center' }} />
-                                    }
-                                </div>
-                        }
 
+                                <ion-tab-bar slot="top">
+                                    <ion-tab-button tab="tab-details">
+                                        <ion-icon name="calendar"></ion-icon>
+                                        <ion-label>Detalles</ion-label>
+                                    </ion-tab-button>
 
-                        <ion-tab-bar slot="top">
-                            <ion-tab-button tab="tab-details">
-                                <ion-icon name="calendar"></ion-icon>
-                                <ion-label>Detalles</ion-label>
+                                    <ion-tab-button tab="tab-tasks">
+                                        <ion-icon name="person-circle"></ion-icon>
+                                        <ion-label>Tareas</ion-label>
+                                    </ion-tab-button>
 
-                            </ion-tab-button>
+                                    <ion-tab-button tab="tab-planned">
+                                        <ion-icon name="map"></ion-icon>
+                                        <ion-label>Planificado</ion-label>
+                                    </ion-tab-button>
 
-                            <ion-tab-button tab="tab-tasks">
-                                <ion-icon name="person-circle"></ion-icon>
-                                <ion-label>Tareas</ion-label>
-                            </ion-tab-button>
+                                    <ion-tab-button tab="tab-actual">
+                                        <ion-icon name="information-circle"></ion-icon>
+                                        <ion-label>Actuales</ion-label>
+                                    </ion-tab-button>
+                                </ion-tab-bar>
 
-                            <ion-tab-button tab="tab-planned">
-                                <ion-icon name="map"></ion-icon>
-                                <ion-label>Planificado</ion-label>
-                            </ion-tab-button>
+                            </ion-tabs>
+                            :
+                            <div className="spinnerCenter">
+                                <IonSpinner name="crescent" style={{ textAlign: 'center' }} />
+                            </div>
+                    }
 
-                            <ion-tab-button tab="tab-actual">
-                                <ion-icon name="information-circle"></ion-icon>
-                                <ion-label>Actuales</ion-label>
-                            </ion-tab-button>
-                        </ion-tab-bar>
-
-                    </ion-tabs>
 
                     <ion-fab horizontal="end" vertical="bottom" slot="fixed">
                         <ion-fab-button color="dark">
@@ -195,7 +187,7 @@ class WorkOrder extends Component {
                     {/* Modals */}
                     <LaborModal handleToggleLaborModal={this.handleToggleLaborModal} showLaborModal={showLaborModal} />
                     <MaterialModal handleToggleMaterialModal={this.handleToggleMaterialModal} showMaterialModal={showMaterialModal} />
-                    <CommentModal handleToggleCommentModal={this.handleToggleCommentModal} showCommentModal={showCommentModal}  />
+                    <CommentModal handleToggleCommentModal={this.handleToggleCommentModal} showCommentModal={showCommentModal} />
 
 
                 </IonContent>
@@ -209,9 +201,10 @@ class WorkOrder extends Component {
 function mapStateToProps({ auth, workOrders }) {
     return {
         token: auth.token,
-        workOrders: workOrders.workOrders
-
+        workOrders: workOrders.workOrders,
+        currentWorkOrder: workOrders.currentWorkOrder,
+        safetyDetails: workOrders.workOrderSafety
     }
 }
 
-export default connect(mapStateToProps)(WorkOrder)
+export default connect(mapStateToProps)(withIonLifeCycle(WorkOrder))

@@ -19,7 +19,7 @@ class WoDetails extends Component {
         if (!currentWorkOrder) {
             return <div>Loading</div>
         }
-        console.log(currentWorkOrder)
+       
 
         return (
             <IonContent>
@@ -152,8 +152,8 @@ class WoDetails extends Component {
                                         </IonCol>
                                     </IonRow>
                                     {
-                                        safetyDetails.map((hazard) => (
-                                            <IonRow>
+                                        safetyDetails.map((hazard, i) => (
+                                            <IonRow key={i}>
                                                 <IonCol>
                                                     <IonLabel className="dataField">{hazard.hazardId} - {hazard.hazardDescription}</IonLabel>
                                                 </IonCol>
@@ -170,8 +170,8 @@ class WoDetails extends Component {
                                         </IonCol>
                                     </IonRow>
                                     {
-                                        safetyDetails.map((hazard) => (
-                                            <IonRow>
+                                        safetyDetails.map((hazard, i) => (
+                                            <IonRow key={i}>
                                                 <IonCol>
                                                     <IonLabel className="dataField">{hazard.precautionId} - {hazard.precautionDescription}</IonLabel>
                                                 </IonCol>

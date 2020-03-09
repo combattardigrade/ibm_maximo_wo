@@ -3,7 +3,7 @@ import { SAVE_USER } from '../actions/user'
 export default function user(state = null, action) {
     switch(action.type) {
         case SAVE_USER:
-            return {
+            return {                
                 ...action.user,                
             }
         default:

@@ -5,8 +5,9 @@ import { checkmarkOutline, closeOutline } from 'ionicons/icons'
 
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
+import WoDetailsHeader from '../components/WODetailsHeader';
 import './Page.css';
-
+import './Maximo.css'
 
 
 class WoTasks extends Component {
@@ -23,45 +24,35 @@ class WoTasks extends Component {
 
         return (
             <IonContent>
-                <IonItem lines="full">
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol><IonLabel>{currentWorkOrder.wonum}</IonLabel></IonCol>
-                            <IonCol><IonLabel>{currentWorkOrder.targstartdate}</IonLabel></IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol>
-                                <IonLabel>{currentWorkOrder.description}</IonLabel>
-                            </IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol>
-                                <IonLabel>{asset && asset.description}</IonLabel>
-                            </IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
+
+                <WoDetailsHeader currentWorkOrder={currentWorkOrder} />
 
                 {
-                    currentWorkOrder && 'woactivity' in currentWorkOrder 
-                    ?
+                    currentWorkOrder && 'woactivity' in currentWorkOrder
+                        ?
                         currentWorkOrder.woactivity.sort((t1, t2) => parseInt(t1.taskid) - parseInt(t2.taskid)).map(task => (
                             <IonItem lines="full" key={task.taskid} button detail>
                                 <IonGrid>
                                     <IonRow>
-                                        <IonCol size="1">
-                                            <IonIcon style={{ fontSize: '28px', paddingTop: '30px' }} icon={checkmarkOutline}></IonIcon>
+                                        <IonCol size="2" style={{textAlign:'center'}}>
+                                            <IonIcon style={{ fontSize: '28px', paddingTop: '10px' }} icon={checkmarkOutline}></IonIcon>
+                                        </IonCol>
+                                        <IonCol size="3">
+                                            <IonLabel className="dataSubtitle">Tarea: </IonLabel>
+                                            <IonLabel className="dataSubtitle">Descripción: </IonLabel>
+                                            <IonLabel className="dataSubtitle">Estado: </IonLabel>
                                         </IonCol>
                                         <IonCol>
-                                            <IonRow> <IonLabel>Tarea: {task.taskid}</IonLabel></IonRow>
-                                            <IonRow><IonCol size="12"><IonNote>{task.description}</IonNote></IonCol></IonRow>
+                                            <IonLabel className="dataField">{'taskid' in task ? task.taskid : '-'}</IonLabel>
+                                            <IonLabel className="dataField">{'description' in task ? task.description : '-'}</IonLabel>
+                                            <IonLabel className="dataField">{'status' in task ? task.status : '-'}</IonLabel>
                                         </IonCol>
                                     </IonRow>
                                 </IonGrid>
                             </IonItem>
                         ))
-                    :
-                    <IonItem><IonLabel>No se encontraron resultados</IonLabel></IonItem>
+                        :
+                        <IonItem><IonLabel>No se encontraron resultados</IonLabel></IonItem>
                 }
 
             </IonContent>

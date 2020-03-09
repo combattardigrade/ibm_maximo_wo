@@ -17,6 +17,7 @@ import './Page.css';
 import './Maximo.css'
 import { Plugins } from '@capacitor/core'
 import { getInventory, findInventoryItem } from '../utils/api'
+import { saveInventory } from '../actions/inventory'
 import ItemModal from './ItemModal'
 const { Modals } = Plugins
 // Modals
@@ -49,15 +50,16 @@ class Inventory extends Component {
     handleSearchClick = (e) => {
         e.preventDefault()
         const { searchMethod, searchValue } = this.state
-        const { token } = this.props
+        const { token, dispatch } = this.props
         this.setState({ loading: true, inventory: '' })
-        
+
         if (!searchValue || !searchMethod) {
             getInventory({ token: token })
                 .then(data => data.json())
                 .then((response) => {
                     if (response.status == 'OK') {
-                        this.setState({ inventory: response.payload, loading: false })
+                        dispatch(saveInventory(response.payload))
+                        this.setState({ loading: false })
                     }
                 })
             return
@@ -68,7 +70,8 @@ class Inventory extends Component {
             .then(response => {
                 console.log(response)
                 if (response.status == 'OK') {
-                    this.setState({ inventory: response.payload, loading: false })
+                    dispatch(saveInventory(response.payload))
+                    this.setState({ loading: false })
                 }
             })
     }
@@ -80,11 +83,11 @@ class Inventory extends Component {
     }
 
     handleToggleItemModal = (value) => {
-        this.setState({ showItemModal: value })        
+        this.setState({ showItemModal: value })
     }
 
-    handleItemClick = (_rowstamp) => {        
-        const { inventory } = this.state
+    handleItemClick = (_rowstamp) => {
+        const { inventory } = this.props
         this.setState({ showItemModal: true, modalLoading: true })
         const item = inventory.filter(i => i._rowstamp == _rowstamp)
         console.log(item)
@@ -93,18 +96,24 @@ class Inventory extends Component {
     }
 
     componentDidMount() {
-        const { token } = this.props
-        getInventory({ token: token })
-            .then(data => data.json())
-            .then((response) => {
-                if (response.status == 'OK') {
-                    this.setState({ inventory: response.payload, loading: false })
-                }
-            })
+        const { token, inventory, dispatch } = this.props
+
+        if (!inventory) {
+            getInventory({ token: token })
+                .then(data => data.json())
+                .then((response) => {
+                    if (response.status == 'OK') {
+                        dispatch(saveInventory(response.payload))
+                    }
+                })
+        } else {
+            this.setState({ loading: false })
+        }
     }
 
     render() {
-        const { inventory, loading, showItemModal } = this.state        
+        const { loading, showItemModal } = this.state
+        const { inventory } = this.props
 
         return (
             <IonPage>
@@ -139,9 +148,10 @@ class Inventory extends Component {
                     </IonGrid>
 
                     {
-                        inventory.length > 0
+                        inventory && loading == false
                             ?
                             inventory.map((item) => (
+
                                 <IonItem key={item._rowstamp} button detail onClick={e => { e.preventDefault(); this.handleItemClick(item._rowstamp) }}>
                                     <IonGrid>
                                         <IonRow>
@@ -189,11 +199,10 @@ class Inventory extends Component {
     }
 };
 
-function mapStateToProps({ auth, workOrders }) {
+function mapStateToProps({ auth, workOrders, inventory }) {
     return {
         token: auth.token,
-
-
+        inventory: inventory.inventory
     }
 }
 

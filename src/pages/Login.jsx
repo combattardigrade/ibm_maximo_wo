@@ -10,13 +10,8 @@ import { Plugins } from '@capacitor/core'
 const { Modals } = Plugins
 
 class Login extends Component {
-
+ 
     
-
-    componentDidMount() {
-        console.log(this.props.history)
-        
-    }
     async showAlert(message) {
         let alertRet = await Modals.alert({
           title: 'Error',

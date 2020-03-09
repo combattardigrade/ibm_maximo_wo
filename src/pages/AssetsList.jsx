@@ -17,6 +17,7 @@ import './Page.css';
 import './Maximo.css'
 import { Plugins } from '@capacitor/core'
 import { getAssets, findAsset, getAssetSafety } from '../utils/api'
+import { saveAssets } from '../actions/assets'
 import AssetModal from './AssetModal'
 const { Modals } = Plugins
 
@@ -49,15 +50,16 @@ class AssetsList extends Component {
     handleSearchClick = (e) => {
         e.preventDefault()
         const { searchMethod, searchValue } = this.state
-        const { token } = this.props
-        this.setState({ loading: true, assets: '' })
+        const { token, dispatch } = this.props
+        this.setState({ loading: true })
 
         if (!searchValue || !searchMethod) {
             getAssets({ token: token })
                 .then(data => data.json())
                 .then((response) => {
                     if (response.status == 'OK') {
-                        this.setState({ assets: response.payload, loading: false })
+                        dispatch(saveAssets(response.payload))
+                        this.setState({ loading: false })
                     }
                 })
             return
@@ -68,7 +70,8 @@ class AssetsList extends Component {
             .then(response => {
                 console.log(response)
                 if (response.status == 'OK') {
-                    this.setState({ assets: response.payload, loading: false })
+                    dispatch(saveAssets(response.payload))
+                    this.setState({ loading: false })
                 }
             })
     }
@@ -85,14 +88,14 @@ class AssetsList extends Component {
     }
 
     handleAssetClick = (_rowstamp) => {
-        const { assets } = this.state
-        const { token } = this.props
+        const { token, assets, dispatch } = this.props
         this.setState({ showAssetModal: true, modalLoading: true })
         const asset = assets.filter(a => a._rowstamp == _rowstamp)
         this.setState({ asset: asset[0], loading: false })
         getAssetSafety({ assetnum: asset[0].assetnum, token: token })
             .then(data => data.json())
             .then(res => {
+                console.log('assetSafety: ' + res.payload)
                 this.setState({ assetSafety: res.status == 'OK' && res.payload })
                 return false
             })
@@ -100,22 +103,24 @@ class AssetsList extends Component {
     }
 
     componentDidMount() {
-        const { token } = this.props
-        getAssets({ token: token })
-            .then(data => data.json())
-            .then((response) => {
-                if (response.status == 'OK') {
-                    this.setState({ assets: response.payload, loading: false })
-                }
-            })
+        const { token, assets, dispatch } = this.props
+        if (!assets) {
+            getAssets({ token: token })
+                .then(data => data.json())
+                .then((response) => {
+                    if (response.status == 'OK') {
+                        dispatch(saveAssets(response.payload))
+                    }
+                })
+                .catch((err) => console.log(err))
+        } else {
+            this.setState({ loading: false })
+        }
     }
 
     render() {
-        const { assets, loading, showAssetModal } = this.state
-
-
-
-
+        const { loading, showAssetModal } = this.state
+        const { assets } = this.props
 
         return (
             <IonPage>
@@ -150,7 +155,7 @@ class AssetsList extends Component {
                     </IonGrid>
 
                     {
-                        assets.length > 0
+                        assets.length > 0 && loading == false
                             ?
                             assets.map((asset) => (
                                 <IonItem key={asset._rowstamp} button detail onClick={e => { e.preventDefault(); this.handleAssetClick(asset._rowstamp) }}>
@@ -200,10 +205,10 @@ class AssetsList extends Component {
     }
 };
 
-function mapStateToProps({ auth, workOrders }) {
+function mapStateToProps({ auth, assets }) {
     return {
         token: auth.token,
-
+        assets: assets.assets
 
     }
 }

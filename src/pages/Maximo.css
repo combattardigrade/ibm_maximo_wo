@@ -16,3 +16,7 @@
     align-items: center; 
     height: 50%;
 }
+.dataSubtitle {
+    font-weight: bold;
+    font-size: 12px !important;
+}

@@ -84,7 +84,7 @@ class App extends Component {
 
 function mapStateToProps({ auth }) {
   return {
-      token: auth.token,   
+       
 
   }
 }
