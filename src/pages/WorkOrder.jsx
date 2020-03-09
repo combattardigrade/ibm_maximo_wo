@@ -44,15 +44,21 @@ class WorkOrder extends Component {
         jobPlan: '',
         asset: '',
         loading: true,
-        safetyDetails: ''
+        safetyDetails: '',
+        taskid: '',
+        wonum: ''
     }
 
-    handleToggleLaborModal = (value) => {
-        this.setState({ showLaborModal: value })
+    handleToggleLaborModal = (value, taskid) => {
+        taskid
+            ? this.setState({ showLaborModal: value, taskid: taskid })
+            : this.setState({ showLaborModal: value, taskid: '' })
     }
 
-    handleToggleMaterialModal = (value) => {
-        this.setState({ showMaterialModal: value })
+    handleToggleMaterialModal = (value, wonum) => {        
+        wonum
+            ? this.setState({ showMaterialModal: value, wonum: wonum })
+            : this.setState({ showMaterialModal: value, wonum: '' })
     }
 
     handleToggleCommentModal = (value) => {
@@ -67,7 +73,7 @@ class WorkOrder extends Component {
         const { wonum } = this.props.match.params
         const { currentWorkOrder, token, dispatch } = this.props
 
-        if (!currentWorkOrder || currentWorkOrder.wonum != wonum ) {
+        if (!currentWorkOrder || currentWorkOrder.wonum != wonum) {
             getWorkOrder({ wonum: wonum, token: token })
                 .then((data) => data.json())
                 .then((response) => {
@@ -121,7 +127,12 @@ class WorkOrder extends Component {
                                     </ion-tab>
 
                                     <ion-tab tab="tab-planned" >
-                                        <ion-nav><WoPlanned currentWorkOrder={currentWorkOrder} /></ion-nav>
+                                        <ion-nav>
+                                            <WoPlanned currentWorkOrder={currentWorkOrder}
+                                                handleToggleLaborModal={this.handleToggleLaborModal} 
+                                                handleToggleMaterialModal={this.handleToggleMaterialModal}
+                                            />
+                                        </ion-nav>
                                     </ion-tab>
 
                                     <ion-tab tab="tab-actual" >
@@ -185,8 +196,8 @@ class WorkOrder extends Component {
                     </ion-fab>
 
                     {/* Modals */}
-                    <LaborModal handleToggleLaborModal={this.handleToggleLaborModal} showLaborModal={showLaborModal} />
-                    <MaterialModal handleToggleMaterialModal={this.handleToggleMaterialModal} showMaterialModal={showMaterialModal} />
+                    <LaborModal handleToggleLaborModal={this.handleToggleLaborModal} showLaborModal={showLaborModal} taskid={this.state.taskid} />
+                    <MaterialModal handleToggleMaterialModal={this.handleToggleMaterialModal} showMaterialModal={showMaterialModal} wonum={this.state.wonum} />
                     <CommentModal handleToggleCommentModal={this.handleToggleCommentModal} showCommentModal={showCommentModal} />
 
 

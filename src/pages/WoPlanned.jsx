@@ -8,12 +8,11 @@ import WoDetailsHeader from '../components/WODetailsHeader'
 import './Page.css';
 import { parse } from 'url';
 
-class WoPlanned extends Component {
-
+class WoPlanned extends Component {    
 
     render() {
 
-        const { currentWorkOrder, asset, jobPlan } = this.props
+        const { currentWorkOrder, handleToggleLaborModal, handleToggleMaterialModal} = this.props
 
         // Check if jobPlan has attributes
         if (!currentWorkOrder) {
@@ -31,7 +30,7 @@ class WoPlanned extends Component {
                 {
                     'wplabor' in currentWorkOrder && (
                         currentWorkOrder.wplabor.map((labor) => (
-                            <IonItem lines="full"  key={labor.wplaborid}>
+                            <IonItem lines="full" key={labor.wplaborid}>
                                 <IonGrid>
                                     <IonRow>
                                         <IonCol size="2" style={{ textAlign: 'center' }}>
@@ -54,7 +53,7 @@ class WoPlanned extends Component {
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Completado:</span> {labor.laborhrscompleted} hrs</IonLabel>
                                                 </IonCol>
                                                 <IonCol size="2">
-                                                    <IonButton fill="clear" style={{ height: '100%', width: '100%' }}><IonIcon style={{ fontSize: '28px',  }} icon={addCircleOutline}></IonIcon></IonButton>
+                                                    <IonButton onClick={e => {e.preventDefault(); handleToggleLaborModal(true,labor.taskid)}}  fill="clear" style={{ height: '100%', width: '100%' }}><IonIcon style={{ fontSize: '28px', }} icon={addCircleOutline}></IonIcon></IonButton>
                                                 </IonCol>
                                             </IonRow>
                                         </IonCol>
@@ -75,7 +74,7 @@ class WoPlanned extends Component {
                 {
                     'wpmaterial' in currentWorkOrder && (
                         currentWorkOrder.wpmaterial.map((material) => (
-                            <IonItem lines="full"  key={material.wpitemid}>
+                            <IonItem lines="full" key={material.wpitemid}>
                                 <IonGrid>
                                     <IonRow>
                                         <IonCol size="2" style={{ textAlign: 'center' }}>
@@ -99,7 +98,7 @@ class WoPlanned extends Component {
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Cantidad usada:</span> {material.itemqtyused}</IonLabel>
                                                 </IonCol>
                                                 <IonCol size="2">
-                                                    <IonButton fill="clear" style={{ height: '100%', width: '100%' }}><IonIcon style={{ fontSize: '28px',  }} icon={addCircleOutline}></IonIcon></IonButton>
+                                                    <IonButton onClick={e => { e.preventDefault(); handleToggleMaterialModal(true, currentWorkOrder.wonum)}} fill="clear" style={{ height: '100%', width: '100%' }}><IonIcon style={{ fontSize: '28px', }} icon={addCircleOutline}></IonIcon></IonButton>
                                                 </IonCol>
                                             </IonRow>
                                         </IonCol>
@@ -107,11 +106,11 @@ class WoPlanned extends Component {
 
                                 </IonGrid>
                             </IonItem>
-                            
+
                         ))
                     )
                 }
-
+               
             </IonContent>
 
         );

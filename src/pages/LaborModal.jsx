@@ -11,6 +11,8 @@ import {
 
 class LaborModal extends Component {
     render() {
+        const { taskid } = this.props
+        console.log(taskid)
         return (
             <IonModal isOpen={this.props.showLaborModal}>
                 <IonHeader>
