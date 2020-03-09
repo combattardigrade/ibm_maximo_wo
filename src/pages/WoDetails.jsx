@@ -4,6 +4,7 @@ import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, Io
 
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
+import WoDetailsHeader from '../components/WODetailsHeader';
 import './Page.css';
 import './Maximo.css'
 
@@ -24,19 +25,7 @@ class WoDetails extends Component {
         return (
             <IonContent>
                 {/* WO */}
-                <IonItem lines="full" detail button>
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol className="dataTitle">Orden de Trabajo</IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol size="12">
-                                <IonLabel className="dataField">{'wonum' in currentWorkOrder ? currentWorkOrder.wonum : '-'}</IonLabel>
-                                <IonLabel className="dataField">{'description' in currentWorkOrder ? currentWorkOrder.description : '-'}</IonLabel>
-                            </IonCol>
-                        </IonRow>
-                    </IonGrid>
-                </IonItem>
+                <WoDetailsHeader currentWorkOrder={currentWorkOrder} />
                 {/* ASSET */}
                 <IonItem lines="full">
                     <IonGrid>
