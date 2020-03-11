@@ -1,16 +1,23 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { IonSpinner, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonIcon, IonButton, IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol } from '@ionic/react';
+import {
+    IonSpinner, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonIcon, IonButton,
+    IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonAlert
+} from '@ionic/react';
 import {
     refreshOutline
 } from 'ionicons/icons'
 import './Page.css';
 import './Maximo.css'
-import { getWorkOrders, getWhoAmI, getInventory, getAssets, getWorkOrder, getWOSafety } from '../utils/api'
+import { getWorkOrders, getWhoAmI, getInventory, getAssets, 
+    getWorkOrder, checkWOHazardVerification, 
+    sendWOHazardVerification, getLaborCatalog
+} from '../utils/api'
 import { saveWorkOrders, saveCurrentWorkOrder, saveWorkOrderSafety } from '../actions/workOrders'
 import { saveUser } from '../actions/user'
 import { saveInventory } from '../actions/inventory'
 import { saveAssets } from '../actions/assets'
+import { saveLaborCatalog } from '../actions/labor'
 import WoCard from '../components/WoCard'
 import { Plugins } from '@capacitor/core'
 const { Modals } = Plugins
@@ -18,14 +25,16 @@ const { Modals } = Plugins
 class Dashboard extends Component {
 
     state = {
-        loading: true
+        loading: true,
+        showHazardVerification: false,
+        wonum: ''
     }
 
     componentDidMount() {
-        const { token, dispatch, workOrders, user, inventory, assets } = this.props
+        const { token, dispatch, workOrders, user, inventory, assets, labor } = this.props
 
-        if(workOrders && user && inventory && assets) {
-            this.setState({loading: false})
+        if (workOrders && user && inventory && assets && labor) {
+            this.setState({ loading: false })
             return
         }
 
@@ -64,31 +73,68 @@ class Dashboard extends Component {
                 })
         }
 
-        if(!inventory) {
+        if (!inventory) {
             getInventory({ token: token })
-            .then(data => data.json())
-            .then((response) => {
-                if (response.status == 'OK') {
-                    dispatch(saveInventory(response.payload))
-                }
-            })
-            .catch((err) => console.log(err))
+                .then(data => data.json())
+                .then((response) => {
+                    if (response.status == 'OK') {
+                        dispatch(saveInventory(response.payload))
+                    }
+                })
+                .catch((err) => console.log(err))
         }
 
-        if(!assets) {
+        if (!assets) {
             getAssets({ token: token })
-            .then(data => data.json())
-            .then((response) => {
-                if (response.status == 'OK') {
-                    dispatch(saveAssets(response.payload))
-                }
-            })
-            .catch((err) => console.log(err))
+                .then(data => data.json())
+                .then((response) => {
+                    if (response.status == 'OK') {
+                        dispatch(saveAssets(response.payload))
+                    }
+                })
+                .catch((err) => console.log(err))
+        }
+        
+        if(!labor) {
+            
+            getLaborCatalog({ token: token})
+                .then(data => data.json())
+                .then((response) => {
+                    if(response.status == 'OK') {
+                        console.log(response.payload)
+                        dispatch(saveLaborCatalog(response.payload))
+                    }
+                })
+                .catch((err) => console.log(err))
         }
 
     }
 
     handleWorkOrderClick = async (wonum) => {
+        // const { token } = this.props
+        // // Check if WO Hazard Verification has been submitted
+        // checkWOHazardVerification({ wonum: wonum, token: token })
+        //     .then((data) => data.json())
+        //     .then((res) => {
+        //         console.log(res)
+        //         if (res.payload.length == 0) {
+        //             this.setState({ showHazardVerification: true, wonum: wonum })
+        //             return
+        //         }
+        //         this.props.history.push('/wo/' + wonum)
+        //     })
+        this.props.history.push('/wo/' + wonum)
+    }
+
+    handleHazardVerificationClick = async (data) => {
+        const { token } = this.props
+        const { wonum } = this.state
+        if (data.length != 3) {
+            this.setState({ showHazardVerification: false })
+            return
+        }
+        sendWOHazardVerification({ wonum: wonum, token: token })
+
         this.props.history.push('/wo/' + wonum)
     }
 
@@ -123,7 +169,7 @@ class Dashboard extends Component {
 
     render() {
         const { workOrders } = this.props
-        const { loading } = this.state
+        const { loading, showHazardVerification } = this.state
 
         return (
             <IonPage>
@@ -160,6 +206,51 @@ class Dashboard extends Component {
                             </div>
                     }
 
+                    <IonAlert
+                        isOpen={showHazardVerification}
+                        header={'Verificación'}
+                        inputs={[
+                            {
+                                name: 'checkbox1',
+                                value: 'true',
+                                type: 'checkbox',
+                                label: 'Tengo permiso de trabajo Aprobado para trabajos riesgosos.',
+                                checked: false,
+                            },
+                            {
+                                name: 'checkbox2',
+                                value: 'true',
+                                type: 'checkbox',
+                                label: 'Cuento con el equipo y protección necesaria.',
+                                checked: false,
+                            },
+                            {
+                                name: 'checkbox3',
+                                value: 'true',
+                                type: 'checkbox',
+                                label: 'Realicé LoTo antes de intervenir equipo.',
+                                checked: false,
+                            }
+                        ]}
+                        buttons={[
+                            {
+                                text: 'Cancelar',
+                                role: 'cancel',
+                                handler: () => {
+                                    this.setState({ showHazardVerification: false })
+                                }
+                            },
+                            {
+                                text: 'Enviar',
+
+                                handler: (data) => {
+                                    this.handleHazardVerificationClick(data)
+                                }
+                            }
+                        ]}
+                    />
+
+
 
                 </IonContent>
             </IonPage>
@@ -168,13 +259,14 @@ class Dashboard extends Component {
 };
 
 
-function mapStateToProps({ auth, workOrders, user, inventory, assets }) {
+function mapStateToProps({ auth, workOrders, user, inventory, assets, labor }) {
     return {
         token: auth.token,
         workOrders: workOrders && workOrders.workOrders,
         user,
         inventory,
-        assets
+        assets,
+        labor
     }
 }
 

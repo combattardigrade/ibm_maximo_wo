@@ -159,3 +159,37 @@ export function findWorkOrder(params) {
         }
     })
 }
+
+export function checkWOHazardVerification(params) {
+    return fetch(API + '/checkWOHazardVerification', {
+        method: 'POST',
+        body: JSON.stringify({ wonum: params.wonum }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function sendWOHazardVerification(params) {
+    return fetch(API + '/sendWOHazardVerification', {
+        method: 'POST',
+        body: JSON.stringify({ wonum: params.wonum }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function getLaborCatalog(params) {
+    console.log(params)
+    return fetch(API + '/getLaborCatalog/', {
+        method: 'POST',
+        body: JSON.stringify({searchMethod: params.searchMethod, searchValue: params.searchValue}),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}

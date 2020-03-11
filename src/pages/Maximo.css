@@ -20,3 +20,15 @@
     font-weight: bold;
     font-size: 12px !important;
 }
+
+.alert-wrapper {
+    --min-width: 80%;
+}
+
+.alert-tappable {
+    height: 68px !important;
+}
+
+.alert-checkbox-label {
+    white-space: normal !important;
+}

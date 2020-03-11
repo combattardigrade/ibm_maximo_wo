@@ -62,9 +62,11 @@ class Menu extends Component {
 
             <IonItem lines="none" onClick={ e => { e.preventDefault(); this.handlePage('assets') }} >
               <IonLabel>Activos</IonLabel>
-            </IonItem>
-
+            </IonItem>            
           </IonList>
+          <IonItem lines="none" style={{position:'absolute',bottom: '20px'}} onClick={ e => { e.preventDefault(); localStorage.clear();this.handlePage('login') }} >
+              <IonLabel>Cerrar sesión</IonLabel>
+            </IonItem>
         </IonContent>
       </IonMenu>
     );
