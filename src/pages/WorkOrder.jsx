@@ -55,7 +55,7 @@ class WorkOrder extends Component {
             : this.setState({ showLaborModal: value, taskid: '' })
     }
 
-    handleToggleMaterialModal = (value, wonum) => {        
+    handleToggleMaterialModal = (value, wonum) => {
         wonum
             ? this.setState({ showMaterialModal: value, wonum: wonum })
             : this.setState({ showMaterialModal: value, wonum: '' })
@@ -129,14 +129,15 @@ class WorkOrder extends Component {
                                     <ion-tab tab="tab-planned" >
                                         <ion-nav>
                                             <WoPlanned currentWorkOrder={currentWorkOrder}
-                                                handleToggleLaborModal={this.handleToggleLaborModal} 
+                                                handleToggleLaborModal={this.handleToggleLaborModal}
                                                 handleToggleMaterialModal={this.handleToggleMaterialModal}
                                             />
                                         </ion-nav>
                                     </ion-tab>
 
                                     <ion-tab tab="tab-actual" >
-                                        <ion-nav><WoActual currentWorkOrder={currentWorkOrder} /></ion-nav>
+                                        <ion-nav><WoActual currentWorkOrder={currentWorkOrder} handleToggleLaborModal={this.handleToggleLaborModal}
+                                            handleToggleMaterialModal={this.handleToggleMaterialModal} /></ion-nav>
                                     </ion-tab>
                                 </div>
 

@@ -37,7 +37,7 @@ class ItemModal extends Component {
                                 <IonItem>
                                     <IonGrid>
                                         <IonRow>
-                                            <IonCol><IonLabel>Código</IonLabel></IonCol>
+                                            <IonCol><IonLabel className="dataTitle">Código</IonLabel></IonCol>
 
                                         </IonRow>
                                         <IonRow>
@@ -48,7 +48,7 @@ class ItemModal extends Component {
                                 <IonItem>
                                     <IonGrid>
                                         <IonRow>
-                                            <IonCol><IonLabel>Descripción</IonLabel></IonCol>
+                                            <IonCol><IonLabel className="dataTitle">Descripción</IonLabel></IonCol>
 
                                         </IonRow>
                                         <IonRow>
@@ -59,7 +59,7 @@ class ItemModal extends Component {
                                 <IonItem>
                                     <IonGrid>
                                         <IonRow>
-                                            <IonCol><IonLabel>Almacén</IonLabel></IonCol>
+                                            <IonCol><IonLabel className="dataTitle">Almacén</IonLabel></IonCol>
 
                                         </IonRow>
                                         <IonRow>
@@ -70,7 +70,7 @@ class ItemModal extends Component {
                                 <IonItem>
                                     <IonGrid>
                                         <IonRow>
-                                            <IonCol><IonLabel>Estante</IonLabel></IonCol>
+                                            <IonCol><IonLabel className="dataTitle">Estante</IonLabel></IonCol>
                                         </IonRow>
                                         <IonRow>
                                             <IonCol><IonLabel>{item.binnum}</IonLabel></IonCol>
@@ -80,7 +80,7 @@ class ItemModal extends Component {
                                 <IonItem>
                                     <IonGrid>
                                         <IonRow>
-                                            <IonCol><IonLabel>Balance actual</IonLabel></IonCol>
+                                            <IonCol><IonLabel className="dataTitle">Balance actual</IonLabel></IonCol>
                                         </IonRow>
                                         <IonRow>
                                             <IonCol><IonLabel>{item.avblbalance}</IonLabel></IonCol>
@@ -90,7 +90,7 @@ class ItemModal extends Component {
                                 <IonItem>
                                     <IonGrid>
                                         <IonRow>
-                                            <IonCol><IonLabel>Almacén</IonLabel></IonCol>
+                                            <IonCol><IonLabel className="dataTitle">Almacén</IonLabel></IonCol>
 
                                         </IonRow>
                                         <IonRow>
