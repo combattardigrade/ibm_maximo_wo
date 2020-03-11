@@ -37,9 +37,9 @@ class LaborModal extends Component {
             getLaborCatalog({ token: token })
                 .then(data => data.json())
                 .then((response) => {
-                    if (response.status == 'OK') {                        
+                    if (response.status == 'OK') {
                         dispatch(saveLaborCatalog(response.payload))
-                        this.setState({loading: false})
+                        this.setState({ loading: false })
                     }
                 })
                 .catch((err) => console.log(err))
@@ -49,9 +49,9 @@ class LaborModal extends Component {
         getLaborCatalog({ searchMethod: searchMethod, searchValue: searchValue, token: token })
             .then(data => data.json())
             .then((response) => {
-                if (response.status == 'OK') {                    
+                if (response.status == 'OK') {
                     dispatch(saveLaborCatalog(response.payload))
-                    this.setState({loading: false})
+                    this.setState({ loading: false })
                 }
             })
             .catch((err) => console.log(err))
@@ -75,7 +75,7 @@ class LaborModal extends Component {
                     if (response.status == 'OK') {
                         console.log(response.payload)
                         dispatch(saveLaborCatalog(response.payload))
-                        this.setState({loading: false})
+                        this.setState({ loading: false })
                     }
                 })
                 .catch((err) => console.log(err))
@@ -108,12 +108,20 @@ class LaborModal extends Component {
                                     </IonSelect>
                                 </IonCol>
                             </IonRow>
-                            <IonRow >
+                            <IonRow style={{paddingBottom:'20px'}}>
                                 <IonCol>
                                     <IonInput onIonChange={this.handleInputChange} value={this.state.searchValue} placeholder="Búsqueda de mano de obra"></IonInput>
                                 </IonCol>
                                 <IonCol>
                                     <IonButton onClick={this.handleSearchClick} expand="block">Buscar</IonButton>
+                                </IonCol>
+                            </IonRow>
+                            <IonRow style={{borderTop:'1px solid #d2d2d259'}}>
+                                <IonCol>
+                                    <IonLabel className="dataTitle" style={{paddingLeft:'10px'}}>Código</IonLabel>
+                                </IonCol>
+                                <IonCol>
+                                    <IonLabel className="dataTitle">Nombre</IonLabel>
                                 </IonCol>
                             </IonRow>
                         </IonGrid>
@@ -135,8 +143,8 @@ class LaborModal extends Component {
                                 </IonItem>
                             ))
                             :
-                            <div className="spinnerCenter">                                
-                                    <IonSpinner name="crescent" style={{ textAlign: 'center' }} />                                
+                            <div className="spinnerCenter">
+                                <IonSpinner name="crescent" style={{ textAlign: 'center' }} />
                             </div>
                     }
                 </IonContent>
