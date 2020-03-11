@@ -52,7 +52,7 @@ class Menu extends Component {
               <IonLabel>Reporte de trabajo a programar</IonLabel>
             </IonItem>
 
-            <IonItem lines="none" >
+            <IonItem lines="none" onClick={ e => { e.preventDefault(); this.handlePage('woSearch') }}>
               <IonLabel>Búsqueda de Órdenes</IonLabel>
             </IonItem>
 

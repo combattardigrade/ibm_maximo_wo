@@ -48,7 +48,10 @@ class WorkDone extends Component {
                             </IonRow>
                             <IonRow>
                                 <IonTextarea
-                                    placeholder="Ingresa la descripción del trabajo realizado...">
+                                    placeholder="Ingresa la descripción del trabajo realizado..."
+                                    maxlength="50000"
+                                >
+                                        
                                 </IonTextarea>
                             </IonRow>
                         </IonGrid>
@@ -74,10 +77,14 @@ class WorkDone extends Component {
 
                     <IonItem>
                         <IonLabel>Seleccionar Tipo de Trabajo</IonLabel>
-                        <IonSelect value="brown" okText="Okay" cancelText="Dismiss">
-                            <IonSelectOption value="">Elemento 1</IonSelectOption>
-                            <IonSelectOption value="">Elemento 2</IonSelectOption>
-                            <IonSelectOption value="">Elemento 3</IonSelectOption>
+                        <IonSelect value="brown" okText="OK" cancelText="Cerrar">
+                            <IonSelectOption value="EM">EM</IonSelectOption>
+                            <IonSelectOption value="CM">CM</IonSelectOption>
+                            <IonSelectOption value="INPS">INPS</IonSelectOption>
+                            <IonSelectOption value="LUB">LUB</IonSelectOption>
+                            <IonSelectOption value="TRN">TRN</IonSelectOption>
+                            <IonSelectOption value="HSE">HSE</IonSelectOption>
+                            <IonSelectOption value="PROJ">PROJ</IonSelectOption>
                         </IonSelect>
                     </IonItem>
 

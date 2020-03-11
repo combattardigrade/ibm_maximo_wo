@@ -35,6 +35,7 @@ import { getWhoAmI } from './utils/api'
 import { saveUser } from './actions/user'
 import AssetsList from './pages/AssetsList';
 import Inventory from './pages/Inventory'
+import WoSearch from './pages/WoSearch'
 
 
 class App extends Component {
@@ -70,8 +71,10 @@ class App extends Component {
               <Route path="/wo/:wonum" component={WorkOrder} />
               <Route path="/wo_details" component={WoDetails} />
               <Route path="/workDone" component={WorkDone} />
+              <Route path="/woSearch" component={WoSearch} />
               <Route path="/assets" component={AssetsList} />
               <Route path="/inventory" component={Inventory} />
+              <Route path='/workDone' component={WorkDone} />
             </IonRouterOutlet>
           </IonSplitPane>
         </IonReactRouter>

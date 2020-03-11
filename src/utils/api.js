@@ -148,3 +148,14 @@ export function updateTaskStatus(params) {
     })  
     .catch((err) => console.log(err))
 }
+
+export function findWorkOrder(params) {
+    return fetch(API + '/findWorkOrder', {
+        method: 'POST',
+        body: JSON.stringify({ method: params.method, value: params.value }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
