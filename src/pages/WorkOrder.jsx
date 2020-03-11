@@ -12,7 +12,7 @@ import {
 import { Redirect, Route } from 'react-router-dom';
 import {
     addOutline, peopleOutline, hammerOutline, documentTextOutline, cameraOutline,
-    documentAttachOutline, chevronBackOutline, searchOutline
+    documentAttachOutline, chevronBackOutline, searchOutline, refreshOutline
 } from 'ionicons/icons'
 
 import { RouteComponentProps } from 'react-router';
@@ -69,6 +69,32 @@ class WorkOrder extends Component {
         this.props.history.goBack()
     }
 
+    handleRefreshClick = (e) => {
+        e.preventDefault()
+        const { wonum } = this.props.match.params
+        const { currentWorkOrder, token, dispatch } = this.props
+
+
+        getWorkOrder({ wonum: wonum, token: token })
+            .then((data) => data.json())
+            .then((response) => {
+                if (response.status == 'OK') {
+                    dispatch(saveCurrentWorkOrder(response.payload))
+                    // this.setState({ loading: false })
+                }
+            })
+
+        getWOSafety({ wonum: wonum, token: token })
+            .then((data) => data.json())
+            .then((response) => {
+                if (response.status == 'OK') {
+                    dispatch(saveWorkOrderSafety(response.payload))
+
+                }
+            })
+
+    }
+
     ionViewWillEnter() {
         const { wonum } = this.props.match.params
         const { currentWorkOrder, token, dispatch } = this.props
@@ -108,6 +134,9 @@ class WorkOrder extends Component {
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
                         <IonTitle>Detalles de Orden de Trabajo</IonTitle>
+                        <IonButtons slot="end">
+                            <IonButton onClick={this.handleRefreshClick}><IonIcon icon={refreshOutline}></IonIcon></IonButton>
+                        </IonButtons>
                     </IonToolbar>
                 </IonHeader>
 
