@@ -9,19 +9,17 @@ import {
     documentAttachOutline, chevronBackOutline, searchOutline, addCircle, swapHorizontalOutline
 } from 'ionicons/icons'
 
-import { RouteComponentProps } from 'react-router';
-import ExploreContainer from '../components/ExploreContainer';
 import './Page.css';
 import './Maximo.css'
 
 // Modals
 import SelectAssetModal from './SelectAssetModal'
 import SelectLocationModal from './SelectLocationModal'
+import SelectFailureCodeModal from './SelectFailureCodeModal'
 import MaterialModal from './MaterialModal'
 
 // Components
 import TimeField from 'react-simple-timefield';
-
 
 class WorkDone extends Component {
 
@@ -29,15 +27,17 @@ class WorkDone extends Component {
         showMaterialModal: false,
         showSelectAssetModal: false,
         showSelectLocationModal: false,
+        showSelectFailureCodeModal: true,
         selectedAsset: '',
         selectedLocation: '',
+        selectedFailureCode: '',
         workType: '',
         priority: 1,
         description: '',
         timeWorked: '0:00',
         downtime: '0:00',
         comments: '',
-        faultCode: '',
+        
     }
 
     // SelecteAssetModal => 
@@ -51,6 +51,11 @@ class WorkDone extends Component {
         this.setState({ showSelectLocationModal: false, selectedLocation: location })
     }
 
+    handleSubmitFailureCodeClick = (failureCode) => {
+        console.log(failureCode)
+        this.setState({ showSelectFailureCodeModal: false, selectedFailureCode: failureCode })
+    }
+
     // Toggle Modals
     handleToggleSelectAssetModal = (value) => {
         console.log('SHOW_SELECT_ASSET_MODAL')
@@ -60,8 +65,14 @@ class WorkDone extends Component {
     // Toggle Select Location Modal
     handleToggleSelectLocationModal = (value) => {
         console.log('SHOW_SELECT_LOCATION_MODAL')
-        this.setState({ showSelectLocationModal: value })
-        console.log(this.state.showSelectLocationModal)
+        this.setState({ showSelectLocationModal: value })        
+    }
+
+    // Toggle Select Failure Code Modal
+    handleToggleSelectFailureCodeModal = (value) => {
+        console.log('SHOW_SELECT_FAILURECODE_MODAL')        
+        this.setState({ showSelectFailureCodeModal: value })     
+        
     }
 
     handleToggleMaterialModal = (value) => {
@@ -101,14 +112,8 @@ class WorkDone extends Component {
 
     handleCommentsChange = (e) => {
         e.preventDefault()
-        this.setState({comments: e.target.value})
+        this.setState({ comments: e.target.value })
     }
-
-    handleFaultCodeSelect = (e) => {
-        e.preventDefault()
-        this.setState({ faultCode: e.target.value })
-    }
-
 
     // Back Btn
     handleBackBtn = () => {
@@ -117,7 +122,10 @@ class WorkDone extends Component {
 
     render() {
         const { currentWorkOrder, asset } = this.props
-        const { showSelectAssetModal, showSelectLocationModal, showMaterialModal, selectedAsset, selectedLocation, workType, priority } = this.state
+        const {
+            showSelectAssetModal, showSelectLocationModal, showMaterialModal, showSelectFailureCodeModal,
+            selectedAsset, selectedLocation, workType, priority, selectedFailureCode
+        } = this.state
         return (
             <IonPage>
                 <IonHeader>
@@ -190,7 +198,7 @@ class WorkDone extends Component {
                                         <Fragment>
                                             <IonCol size="10">
                                                 <IonLabel className="dataTitle">Ubicación</IonLabel>
-                                                <IonLabel className="dataField">{selectedLocation.location} - {selectedLocation.siteid}</IonLabel>
+                                                <IonLabel className="dataField">{selectedLocation.siteid} - {selectedLocation.location} </IonLabel>
                                             </IonCol>
                                             <IonCol size="2">
                                                 <IonButton onClick={() => this.handleToggleSelectLocationModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={swapHorizontalOutline}></IonIcon></IonButton>
@@ -272,7 +280,7 @@ class WorkDone extends Component {
                             <IonRow >
                                 <IonCol size="12" >
                                     <IonLabel className="dataTitle">Tiempo de Inactividad</IonLabel>
-                                    <TimeField style={{ width: '50px', textAlign: 'center',}} value={this.state.downtime} onChange={this.handleDownTimeChange} />
+                                    <TimeField style={{ width: '50px', textAlign: 'center', }} value={this.state.downtime} onChange={this.handleDownTimeChange} />
                                 </IonCol>
 
                             </IonRow>
@@ -301,19 +309,30 @@ class WorkDone extends Component {
 
                     <IonItem style={{}}>
                         <IonGrid>
-                            <IonRow >
-                                <IonCol size="12" >
-                                    <IonLabel className="dataTitle">Código de Falla</IonLabel>
-                                    <IonSelect onIonChange={this.handleFaultCodeSelect} value={this.state.faultCode} className="dataField" style={{ paddingLeft: '0px' }} placeholder="Seleccionar Tipo" okText="OK" cancelText="Cerrar">
-                                        <IonSelectOption value="EM">EM</IonSelectOption>
-                                        <IonSelectOption value="CM">CM</IonSelectOption>
-                                        <IonSelectOption value="INPS">INPS</IonSelectOption>
-                                        <IonSelectOption value="LUB">LUB</IonSelectOption>
-                                        <IonSelectOption value="TRN">TRN</IonSelectOption>
-                                        <IonSelectOption value="HSE">HSE</IonSelectOption>
-                                        <IonSelectOption value="PROJ">PROJ</IonSelectOption>
-                                    </IonSelect>
-                                </IonCol>
+                            <IonRow style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+                                {
+                                    selectedFailureCode
+                                        ?
+                                        <Fragment>
+                                            <IonCol size="10">
+                                                <IonLabel className="dataTitle">Código de Falla</IonLabel>
+                                                <IonLabel className="dataField">{selectedFailureCode.failureCode} - {selectedFailureCode.description}</IonLabel>
+                                            </IonCol>
+                                            <IonCol size="2">
+                                                <IonButton onClick={() => this.handleToggleSelectFailureCodeModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={swapHorizontalOutline}></IonIcon></IonButton>
+                                            </IonCol>
+                                        </Fragment>
+                                        :
+                                        <Fragment>
+                                            <IonCol size="10">
+                                                <IonLabel className="dataTitle">Código de Falla</IonLabel>
+                                                <IonLabel className="dataField">No hay ningún código seleccionado</IonLabel>
+                                            </IonCol>
+                                            <IonCol size="2">
+                                                <IonButton onClick={() => this.handleToggleSelectFailureCodeModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={addCircle}></IonIcon></IonButton>
+                                            </IonCol>
+                                        </Fragment>
+                                }
                             </IonRow>
                         </IonGrid>
                     </IonItem>
@@ -362,6 +381,11 @@ class WorkDone extends Component {
                         handleToggleSelectLocationModal={this.handleToggleSelectLocationModal}
                         showSelectLocationModal={showSelectLocationModal}
                         handleSubmitLocationClick={this.handleSubmitLocationClick}
+                    />
+                    <SelectFailureCodeModal
+                        handleToggleSelectFailureCodeModal={this.handleToggleSelectFailureCodeModal}
+                        showSelectFailureCodeModal={showSelectFailureCodeModal}
+                        handleSubmitFailureCodeClick={this.handleSubmitFailureCodeClick}
                     />
                     <MaterialModal handleToggleMaterialModal={this.handleToggleMaterialModal} showMaterialModal={showMaterialModal} />
 

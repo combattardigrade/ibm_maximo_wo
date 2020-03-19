@@ -215,3 +215,24 @@ export function getLocations(params) {
     })
 }
 
+export function getFailureCodes(params) {
+    return fetch(API + '/getFailureCodes', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function findFailureCode(params) {
+    return fetch(API + '/findFailureCode', {
+        method: 'POST',
+        body: JSON.stringify({ searchParam: params.searchParam, searchValue: params.searchValue }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+

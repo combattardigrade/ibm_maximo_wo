@@ -6,6 +6,7 @@ import inventory from './inventory'
 import assets from './assets'
 import labor from './labor'
 import locations from './locations'
+import failureCodes from './failureCodes'
 
 export default combineReducers({
     auth,
@@ -15,4 +16,5 @@ export default combineReducers({
     assets,
     labor,
     locations,
+    failureCodes,
 })
