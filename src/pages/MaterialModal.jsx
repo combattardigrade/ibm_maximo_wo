@@ -12,7 +12,7 @@ import {
 class MaterialModal extends Component {
     render() {
         const { wonum } = this.props
-        console.log(wonum)
+        
         return (
             <IonModal isOpen={this.props.showMaterialModal}>
                 <IonHeader>

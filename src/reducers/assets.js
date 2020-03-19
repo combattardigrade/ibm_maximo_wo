@@ -4,7 +4,7 @@ export default function inventory(state = null, action) {
     switch(action.type) {
         case SAVE_ASSETS:
             return {
-                ...state,
+                
                 assets: action.assets
             }
         default:

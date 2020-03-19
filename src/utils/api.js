@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api'
+const API = 'http://genesisblock.ddns.net:3000/api'
 
 export function login(params) {
     return fetch(API + '/authentication', {
@@ -193,3 +193,25 @@ export function getLaborCatalog(params) {
         }
     })
 }
+
+export function findLocation(params) {
+    return fetch(API + '/findLocation', {
+        method: 'POST',
+        body: JSON.stringify({ method: params.method, value: params.value }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function getLocations(params) {
+    return fetch(API + '/locations/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+

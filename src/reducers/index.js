@@ -5,6 +5,7 @@ import user from './user'
 import inventory from './inventory'
 import assets from './assets'
 import labor from './labor'
+import locations from './locations'
 
 export default combineReducers({
     auth,
@@ -12,5 +13,6 @@ export default combineReducers({
     user,
     inventory,
     assets,
-    labor
+    labor,
+    locations,
 })

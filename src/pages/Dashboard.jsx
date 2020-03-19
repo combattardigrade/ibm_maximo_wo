@@ -2,22 +2,27 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {
     IonSpinner, IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonIcon, IonButton,
-    IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonAlert
+    IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonAlert, withIonLifeCycle
 } from '@ionic/react';
 import {
-    refreshOutline
+    refreshOutline, save
 } from 'ionicons/icons'
 import './Page.css';
 import './Maximo.css'
-import { getWorkOrders, getWhoAmI, getInventory, getAssets, 
-    getWorkOrder, checkWOHazardVerification, 
-    sendWOHazardVerification, getLaborCatalog
+import {
+    getWorkOrders, getWhoAmI, getInventory, getAssets,
+    getWorkOrder, checkWOHazardVerification,
+    sendWOHazardVerification, getLaborCatalog, getLocations
 } from '../utils/api'
+// Actions
 import { saveWorkOrders, saveCurrentWorkOrder, saveWorkOrderSafety } from '../actions/workOrders'
 import { saveUser } from '../actions/user'
 import { saveInventory } from '../actions/inventory'
 import { saveAssets } from '../actions/assets'
 import { saveLaborCatalog } from '../actions/labor'
+import { saveLocations } from '../actions/locations'
+
+
 import WoCard from '../components/WoCard'
 import { Plugins } from '@capacitor/core'
 const { Modals } = Plugins
@@ -27,13 +32,15 @@ class Dashboard extends Component {
     state = {
         loading: true,
         showHazardVerification: false,
-        wonum: ''
+        wonum: '',
+
+
     }
 
-    componentDidMount() {
-        const { token, dispatch, workOrders, user, inventory, assets, labor } = this.props
+    ionViewWillEnter() {
+        const { token, dispatch, workOrders, user, inventory, assets, labor, locations } = this.props
 
-        if (workOrders && user && inventory && assets && labor) {
+        if (workOrders && user && inventory && assets && labor && locations) {
             this.setState({ loading: false })
             return
         }
@@ -94,13 +101,13 @@ class Dashboard extends Component {
                 })
                 .catch((err) => console.log(err))
         }
-        
-        if(!labor) {
-            
-            getLaborCatalog({ token: token})
+
+        if (!labor) {
+
+            getLaborCatalog({ token: token })
                 .then(data => data.json())
                 .then((response) => {
-                    if(response.status == 'OK') {
+                    if (response.status == 'OK') {
                         console.log(response.payload)
                         dispatch(saveLaborCatalog(response.payload))
                     }
@@ -108,22 +115,27 @@ class Dashboard extends Component {
                 .catch((err) => console.log(err))
         }
 
+        
+        if (!locations) {
+            getLocations({ token: token })
+                .then(data => data.json())
+                .then((response) => {
+                    console.log(response)
+                    if (response.status == 'OK') {
+                        console.log(response.payload)
+                        dispatch(saveLocations(response.payload))
+                    }
+                })
+        }
+
+
     }
 
-    handleWorkOrderClick = async (wonum) => {
-        // const { token } = this.props
-        // // Check if WO Hazard Verification has been submitted
-        // checkWOHazardVerification({ wonum: wonum, token: token })
-        //     .then((data) => data.json())
-        //     .then((res) => {
-        //         console.log(res)
-        //         if (res.payload.length == 0) {
-        //             this.setState({ showHazardVerification: true, wonum: wonum })
-        //             return
-        //         }
-        //         this.props.history.push('/wo/' + wonum)
-        //     })
+    handleWorkOrderClick = (wonum) => {
+
         this.props.history.push('/wo/' + wonum)
+        // this.setState({showHazardVerification: true})
+
     }
 
     handleHazardVerificationClick = async (data) => {
@@ -133,7 +145,7 @@ class Dashboard extends Component {
             this.setState({ showHazardVerification: false })
             return
         }
-        sendWOHazardVerification({ wonum: wonum, token: token })
+
 
         this.props.history.push('/wo/' + wonum)
     }
@@ -174,7 +186,7 @@ class Dashboard extends Component {
         return (
             <IonPage>
                 <IonHeader>
-                    <IonToolbar>
+                    <IonToolbar color="dark">
                         <IonButtons slot="start">
                             <IonMenuButton />
                         </IonButtons>
@@ -259,15 +271,17 @@ class Dashboard extends Component {
 };
 
 
-function mapStateToProps({ auth, workOrders, user, inventory, assets, labor }) {
+function mapStateToProps({ auth, workOrders, user, inventory, assets, labor, comments, locations }) {
     return {
         token: auth.token,
         workOrders: workOrders && workOrders.workOrders,
         user,
         inventory,
         assets,
-        labor
+        labor,
+        comments,
+        locations,
     }
 }
 
-export default connect(mapStateToProps)(Dashboard)
+export default connect(mapStateToProps)(withIonLifeCycle(Dashboard))

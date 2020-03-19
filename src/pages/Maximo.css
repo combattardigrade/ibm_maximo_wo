@@ -9,6 +9,11 @@
     padding-top: 30px;
     color: #0db0bf;
 }   
+.searchResultIconLocation{
+    font-size: 2em !important;
+    padding-top: 8px;
+    color: #0db0bf;
+}
 .spinnerCenter {
     display: flex;
     flex-direction: column;

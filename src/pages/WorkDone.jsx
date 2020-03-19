@@ -1,21 +1,67 @@
-import React, { Component } from 'react'
-import { IonButtons, IonContent, IonHeader, IonSelect, IonSelectOption, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonNote, IonIcon, IonTextarea } from '@ionic/react';
+import React, { Component, Fragment } from 'react'
+import {
+    IonButtons, IonButton, IonContent, IonHeader, IonSelect, IonSelectOption,
+    IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonRefresher, IonRefresherContent,
+    IonGrid, IonRow, IonCol, IonNote, IonIcon, IonTextarea, IonInput, IonItemDivider
+} from '@ionic/react';
 import {
     addOutline, peopleOutline, hammerOutline, documentTextOutline, cameraOutline,
-    documentAttachOutline, chevronBackOutline, searchOutline
+    documentAttachOutline, chevronBackOutline, searchOutline, addCircle, swapHorizontalOutline
 } from 'ionicons/icons'
 
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
 import './Page.css';
+import './Maximo.css'
 
 // Modals
+import SelectAssetModal from './SelectAssetModal'
+import SelectLocationModal from './SelectLocationModal'
 import MaterialModal from './MaterialModal'
+
+// Components
+import TimeField from 'react-simple-timefield';
+
 
 class WorkDone extends Component {
 
     state = {
         showMaterialModal: false,
+        showSelectAssetModal: false,
+        showSelectLocationModal: false,
+        selectedAsset: '',
+        selectedLocation: '',
+        workType: '',
+        priority: 1,
+        description: '',
+        timeWorked: '0:00',
+        downtime: '0:00',
+        comments: '',
+        faultCode: '',
+    }
+
+    // SelecteAssetModal => 
+    handleSubmitAssetClick = (asset) => {
+        console.log(asset)
+        this.setState({ showSelectAssetModal: false, selectedAsset: asset })
+    }
+
+    handleSubmitLocationClick = (location) => {
+        console.log(location)
+        this.setState({ showSelectLocationModal: false, selectedLocation: location })
+    }
+
+    // Toggle Modals
+    handleToggleSelectAssetModal = (value) => {
+        console.log('SHOW_SELECT_ASSET_MODAL')
+        this.setState({ showSelectAssetModal: value })
+    }
+
+    // Toggle Select Location Modal
+    handleToggleSelectLocationModal = (value) => {
+        console.log('SHOW_SELECT_LOCATION_MODAL')
+        this.setState({ showSelectLocationModal: value })
+        console.log(this.state.showSelectLocationModal)
     }
 
     handleToggleMaterialModal = (value) => {
@@ -23,17 +69,59 @@ class WorkDone extends Component {
         this.setState({ showMaterialModal: value })
     }
 
+    // handle description change
+    handleDescriptionChange = (e) => {
+        e.preventDefault()
+        this.setState({ description: e.target.value })
+    }
+
+    // work type select
+    handleWorkTypeSelect = (e) => {
+        e.preventDefault()
+        console.log(e.target.value)
+        this.setState({ workType: e.target.value })
+    }
+
+    // priority select
+    handlePrioritySelect = (e) => {
+        e.preventDefault()
+        console.log(e.target.value)
+        this.setState({ priority: e.target.value })
+    }
+
+    handleTimeWorkedChange = (e, timeWorked) => {
+        e.preventDefault()
+        this.setState({ timeWorked: timeWorked })
+    }
+
+    handleDownTimeChange = (e, downtime) => {
+        e.preventDefault()
+        this.setState({ downtime: downtime })
+    }
+
+    handleCommentsChange = (e) => {
+        e.preventDefault()
+        this.setState({comments: e.target.value})
+    }
+
+    handleFaultCodeSelect = (e) => {
+        e.preventDefault()
+        this.setState({ faultCode: e.target.value })
+    }
+
+
+    // Back Btn
     handleBackBtn = () => {
         this.props.history.goBack()
     }
 
     render() {
         const { currentWorkOrder, asset } = this.props
-        const { showLaborModal, showMaterialModal, showCommentModal } = this.state
+        const { showSelectAssetModal, showSelectLocationModal, showMaterialModal, selectedAsset, selectedLocation, workType, priority } = this.state
         return (
             <IonPage>
                 <IonHeader>
-                    <IonToolbar>
+                    <IonToolbar color="dark">
                         <IonButtons slot="start" onClick={e => { e.preventDefault(); this.handleBackBtn() }}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
@@ -41,94 +129,201 @@ class WorkDone extends Component {
                     </IonToolbar>
                 </IonHeader>
                 <IonContent>
+
                     <IonItem lines="full">
                         <IonGrid>
                             <IonRow>
-                                <IonCol><IonLabel>Indicar Trabajo Realizado</IonLabel></IonCol>
+                                <IonCol><IonLabel className="dataTitle">Indicar Trabajo Realizado</IonLabel></IonCol>
                             </IonRow>
                             <IonRow>
                                 <IonTextarea
                                     placeholder="Ingresa la descripción del trabajo realizado..."
                                     maxlength="50000"
+                                    className="dataField"
+                                    rows="3"
+                                    onIonChange={this.handleDescriptionChange}
+                                    value={this.state.description}
                                 >
-                                        
+
                                 </IonTextarea>
                             </IonRow>
                         </IonGrid>
                     </IonItem>
 
-                    <IonItem>
-                        <IonLabel>Seleccionar Activo</IonLabel>
-                        <IonSelect value="brown" okText="Okay" cancelText="Dismiss">
-                            <IonSelectOption value="">Elemento 1</IonSelectOption>
-                            <IonSelectOption value="">Elemento 2</IonSelectOption>
-                            <IonSelectOption value="">Elemento 3</IonSelectOption>
-                        </IonSelect>
-                    </IonItem>
-
-                    <IonItem>
-                        <IonLabel>Seleccionar Ubicación</IonLabel>
-                        <IonSelect value="brown" okText="Okay" cancelText="Dismiss">
-                            <IonSelectOption value="">Elemento 1</IonSelectOption>
-                            <IonSelectOption value="">Elemento 2</IonSelectOption>
-                            <IonSelectOption value="">Elemento 3</IonSelectOption>
-                        </IonSelect>
-                    </IonItem>
-
-                    <IonItem>
-                        <IonLabel>Seleccionar Tipo de Trabajo</IonLabel>
-                        <IonSelect value="brown" okText="OK" cancelText="Cerrar">
-                            <IonSelectOption value="EM">EM</IonSelectOption>
-                            <IonSelectOption value="CM">CM</IonSelectOption>
-                            <IonSelectOption value="INPS">INPS</IonSelectOption>
-                            <IonSelectOption value="LUB">LUB</IonSelectOption>
-                            <IonSelectOption value="TRN">TRN</IonSelectOption>
-                            <IonSelectOption value="HSE">HSE</IonSelectOption>
-                            <IonSelectOption value="PROJ">PROJ</IonSelectOption>
-                        </IonSelect>
-                    </IonItem>
-
-                    <IonItem>
-                        <IonLabel>Seleccionar Prioridad</IonLabel>
-                        <IonSelect value="brown" okText="Okay" cancelText="Dismiss">
-                            <IonSelectOption value="">Elemento 1</IonSelectOption>
-                            <IonSelectOption value="">Elemento 2</IonSelectOption>
-                            <IonSelectOption value="">Elemento 3</IonSelectOption>
-                        </IonSelect>
-                    </IonItem>
-
-                    <IonItem>
-                        <IonLabel>Ingresar horas trabajadas</IonLabel>
-                    </IonItem>
-
-
-                    <IonItem>
-                        <IonLabel>Ingresar tiempo de inactividad</IonLabel>
-                    </IonItem>
-
-                    <IonItem>
+                    <IonItem style={{}}>
                         <IonGrid>
-                            <IonRow>
-                                <IonCol> <IonLabel>Comentarios Adicionales</IonLabel></IonCol>
+                            <IonRow style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+                                {
+                                    selectedAsset
+                                        ?
+                                        <Fragment>
+                                            <IonCol size="10">
+                                                <IonLabel className="dataTitle">Activo</IonLabel>
+                                                <IonLabel className="dataField">{selectedAsset.assetnum} - {selectedAsset.description}</IonLabel>
+                                            </IonCol>
+                                            <IonCol size="2">
+                                                <IonButton onClick={() => this.handleToggleSelectAssetModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={swapHorizontalOutline}></IonIcon></IonButton>
+                                            </IonCol>
+                                        </Fragment>
+                                        :
+                                        <Fragment>
+                                            <IonCol size="10">
+                                                <IonLabel className="dataTitle">Activo</IonLabel>
+                                                <IonLabel className="dataField">No hay ningún activo seleccionado</IonLabel>
+                                            </IonCol>
+                                            <IonCol size="2">
+                                                <IonButton onClick={() => this.handleToggleSelectAssetModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={addCircle}></IonIcon></IonButton>
+                                            </IonCol>
+                                        </Fragment>
+                                }
+
                             </IonRow>
-                            <IonRow>
-                                <IonCol>
-                                    <IonTextarea
-                                        placeholder="Ingresa un comentario adicional...">
-                                    </IonTextarea>
+                        </IonGrid>
+                    </IonItem>
+
+                    <IonItem style={{}}>
+                        <IonGrid>
+                            <IonRow style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+                                {
+                                    selectedLocation
+                                        ?
+                                        <Fragment>
+                                            <IonCol size="10">
+                                                <IonLabel className="dataTitle">Ubicación</IonLabel>
+                                                <IonLabel className="dataField">{selectedLocation.location} - {selectedLocation.siteid}</IonLabel>
+                                            </IonCol>
+                                            <IonCol size="2">
+                                                <IonButton onClick={() => this.handleToggleSelectLocationModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={swapHorizontalOutline}></IonIcon></IonButton>
+                                            </IonCol>
+                                        </Fragment>
+                                        :
+                                        <Fragment>
+                                            <IonCol size="10">
+                                                <IonLabel className="dataTitle">Ubicación</IonLabel>
+                                                <IonLabel className="dataField">No hay ningúna ubicación seleccionado</IonLabel>
+                                            </IonCol>
+                                            <IonCol size="2">
+                                                <IonButton onClick={() => this.handleToggleSelectLocationModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={addCircle}></IonIcon></IonButton>
+                                            </IonCol>
+                                        </Fragment>
+                                }
+                            </IonRow>
+                        </IonGrid>
+                    </IonItem>
+
+                    <IonItem style={{}}>
+                        <IonGrid>
+                            <IonRow >
+                                <IonCol size="12" >
+                                    <IonLabel className="dataTitle">Tipo de Trabajo</IonLabel>
+                                    <IonSelect onIonChange={this.handleWorkTypeSelect} value={this.state.workType} className="dataField" style={{ paddingLeft: '0px' }} placeholder="Seleccionar Tipo" okText="OK" cancelText="Cerrar">
+                                        <IonSelectOption value="EM">EM</IonSelectOption>
+                                        <IonSelectOption value="CM">CM</IonSelectOption>
+                                        <IonSelectOption value="INPS">INPS</IonSelectOption>
+                                        <IonSelectOption value="LUB">LUB</IonSelectOption>
+                                        <IonSelectOption value="TRN">TRN</IonSelectOption>
+                                        <IonSelectOption value="HSE">HSE</IonSelectOption>
+                                        <IonSelectOption value="PROJ">PROJ</IonSelectOption>
+                                    </IonSelect>
+                                </IonCol>
+
+                            </IonRow>
+                        </IonGrid>
+                    </IonItem>
+                    <IonItem style={{}}>
+                        <IonGrid>
+                            <IonRow >
+                                <IonCol size="12" >
+                                    <IonLabel className="dataTitle">Priodidad</IonLabel>
+                                    <IonSelect onIonChange={this.handlePrioritySelect} value={this.state.workType == 'EM' ? '1' : this.state.priority} className="dataField" style={{ paddingLeft: '0px' }} placeholder="Seleccionar Tipo" okText="OK" cancelText="Cerrar">
+                                        <IonSelectOption value="1">1</IonSelectOption>
+                                        <IonSelectOption value="2">2</IonSelectOption>
+                                        <IonSelectOption value="3">3</IonSelectOption>
+                                        <IonSelectOption value="4">4</IonSelectOption>
+                                        <IonSelectOption value="5">5</IonSelectOption>
+                                        <IonSelectOption value="6">6</IonSelectOption>
+                                        <IonSelectOption value="7">7</IonSelectOption>
+                                        <IonSelectOption value="8">8</IonSelectOption>
+                                        <IonSelectOption value="9">9</IonSelectOption>
+                                        <IonSelectOption value="10">10</IonSelectOption>
+                                    </IonSelect>
                                 </IonCol>
                             </IonRow>
                         </IonGrid>
                     </IonItem>
 
-                    <IonItem>
-                        <IonLabel>Seleccionar código de falla</IonLabel>
+
+
+
+                    <IonItem style={{}}>
+                        <IonGrid>
+                            <IonRow >
+                                <IonCol size="12" >
+                                    <IonLabel className="dataTitle">Horas Trabajadas</IonLabel>
+                                    <TimeField style={{ width: '50px', textAlign: 'center' }} value={this.state.timeWorked} onChange={this.handleTimeWorkedChange} />
+                                </IonCol>
+
+                            </IonRow>
+                        </IonGrid>
                     </IonItem>
+
+                    <IonItem style={{}}>
+                        <IonGrid>
+                            <IonRow >
+                                <IonCol size="12" >
+                                    <IonLabel className="dataTitle">Tiempo de Inactividad</IonLabel>
+                                    <TimeField style={{ width: '50px', textAlign: 'center',}} value={this.state.downtime} onChange={this.handleDownTimeChange} />
+                                </IonCol>
+
+                            </IonRow>
+                        </IonGrid>
+                    </IonItem>
+                    <IonItem style={{}}>
+                        <IonGrid>
+                            <IonRow >
+                                <IonCol size="12" >
+                                    <IonLabel className="dataTitle">Comentarios Adicionales</IonLabel>
+                                    <IonTextarea
+                                        placeholder="Ingresa comentarios adicionales..."
+                                        maxlength="50000"
+                                        className="dataField"
+                                        rows="3"
+                                        onIonChange={this.handleCommentsChange}
+                                        value={this.state.comments}
+                                    >
+
+                                    </IonTextarea>
+                                </IonCol>
+
+                            </IonRow>
+                        </IonGrid>
+                    </IonItem>
+
+                    <IonItem style={{}}>
+                        <IonGrid>
+                            <IonRow >
+                                <IonCol size="12" >
+                                    <IonLabel className="dataTitle">Código de Falla</IonLabel>
+                                    <IonSelect onIonChange={this.handleFaultCodeSelect} value={this.state.faultCode} className="dataField" style={{ paddingLeft: '0px' }} placeholder="Seleccionar Tipo" okText="OK" cancelText="Cerrar">
+                                        <IonSelectOption value="EM">EM</IonSelectOption>
+                                        <IonSelectOption value="CM">CM</IonSelectOption>
+                                        <IonSelectOption value="INPS">INPS</IonSelectOption>
+                                        <IonSelectOption value="LUB">LUB</IonSelectOption>
+                                        <IonSelectOption value="TRN">TRN</IonSelectOption>
+                                        <IonSelectOption value="HSE">HSE</IonSelectOption>
+                                        <IonSelectOption value="PROJ">PROJ</IonSelectOption>
+                                    </IonSelect>
+                                </IonCol>
+                            </IonRow>
+                        </IonGrid>
+                    </IonItem>
+
+
 
                     <IonItem>
                         <IonGrid>
                             <IonRow>
-                                <IonCol><IonLabel>"Adjuntos":</IonLabel></IonCol>
+                                <IonCol><IonLabel className="dataTitle">Adjuntos</IonLabel></IonCol>
                             </IonRow>
                             <IonRow>
                                 <IonCol></IonCol>
@@ -158,7 +353,16 @@ class WorkDone extends Component {
                     </ion-fab>
 
                     {/* Modals */}
-
+                    <SelectAssetModal
+                        handleToggleSelectAssetModal={this.handleToggleSelectAssetModal}
+                        showSelectAssetModal={showSelectAssetModal}
+                        handleSubmitAssetClick={this.handleSubmitAssetClick}
+                    />
+                    <SelectLocationModal
+                        handleToggleSelectLocationModal={this.handleToggleSelectLocationModal}
+                        showSelectLocationModal={showSelectLocationModal}
+                        handleSubmitLocationClick={this.handleSubmitLocationClick}
+                    />
                     <MaterialModal handleToggleMaterialModal={this.handleToggleMaterialModal} showMaterialModal={showMaterialModal} />
 
 
