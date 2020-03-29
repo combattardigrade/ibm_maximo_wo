@@ -7,12 +7,12 @@
 .searchResultIcon {
     font-size: 2em !important;
     padding-top: 30px;
-    color: #0db0bf;
+    color: #3880ff;
 }   
 .searchResultIconLocation{
     font-size: 2em !important;
     padding-top: 8px;
-    color: #0db0bf;
+    color: #3880ff;
 }
 .spinnerCenter {
     display: flex;

@@ -12,7 +12,8 @@ import './Maximo.css'
 import {
     getWorkOrders, getWhoAmI, getInventory, getAssets,
     getWorkOrder, checkWOHazardVerification,
-    sendWOHazardVerification, getLaborCatalog, getLocations
+    sendWOHazardVerification, getLaborCatalog, getLocations,
+    getMaterials,   
 } from '../utils/api'
 // Actions
 import { saveWorkOrders, saveCurrentWorkOrder, saveWorkOrderSafety } from '../actions/workOrders'
@@ -21,6 +22,7 @@ import { saveInventory } from '../actions/inventory'
 import { saveAssets } from '../actions/assets'
 import { saveLaborCatalog } from '../actions/labor'
 import { saveLocations } from '../actions/locations'
+import { saveMaterials } from '../actions/materials'
 
 
 import WoCard from '../components/WoCard'
@@ -38,7 +40,7 @@ class Dashboard extends Component {
     }
 
     ionViewWillEnter() {
-        const { token, dispatch, workOrders, user, inventory, assets, labor, locations } = this.props
+        const { token, dispatch, workOrders, user, inventory, assets, labor, locations, materials } = this.props
 
         if (workOrders && user && inventory && assets && labor && locations) {
             this.setState({ loading: false })
@@ -124,6 +126,18 @@ class Dashboard extends Component {
                     if (response.status == 'OK') {
                         console.log(response.payload)
                         dispatch(saveLocations(response.payload))
+                    }
+                })
+        }
+
+        if(!materials) {
+            getMaterials({ token })
+                .then((data) => data.json())
+                .then((response) => {
+                    console.log(response)
+                    if(response.status == 'OK') {
+                        console.log(response.payload)
+                        dispatch(saveMaterials(response.payload))
                     }
                 })
         }
@@ -271,7 +285,7 @@ class Dashboard extends Component {
 };
 
 
-function mapStateToProps({ auth, workOrders, user, inventory, assets, labor, comments, locations }) {
+function mapStateToProps({ auth, workOrders, user, inventory, assets, labor, comments, locations, materials }) {
     return {
         token: auth.token,
         workOrders: workOrders && workOrders.workOrders,
@@ -281,6 +295,7 @@ function mapStateToProps({ auth, workOrders, user, inventory, assets, labor, com
         labor,
         comments,
         locations,
+        materials,
     }
 }
 

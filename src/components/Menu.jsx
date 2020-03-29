@@ -18,11 +18,26 @@ import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp
 import './Menu.css';
 import { menuController } from '@ionic/core';
 
+// Actions
+import { userLogout } from '../actions/auth'
 
 
 class Menu extends Component {
   handlePage = (page) => {
 
+    this.props.history.push(page)
+    menuController.close()
+    return
+  }
+
+  handleUserLogout = (e) => {
+    e.preventDefault()
+    const { dispatch } = this.props
+    dispatch(userLogout())
+    this.goToPage('login')
+  }
+
+  goToPage = (page) => {
     this.props.history.push(page)
     menuController.close()
     return
@@ -44,7 +59,7 @@ class Menu extends Component {
           <IonList id="labels-list">
             <IonListHeader>Menú</IonListHeader>
 
-            <IonItem lines="none" onClick={ e => { e.preventDefault(); this.handlePage('workDone') }}>
+            <IonItem lines="none" onClick={e => { e.preventDefault(); this.handlePage('workDone') }}>
               <IonLabel>Reporte de trabajo realizado</IonLabel>
             </IonItem>
 
@@ -52,21 +67,21 @@ class Menu extends Component {
               <IonLabel>Reporte de trabajo a programar</IonLabel>
             </IonItem>
 
-            <IonItem lines="none" onClick={ e => { e.preventDefault(); this.handlePage('woSearch') }}>
+            <IonItem lines="none" onClick={e => { e.preventDefault(); this.handlePage('woSearch') }}>
               <IonLabel>Búsqueda de Órdenes</IonLabel>
             </IonItem>
 
-            <IonItem lines="none" onClick={ e => { e.preventDefault(); this.handlePage('inventory') }}>
+            <IonItem lines="none" onClick={e => { e.preventDefault(); this.handlePage('inventory') }}>
               <IonLabel>Inventario</IonLabel>
             </IonItem>
 
-            <IonItem lines="none" onClick={ e => { e.preventDefault(); this.handlePage('assets') }} >
+            <IonItem lines="none" onClick={e => { e.preventDefault(); this.handlePage('assets') }} >
               <IonLabel>Activos</IonLabel>
-            </IonItem>            
-          </IonList>
-          <IonItem lines="none" style={{position:'absolute',bottom: '20px'}} onClick={ e => { e.preventDefault(); localStorage.clear();this.handlePage('login') }} >
-              <IonLabel>Cerrar sesión</IonLabel>
             </IonItem>
+          </IonList>
+          <IonItem lines="none" style={{ position: 'absolute', bottom: '20px' }} onClick={this.handleUserLogout} >
+            <IonLabel>Cerrar sesión</IonLabel>
+          </IonItem>
         </IonContent>
       </IonMenu>
     );

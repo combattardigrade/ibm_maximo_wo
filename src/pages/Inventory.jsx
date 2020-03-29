@@ -160,10 +160,9 @@ class Inventory extends Component {
                                             </IonCol>
                                             <IonCol size="10">
                                                 <IonRow>
-
                                                     <IonCol size="6">
-                                                        <IonLabel className="dataTitle">Item</IonLabel>
-                                                        <IonLabel className="dataField">{item.itemDetails.description}</IonLabel>
+                                                        <IonLabel className="dataTitle" style={{whiteSpace:'normal',overflow:'hidden',display:'block'}}>Item</IonLabel>
+                                                        <IonLabel className="dataField">{item.itemDetails.description.substring(1,30)}</IonLabel>
                                                     </IonCol>
                                                     <IonCol size="6">
                                                         <IonLabel className="dataTitle">Código</IonLabel>

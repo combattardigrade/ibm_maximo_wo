@@ -7,8 +7,10 @@ import assets from './assets'
 import labor from './labor'
 import locations from './locations'
 import failureCodes from './failureCodes'
+import storage from 'redux-persist/lib/storage'
 
-export default combineReducers({
+
+const appReducer = combineReducers({
     auth,
     workOrders,
     user,
@@ -18,3 +20,13 @@ export default combineReducers({
     locations,
     failureCodes,
 })
+
+const rootReducer = (state, action) => {    
+    if(action.type == 'USER_LOGOUT') {
+        storage.removeItem('persist:root')
+        state = undefined
+    }
+    return appReducer(state, action)
+}
+
+export default rootReducer

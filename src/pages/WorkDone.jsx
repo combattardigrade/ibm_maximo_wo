@@ -27,7 +27,7 @@ class WorkDone extends Component {
         showMaterialModal: false,
         showSelectAssetModal: false,
         showSelectLocationModal: false,
-        showSelectFailureCodeModal: true,
+        showSelectFailureCodeModal: false,
         selectedAsset: '',
         selectedLocation: '',
         selectedFailureCode: '',

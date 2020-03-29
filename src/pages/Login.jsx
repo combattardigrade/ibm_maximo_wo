@@ -40,7 +40,7 @@ class Login extends Component {
             this.showAlert('Ocurrió un error al intentar realizar la acción. Por favor, inténtalo nuevamente.')   
             return
         }     
-
+        console.log(response)
         if(response.status != 'OK') {
             this.showAlert('message' in response ? response.message : 'Ocurrió un error al intentar realizar la acción. Por favor, inténtalo nuevamente.')   
             return

@@ -236,3 +236,13 @@ export function findFailureCode(params) {
     })
 }
 
+export function getMaterials(params) {
+    return fetch(API + '/getMaterials', {
+        method: 'GET',       
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
