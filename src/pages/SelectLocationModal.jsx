@@ -122,7 +122,7 @@ class SelectLocationModal extends Component {
                         locations && Object.values(locations).length > 0 && loading == false
                             ?
                             Object.values(locations).map((location, index) => (
-                                <IonItem style={{borderBottom: '#dedede'}} color={location._rowstamp == this.state.selectedLocation._rowstamp && 'primary' }  key={index} button detail onClick={e => { e.preventDefault(); this.handleSelectLocationClick(location) }}>
+                                <IonItem lines="none" style={{ borderBottom: '1px solid #dedede' }} color={location._rowstamp == this.state.selectedLocation._rowstamp && 'primary' }  key={index} button detail onClick={e => { e.preventDefault(); this.handleSelectLocationClick(location) }}>
                                     <IonGrid>
                                         <IonRow>
                                             <IonCol size="2" style={{ textAlign: 'center' }}>
@@ -131,11 +131,11 @@ class SelectLocationModal extends Component {
                                             <IonCol size="10">
                                                 <IonRow>
 
-                                                    <IonCol>
+                                                    <IonCol size="6">
                                                         <IonLabel className="dataTitle">Ubicación</IonLabel>
                                                         <IonLabel className="dataField">{location.location}</IonLabel>
                                                     </IonCol>
-                                                    <IonCol>
+                                                    <IonCol size="6">
                                                         <IonLabel className="dataTitle">ID</IonLabel>
                                                         <IonLabel className="dataField">{location.siteid}</IonLabel>
                                                     </IonCol>

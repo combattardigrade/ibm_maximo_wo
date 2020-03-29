@@ -136,7 +136,7 @@ class SelectFailureCodeModal extends Component {
                         failureCodes && Object.values(failureCodes).length > 0 && loading == false
                             ?
                             Object.values(failureCodes).map((failureCode, index) => (
-                                <IonItem style={{ borderBottom: '1px solid #dedede' }} color={failureCode._rowstamp == this.state.selectedFailureCode._rowstamp && 'primary'} key={index} button detail onClick={e => { e.preventDefault(); this.handleSelectFailureCodeClick(failureCode) }}>
+                                <IonItem lines="none" style={{ borderBottom: '1px solid #dedede' }} color={failureCode._rowstamp == this.state.selectedFailureCode._rowstamp && 'primary'} key={index} button detail onClick={e => { e.preventDefault(); this.handleSelectFailureCodeClick(failureCode) }}>
                                     <IonGrid>
                                         <IonRow>
                                             <IonCol size="2" style={{ textAlign: 'center' }}>
@@ -145,11 +145,11 @@ class SelectFailureCodeModal extends Component {
                                             <IonCol size="10">
                                                 <IonRow>
 
-                                                    <IonCol>
+                                                    <IonCol size="6">
                                                         <IonLabel className="dataTitle">Descripción</IonLabel>
                                                         <IonLabel className="dataField">{failureCode.description}</IonLabel>
                                                     </IonCol>
-                                                    <IonCol>
+                                                    <IonCol size="6">
                                                         <IonLabel className="dataTitle">Código</IonLabel>
                                                         <IonLabel className="dataField">{failureCode.failureCode}</IonLabel>
                                                     </IonCol>

@@ -246,3 +246,14 @@ export function getMaterials(params) {
     })
 }
 
+export function findMaterial(params) {
+    return fetch(API + '/findMaterial', {
+        method: 'POST',
+        body: JSON.stringify({ method: params.method, value: params.value }),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+

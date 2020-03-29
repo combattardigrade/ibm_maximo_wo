@@ -124,7 +124,7 @@ class SelectAssetModal extends Component {
                         assets && assets.length > 0 && loading == false
                             ?
                             assets.map((asset) => (
-                                <IonItem style={{borderBottom: '#dedede'}} color={asset._rowstamp == this.state.selectedAsset._rowstamp && 'primary' }  key={asset._rowstamp} button detail onClick={e => { e.preventDefault(); this.handleSelectAssetClick(asset) }}>
+                                <IonItem lines="none" style={{ borderBottom: '1px solid #dedede' }} color={asset._rowstamp == this.state.selectedAsset._rowstamp && 'primary' }  key={asset._rowstamp} button detail onClick={e => { e.preventDefault(); this.handleSelectAssetClick(asset) }}>
                                     <IonGrid>
                                         <IonRow>
                                             <IonCol size="2" style={{ textAlign: 'center' }}>
@@ -133,21 +133,21 @@ class SelectAssetModal extends Component {
                                             <IonCol size="10">
                                                 <IonRow>
 
-                                                    <IonCol>
+                                                    <IonCol size="6">
                                                         <IonLabel className="dataTitle">Activo</IonLabel>
                                                         <IonLabel className="dataField">{asset.description}</IonLabel>
                                                     </IonCol>
-                                                    <IonCol>
+                                                    <IonCol size="6">
                                                         <IonLabel className="dataTitle">Código</IonLabel>
                                                         <IonLabel className="dataField">{asset.assetnum}</IonLabel>
                                                     </IonCol>
                                                 </IonRow>
                                                 <IonRow>
-                                                    <IonCol>
+                                                    <IonCol size="6">
                                                         <IonLabel className="dataTitle">Ubicación</IonLabel>
                                                         <IonLabel className="dataField">{asset.location}</IonLabel>
                                                     </IonCol>
-                                                    <IonCol>
+                                                    <IonCol size="6">
                                                         <IonLabel className="dataTitle">Planta:</IonLabel>
                                                         <IonLabel className="dataField">{asset.siteid}</IonLabel>
                                                     </IonCol>
