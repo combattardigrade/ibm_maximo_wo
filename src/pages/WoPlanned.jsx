@@ -25,10 +25,10 @@ class WoPlanned extends Component {
                 <WoDetailsHeader currentWorkOrder={currentWorkOrder} />
 
                 <IonItem>
-                    <IonLabel>Mano de obra:</IonLabel>
+                    <IonLabel className="dataTitle">Mano de obra:</IonLabel>
                 </IonItem>
                 {
-                    'wplabor' in currentWorkOrder && (
+                    'wplabor' in currentWorkOrder ? (
                         currentWorkOrder.wplabor.map((labor) => (
                             <IonItem lines="full" key={labor.wplaborid}>
                                 <IonGrid>
@@ -63,16 +63,18 @@ class WoPlanned extends Component {
                             </IonItem>
                         ))
                     )
+                    :
+                    <IonItem><IonLabel className="dataField">No se encontraron resultados</IonLabel></IonItem>
                 }
 
 
 
                 <IonItem>
-                    <IonLabel>Materiales:</IonLabel>
+                    <IonLabel className="dataTitle">Materiales:</IonLabel>
                 </IonItem>
 
                 {
-                    'wpmaterial' in currentWorkOrder && (
+                    'wpmaterial' in currentWorkOrder ? (
                         currentWorkOrder.wpmaterial.map((material) => (
                             <IonItem lines="full" key={material.wpitemid}>
                                 <IonGrid>
@@ -109,6 +111,8 @@ class WoPlanned extends Component {
 
                         ))
                     )
+                    :
+                    <IonItem><IonLabel className="dataField">No se encontraron resultados</IonLabel></IonItem>
                 }
                
             </IonContent>

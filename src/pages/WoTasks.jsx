@@ -77,7 +77,9 @@ class WoTasks extends Component {
             <IonContent>
 
                 <WoDetailsHeader currentWorkOrder={currentWorkOrder} />
-
+                <IonItem>
+                    <IonLabel className="dataTitle">Tareas:</IonLabel>
+                </IonItem>
                 {
                     currentWorkOrder && 'woactivity' in currentWorkOrder 
                         ?
@@ -110,7 +112,7 @@ class WoTasks extends Component {
                             </IonItem>
                         ))
                         :
-                        <IonItem><IonLabel>No se encontraron resultados</IonLabel></IonItem>
+                        <IonItem><IonLabel className="dataField">No se encontraron resultados</IonLabel></IonItem>
                 }
                 <TaskDescModal handleToggleTaskDescModal={this.handleToggleTaskDescModal} showTaskDescModal={this.state.showTaskDescModal} taskLongDescription={this.state.taskLongDescription} />
             </IonContent>

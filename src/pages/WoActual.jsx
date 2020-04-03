@@ -58,7 +58,7 @@ class WoActual extends Component {
 
                         })
                         :
-                        <IonItem><IonLabel>No se encontraron registros</IonLabel></IonItem>
+                        <IonItem><IonLabel className="dataField">No se encontraron registros</IonLabel></IonItem>
                 }
 
 
@@ -98,7 +98,7 @@ class WoActual extends Component {
                             </IonItem>
                         ))
                         :
-                        <IonItem><IonLabel>No se encontraron registros</IonLabel></IonItem>
+                        <IonItem><IonLabel className="dataField">No se encontraron registros</IonLabel></IonItem>
                 }
 
                 <IonItem>
