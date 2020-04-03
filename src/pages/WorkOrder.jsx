@@ -122,7 +122,7 @@ class WorkOrder extends Component {
     }
 
     render() {
-        const { currentWorkOrder, safetyDetails } = this.props
+        const { currentWorkOrder, safetyDetails, localWorkOrder } = this.props
         const { showLaborModal, showMaterialModal, showCommentModal, loading } = this.state
 
 
@@ -166,7 +166,7 @@ class WorkOrder extends Component {
 
                                     <ion-tab tab="tab-actual" >
                                         <ion-nav><WoActual currentWorkOrder={currentWorkOrder} handleToggleLaborModal={this.handleToggleLaborModal}
-                                            handleToggleMaterialModal={this.handleToggleMaterialModal} /></ion-nav>
+                                            handleToggleMaterialModal={this.handleToggleMaterialModal} localWorkOrder={localWorkOrder} /></ion-nav>
                                     </ion-tab>
                                 </div>
 
@@ -239,12 +239,13 @@ class WorkOrder extends Component {
 };
 
 
-function mapStateToProps({ auth, workOrders }) {
+function mapStateToProps({ auth, workOrders, localWorkOrders }) {
     return {
         token: auth.token,
         workOrders: workOrders.workOrders,
         currentWorkOrder: workOrders.currentWorkOrder,
-        safetyDetails: workOrders.workOrderSafety
+        safetyDetails: workOrders.workOrderSafety,
+        localWorkOrder: localWorkOrders[workOrders.currentWorkOrder.wonum]
     }
 }
 

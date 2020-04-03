@@ -23,10 +23,11 @@ import { saveAssets } from '../actions/assets'
 import { saveLaborCatalog } from '../actions/labor'
 import { saveLocations } from '../actions/locations'
 import { saveMaterials } from '../actions/materials'
-
+import { saveLocalWorkOrder } from '../actions/localWorkOrders';
 
 import WoCard from '../components/WoCard'
 import { Plugins } from '@capacitor/core'
+
 const { Modals } = Plugins
 
 class Dashboard extends Component {
@@ -34,7 +35,7 @@ class Dashboard extends Component {
     state = {
         loading: true,
         showHazardVerification: false,
-        wonum: '',
+        currentWonum: '',
 
 
     }
@@ -146,22 +147,37 @@ class Dashboard extends Component {
     }
 
     handleWorkOrderClick = (wonum) => {
-
-        this.props.history.push('/wo/' + wonum)
-        // this.setState({showHazardVerification: true})
+        const { localWorkOrders } = this.props
+        
+        if(localWorkOrders && localWorkOrders[wonum]) {       
+               
+            this.props.history.push('/wo/' + wonum)
+            return
+        }
+        
+        this.setState({showHazardVerification: true, currentWonum: wonum})
 
     }
 
     handleHazardVerificationClick = async (data) => {
-        const { token } = this.props
-        const { wonum } = this.state
+        const { dispatch } = this.props
+        const { currentWonum } = this.state
         if (data.length != 3) {
             this.setState({ showHazardVerification: false })
             return
         }
+        const localWorkOrder = {
+            wonum: currentWonum,
+            comments: [
+                'Tengo permiso para trabajo Aprobado para trabajos riesgosos',
+                'Cuento con el equipo y protección necesaria',
+                'Realicé LoTo antes de intervenir el equipo'
+            ]
+        }
 
+        dispatch(saveLocalWorkOrder(localWorkOrder))
 
-        this.props.history.push('/wo/' + wonum)
+        this.props.history.push('/wo/' + currentWonum)
     }
 
     handleRefreshClick = async (e) => {
@@ -285,7 +301,7 @@ class Dashboard extends Component {
 };
 
 
-function mapStateToProps({ auth, workOrders, user, inventory, assets, labor, comments, locations, materials }) {
+function mapStateToProps({ auth, workOrders, user, inventory, assets, labor, comments, locations, materials, localWorkOrders }) {
     return {
         token: auth.token,
         workOrders: workOrders && workOrders.workOrders,
@@ -296,6 +312,7 @@ function mapStateToProps({ auth, workOrders, user, inventory, assets, labor, com
         comments,
         locations,
         materials,
+        localWorkOrders: localWorkOrders 
     }
 }
 

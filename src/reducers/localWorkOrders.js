@@ -1,16 +1,11 @@
 import { SAVE_LOCAL_WORK_ORDER } from '../actions/localWorkOrders'
 
-const initialState = {
-    localWorkOrders: []
-}
-
-
-export default function auth(state = initialState, action) {
+export default function localWorkOrders(state = null, action) {
     switch(action.type) {
         case SAVE_LOCAL_WORK_ORDER:
             return {
                 ...state,
-                localWorkOrders: [...action.localWorkOrder]
+                [action.localWorkOrder.wonum]: action.localWorkOrder
             }        
         default:
             return state

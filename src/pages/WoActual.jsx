@@ -11,14 +11,14 @@ const moment = require('moment')
 class WoActual extends Component {
 
     render() {
-        const { currentWorkOrder, handleToggleMaterialModal } = this.props
-
+        const { currentWorkOrder, handleToggleMaterialModal, localWorkOrder } = this.props
+        console.log(localWorkOrder)
         return (
             <IonContent>
                 <WoDetailsHeader currentWorkOrder={currentWorkOrder} />
 
                 <IonItem>
-                    <IonLabel>Mano de obra:</IonLabel>
+                    <IonLabel className="dataTitle">Mano de obra:</IonLabel>
                 </IonItem>
 
                 {
@@ -64,7 +64,7 @@ class WoActual extends Component {
 
 
                 <IonItem>
-                    <IonLabel>Materiales:</IonLabel>
+                    <IonLabel className="dataTitle">Materiales:</IonLabel>
                 </IonItem>
 
                 {
@@ -89,7 +89,7 @@ class WoActual extends Component {
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Cantidad:</span> {material.itemqty}</IonLabel>
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Cantidad usada:</span> {material.itemqtyused}</IonLabel>
                                                 </IonCol>
-                                                
+
                                             </IonRow>
                                         </IonCol>
                                     </IonRow>
@@ -101,17 +101,24 @@ class WoActual extends Component {
                         <IonItem><IonLabel>No se encontraron registros</IonLabel></IonItem>
                 }
 
-
+                <IonItem>
+                    <IonLabel className="dataTitle">Comentarios:</IonLabel>
+                </IonItem>
                 <IonItem>
                     <IonGrid>
-                        <IonRow>
-                            <IonCol><IonLabel>Comentarios:</IonLabel></IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonCol><IonTextarea
-                                placeholder="Ingresar comentarios...">
-                            </IonTextarea></IonCol>
-                        </IonRow>
+                        {
+                            localWorkOrder && 'comments' in localWorkOrder
+                                ?
+                                localWorkOrder.comments.map((comment, i) => (
+                                    <IonRow key={i}>
+                                        <IonCol size="12">
+                                            <IonLabel className="dataField">{comment}</IonLabel>
+                                        </IonCol>
+                                    </IonRow>
+                                ))
+                                :
+                                <IonRow><IonCol><IonLabel className="dataField">No se encontraron registros</IonLabel></IonCol></IonRow>
+                        }
                     </IonGrid>
 
                 </IonItem>
@@ -120,7 +127,7 @@ class WoActual extends Component {
                 <IonItem>
                     <IonGrid>
                         <IonRow>
-                            <IonCol><IonLabel>Adjuntos:</IonLabel></IonCol>
+                            <IonCol><IonLabel className="dataTitle">Adjuntos:</IonLabel></IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol></IonCol>
