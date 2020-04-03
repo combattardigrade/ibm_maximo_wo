@@ -8,6 +8,7 @@ import labor from './labor'
 import locations from './locations'
 import failureCodes from './failureCodes'
 import materials from './materials'
+import localWorkOrders from './localWorkOrders'
 import storage from 'redux-persist/lib/storage'
 
 
@@ -21,6 +22,7 @@ const appReducer = combineReducers({
     locations,
     failureCodes,
     materials,
+    localWorkOrders,
 })
 
 const rootReducer = (state, action) => {    

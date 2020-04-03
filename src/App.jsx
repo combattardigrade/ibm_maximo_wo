@@ -48,33 +48,28 @@ class App extends Component {
   async componentDidMount() {
     const { token, dispatch } = this.props
 
-    
+
   }
 
   render() {
     const { selectedPage, setSelectedPage } = this.state
-    
+    const { auth } = this.props
 
     return (
       <IonApp>
         <IonReactRouter>
           <IonSplitPane contentId="main">
-            <Menu selectedPage={selectedPage}  />
+            <Menu selectedPage={selectedPage} />
             <IonRouterOutlet id="main">
-              <Route path="/dashboard" component={Dashboard} />
-              <Route path="/page/:name" render={(props) => {
-
-                return <Page {...props} />;
-              }} exact={true} />
-              <Route path="/" render={() => <Redirect to="/login" />} exact={true} />
               <Route path="/login" component={Login} />
-              <Route path="/wo/:wonum" component={WorkOrder} />
-              <Route path="/wo_details" component={WoDetails} />
-              <Route path="/workDone" component={WorkDone} />
-              <Route path="/woSearch" component={WoSearch} />
-              <Route path="/assets" component={AssetsList} />
-              <Route path="/inventory" component={Inventory} />
-              <Route path='/workDone' component={WorkDone} />
+              <PrivateRoute path='/dashboard' component={Dashboard} auth={auth} />
+              <PrivateRoute path="/wo/:wonum" component={WorkOrder} auth={auth} />
+              <PrivateRoute path="/wo_details" component={WoDetails} auth={auth} />
+              <PrivateRoute path="/workDone" component={WorkDone} auth={auth} />
+              <PrivateRoute path="/woSearch" component={WoSearch} auth={auth} />
+              <PrivateRoute path="/assets" component={AssetsList} auth={auth} />
+              <PrivateRoute path="/inventory" component={Inventory} auth={auth} />
+              <PrivateRoute path='/workDone' component={WorkDone} auth={auth} />
             </IonRouterOutlet>
           </IonSplitPane>
         </IonReactRouter>
@@ -83,11 +78,31 @@ class App extends Component {
   }
 };
 
-
+function PrivateRoute({ component: Component, ...rest }) {
+  const { auth } = rest
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        auth !== null ? (
+          <Component {...props} />
+        )
+          : (
+            <Redirect
+              to={{
+                pathname: '/login',
+                state: { from: props.location.pathname } // thanks a lot of the suggestion :)
+              }}
+            />
+          )
+      }
+    />
+  )
+}
 
 function mapStateToProps({ auth }) {
   return {
-       
+    auth
 
   }
 }
