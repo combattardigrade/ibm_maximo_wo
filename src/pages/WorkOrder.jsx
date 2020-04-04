@@ -165,8 +165,14 @@ class WorkOrder extends Component {
                                     </ion-tab>
 
                                     <ion-tab tab="tab-actual" >
-                                        <ion-nav><WoActual currentWorkOrder={currentWorkOrder} handleToggleLaborModal={this.handleToggleLaborModal}
-                                            handleToggleMaterialModal={this.handleToggleMaterialModal} localWorkOrder={localWorkOrder} /></ion-nav>
+                                        <ion-nav>
+                                            <WoActual
+                                                currentWorkOrder={currentWorkOrder}
+                                                handleToggleLaborModal={this.handleToggleLaborModal}
+                                                handleToggleMaterialModal={this.handleToggleMaterialModal}
+                                                localWorkOrder={localWorkOrder}
+                                            />
+                                        </ion-nav>
                                     </ion-tab>
                                 </div>
 

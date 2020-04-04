@@ -37,3 +37,11 @@
 .alert-checkbox-label {
     white-space: normal !important;
 }
+
+.calendar {
+    width: 100%;
+}
+
+.react-datetime-picker__inputGroup {
+    width:100%;
+}

@@ -13,7 +13,7 @@ import {
     getWorkOrders, getWhoAmI, getInventory, getAssets,
     getWorkOrder, checkWOHazardVerification,
     sendWOHazardVerification, getLaborCatalog, getLocations,
-    getMaterials,   
+    getMaterials,
 } from '../utils/api'
 // Actions
 import { saveWorkOrders, saveCurrentWorkOrder, saveWorkOrderSafety } from '../actions/workOrders'
@@ -118,7 +118,7 @@ class Dashboard extends Component {
                 .catch((err) => console.log(err))
         }
 
-        
+
         if (!locations) {
             getLocations({ token: token })
                 .then(data => data.json())
@@ -131,12 +131,12 @@ class Dashboard extends Component {
                 })
         }
 
-        if(!materials) {
+        if (!materials) {
             getMaterials({ token })
                 .then((data) => data.json())
                 .then((response) => {
                     console.log(response)
-                    if(response.status == 'OK') {
+                    if (response.status == 'OK') {
                         console.log(response.payload)
                         dispatch(saveMaterials(response.payload))
                     }
@@ -147,15 +147,24 @@ class Dashboard extends Component {
     }
 
     handleWorkOrderClick = (wonum) => {
-        const { localWorkOrders } = this.props
-        
-        if(localWorkOrders && localWorkOrders[wonum]) {       
-               
+        const { localWorkOrders, token, dispatch } = this.props
+        // getWorkOrder({ wonum: wonum, token: token })
+        //     .then((data) => data.json())
+        //     .then((response) => {
+        //         if (response.status == 'OK') {
+        //             dispatch(saveCurrentWorkOrder(response.payload))
+        //             // this.setState({ loading: false })
+        //         }
+        //     })
+        if (localWorkOrders && localWorkOrders[wonum]) {
+
             this.props.history.push('/wo/' + wonum)
             return
         }
-        
-        this.setState({showHazardVerification: true, currentWonum: wonum})
+
+
+
+        this.setState({ showHazardVerification: true, currentWonum: wonum })
 
     }
 
@@ -172,7 +181,10 @@ class Dashboard extends Component {
                 'Tengo permiso para trabajo Aprobado para trabajos riesgosos',
                 'Cuento con el equipo y protección necesaria',
                 'Realicé LoTo antes de intervenir el equipo'
-            ]
+            ],
+            laborTransactions: [],
+            materialTransactions: [],
+            attachments: []
         }
 
         dispatch(saveLocalWorkOrder(localWorkOrder))
@@ -312,7 +324,7 @@ function mapStateToProps({ auth, workOrders, user, inventory, assets, labor, com
         comments,
         locations,
         materials,
-        localWorkOrders: localWorkOrders 
+        localWorkOrders: localWorkOrders
     }
 }
 
