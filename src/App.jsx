@@ -61,6 +61,7 @@ class App extends Component {
           <IonSplitPane contentId="main">
             <Menu selectedPage={selectedPage} />
             <IonRouterOutlet id="main">
+              <Route path="/" render={() => <Redirect to="/login" />} exact={true} />
               <Route path="/login" component={Login} />
               <PrivateRoute path='/dashboard' component={Dashboard} auth={auth} />
               <PrivateRoute path="/wo/:wonum" component={WorkOrder} auth={auth} />
@@ -91,7 +92,7 @@ function PrivateRoute({ component: Component, ...rest }) {
             <Redirect
               to={{
                 pathname: '/login',
-                state: { from: props.location.pathname } // thanks a lot of the suggestion :)
+                state: { logout: true } 
               }}
             />
           )

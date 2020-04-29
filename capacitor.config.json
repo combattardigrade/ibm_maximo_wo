@@ -1,11 +1,10 @@
 {
-  "appId": "io.ionic.starter",
+  "appId": "com.softbot.maximo",
   "appName": "maximo_app",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "build",
-  "cordova": {},
-  "server": {
-    "url": "http://192.168.0.173:8101"
-  }
+  "cordova": {}
+
+  
 }

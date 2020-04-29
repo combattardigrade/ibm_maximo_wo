@@ -251,7 +251,7 @@ function mapStateToProps({ auth, workOrders, localWorkOrders }) {
         workOrders: workOrders.workOrders,
         currentWorkOrder: workOrders.currentWorkOrder,
         safetyDetails: workOrders.workOrderSafety,
-        localWorkOrder: localWorkOrders[workOrders.currentWorkOrder.wonum]
+        localWorkOrder: 'currentWorkOrder' in workOrders && localWorkOrders[workOrders.currentWorkOrder.wonum]
     }
 }
 

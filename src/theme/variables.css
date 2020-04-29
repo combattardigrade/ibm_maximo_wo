@@ -1,6 +1,13 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
-
+.ion-color-dark {
+  --ion-color-base:#0db0bf;
+  --ion-color-contrast: #000000;
+  --ion-color-contrast-rgb: 255, 255, 255;
+  --ion-color-shade: #cfcfcf;  
+  --ion-background-color: #0db0bf;
+  
+}
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
