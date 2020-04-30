@@ -48,7 +48,7 @@ class Menu extends Component {
 
     return (
       <IonMenu contentId="main" type="overlay">
-        <IonContent>
+        <IonContent >
           <IonList id="inbox-list">
             <IonRow>
               <IonCol size="2"><IonIcon style={{ fontSize: '50px' }} icon={personCircleOutline} /></IonCol>

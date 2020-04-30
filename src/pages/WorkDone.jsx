@@ -37,13 +37,13 @@ class WorkDone extends Component {
         timeWorked: '0:00',
         downtime: '0:00',
         comments: '',
-        
+
     }
 
     // SelecteAssetModal => 
     handleSubmitAssetClick = (asset) => {
         console.log(asset)
-        this.setState({ showSelectAssetModal: false, selectedAsset: asset })
+        this.setState({ showSelectAssetModal: false, selectedAsset: asset, selectedLocation: { siteid: asset.sideid, location: asset.location } })
     }
 
     handleSubmitLocationClick = (location) => {
@@ -65,14 +65,14 @@ class WorkDone extends Component {
     // Toggle Select Location Modal
     handleToggleSelectLocationModal = (value) => {
         console.log('SHOW_SELECT_LOCATION_MODAL')
-        this.setState({ showSelectLocationModal: value })        
+        this.setState({ showSelectLocationModal: value })
     }
 
     // Toggle Select Failure Code Modal
     handleToggleSelectFailureCodeModal = (value) => {
-        console.log('SHOW_SELECT_FAILURECODE_MODAL')        
-        this.setState({ showSelectFailureCodeModal: value })     
-        
+        console.log('SHOW_SELECT_FAILURECODE_MODAL')
+        this.setState({ showSelectFailureCodeModal: value })
+
     }
 
     handleToggleMaterialModal = (value) => {
@@ -129,7 +129,7 @@ class WorkDone extends Component {
         return (
             <IonPage>
                 <IonHeader>
-                    <IonToolbar color="dark">
+                    <IonToolbar color="primary">
                         <IonButtons slot="start" onClick={e => { e.preventDefault(); this.handleBackBtn() }}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
@@ -247,13 +247,7 @@ class WorkDone extends Component {
                                         <IonSelectOption value="1">1</IonSelectOption>
                                         <IonSelectOption value="2">2</IonSelectOption>
                                         <IonSelectOption value="3">3</IonSelectOption>
-                                        <IonSelectOption value="4">4</IonSelectOption>
-                                        <IonSelectOption value="5">5</IonSelectOption>
-                                        <IonSelectOption value="6">6</IonSelectOption>
-                                        <IonSelectOption value="7">7</IonSelectOption>
-                                        <IonSelectOption value="8">8</IonSelectOption>
-                                        <IonSelectOption value="9">9</IonSelectOption>
-                                        <IonSelectOption value="10">10</IonSelectOption>
+                                        <IonSelectOption value="4">4</IonSelectOption>                                        
                                     </IonSelect>
                                 </IonCol>
                             </IonRow>
@@ -275,17 +269,21 @@ class WorkDone extends Component {
                         </IonGrid>
                     </IonItem>
 
-                    <IonItem style={{}}>
-                        <IonGrid>
-                            <IonRow >
-                                <IonCol size="12" >
-                                    <IonLabel className="dataTitle">Tiempo de Inactividad</IonLabel>
-                                    <TimeField style={{ width: '50px', textAlign: 'center', }} value={this.state.downtime} onChange={this.handleDownTimeChange} />
-                                </IonCol>
+                    {
+                        this.state.workType === 'EM' &&
+                        <IonItem style={{}}>
+                            <IonGrid>
+                                <IonRow >
+                                    <IonCol size="12" >
+                                        <IonLabel className="dataTitle">Tiempo de Inactividad</IonLabel>
+                                        <TimeField style={{ width: '50px', textAlign: 'center', }} value={this.state.downtime} onChange={this.handleDownTimeChange} />
+                                    </IonCol>
+                                </IonRow>
+                            </IonGrid>
+                        </IonItem>
+                    }
 
-                            </IonRow>
-                        </IonGrid>
-                    </IonItem>
+
                     <IonItem style={{}}>
                         <IonGrid>
                             <IonRow >

@@ -88,7 +88,7 @@ class SelectAssetModal extends Component {
         return (
             <IonModal isOpen={showSelectAssetModal}>
                 <IonHeader>
-                    <IonToolbar>
+                    <IonToolbar color="primary">
                         <IonTitle>Seleccionar Activo</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => handleToggleSelectAssetModal(false)}>Cerrar</ion-button>
@@ -134,21 +134,21 @@ class SelectAssetModal extends Component {
                                                 <IonRow>
 
                                                     <IonCol size="6">
-                                                        <IonLabel className="dataTitle">Activo</IonLabel>
-                                                        <IonLabel className="dataField">{asset.description}</IonLabel>
+                                                        <IonLabel className={asset._rowstamp == this.state.selectedAsset._rowstamp ? 'dataTitle white' : 'dataTitle'}>Activo</IonLabel>
+                                                        <IonLabel className="dataField">{asset.description.substr(0,15)}...</IonLabel>
                                                     </IonCol>
                                                     <IonCol size="6">
-                                                        <IonLabel className="dataTitle">Código</IonLabel>
+                                                        <IonLabel className={asset._rowstamp == this.state.selectedAsset._rowstamp ? 'dataTitle white' : 'dataTitle'}>Código</IonLabel>
                                                         <IonLabel className="dataField">{asset.assetnum}</IonLabel>
                                                     </IonCol>
                                                 </IonRow>
                                                 <IonRow>
                                                     <IonCol size="6">
-                                                        <IonLabel className="dataTitle">Ubicación</IonLabel>
-                                                        <IonLabel className="dataField">{asset.location}</IonLabel>
+                                                        <IonLabel className={asset._rowstamp == this.state.selectedAsset._rowstamp ? 'dataTitle white' : 'dataTitle'}>Ubicación</IonLabel>
+                                                        <IonLabel className="dataField">{asset.location.substr(0,15)}...</IonLabel>
                                                     </IonCol>
                                                     <IonCol size="6">
-                                                        <IonLabel className="dataTitle">Planta:</IonLabel>
+                                                        <IonLabel className={asset._rowstamp == this.state.selectedAsset._rowstamp ? 'dataTitle white' : 'dataTitle'}>Planta:</IonLabel>
                                                         <IonLabel className="dataField">{asset.siteid}</IonLabel>
                                                     </IonCol>
                                                 </IonRow>

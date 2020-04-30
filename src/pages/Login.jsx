@@ -8,8 +8,13 @@ import {
     IonRow, IonNote, IonCol, IonButton
 } from '@ionic/react';
 
-import { save } from 'ionicons/icons'
+// Components
+import Loading from '../components/Loading'
 import logo from '../components/logo.png'
+import bg from '../components/bg.png'
+
+
+
 
 
 class Login extends Component {
@@ -20,10 +25,11 @@ class Login extends Component {
         showAlert: false,
         alertTitle: '',
         alertMsg: '',
-
+        loading: true
     }
 
     componentDidMount() {
+        this.setState({ loading: false })
         try {
             if (this.props.location.state.logout === true) {
                 const { state } = this.props.location
@@ -35,7 +41,7 @@ class Login extends Component {
                 }, 100)
             }
         } catch (e) {
-            console.log(e)
+
         }
     }
 
@@ -50,63 +56,73 @@ class Login extends Component {
         e.preventDefault()
 
         const { user, password } = this.state
-        
+
         if (!user || !password) {
-            this.showAlert('Ingresa todos los campos requeridos')
+            this.showAlert('Ingresa todos los campos requeridos', 'Error')
             return
         }
 
+        this.setState({ loading: true })
+
         let response
+
         try {
             response = await (await login({ user: user, password: password })).json()
             console.log(response)
         }
         catch (err) {
-            console.log(err)
-            this.showAlert('Ocurrió un error al intentar realizar la acción. Por favor, inténtalo nuevamente.')
+            this.setState({ loading: false })
+            this.showAlert('Ocurrió un error al intentar realizar la acción. Por favor, inténtalo nuevamente.', 'Eror')
             return
         }
-        console.log(response)
+
         if (response.status != 'OK') {
+            this.setState({ loading: false })
             this.showAlert('message' in response ? response.message : 'Ocurrió un error al intentar realizar la acción. Por favor, inténtalo nuevamente.')
             return
         }
         // save jwt
         this.props.dispatch(saveToken(response.payload))
 
+        this.setState({ loading: false })
         // redirect to dashboard
         this.props.history.replace('/dashboard')
+        
     }
 
 
 
     render() {
+
+        const { user, password, loading } = this.state
+
+        if (loading) {
+            return <Loading />
+        }
+
         return (
             <IonPage>
-
-                <IonContent color="dark">
+                <IonContent color="dark" style={{backgroundImage: "url('../components/bg.png') 0 0/100% 100% no-repeat"}}>
                     <div className='authPage'>
                         <form onSubmit={this.handleSubmit} style={{ width: '100%' }} >
                             <div style={{ textAlign: 'center' }}>
                                 <img src={logo} style={{ height: '8em' }} />
-
                             </div>
                             <div style={{ textAlign: 'center', marginTop: '20px', marginBottom: '10px' }}>
                                 <IonLabel className='authTitle'>INICIAR SESIÓN</IonLabel>
                             </div>
                             <div style={{ padding: 15, paddingBottom: 5 }}>
                                 <IonItem className="dark item-input-login" lines="full">
-                                    <IonInput onChange={this.handleUserChange} className="input-login" type="text" placeholder="Usuario"></IonInput>
+                                    <IonInput value={user} onIonChange={this.handleUserChange} className="input-login" type="text" placeholder="Usuario" />
                                 </IonItem>
-
                                 <IonItem className="dark item-input-login" lines="full" style={{ marginTop: '15px' }}>
-                                    <IonInput onChange={this.handlePasswordChange} className="input-login" type="password" placeholder="Contraseña" ></IonInput>
+                                    <IonInput value={password} onIonChange={this.handlePasswordChange} className="input-login" type="password" placeholder="Contraseña" ></IonInput>
                                 </IonItem>
                             </div>
                             <IonGrid>
                                 <IonRow>
                                     <IonCol size="12" style={{ paddingBottom: '0px', paddingLeft: '8px', paddingRight: '8px' }}>
-                                        <IonButton onClick={this.handleSubmit} color="light" expand="full" >Ingresar</IonButton>
+                                        <IonButton onClick={this.handleSubmit} color="primary" expand="full" >Ingresar</IonButton>
                                     </IonCol>
                                 </IonRow>
                             </IonGrid>

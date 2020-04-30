@@ -25,10 +25,9 @@ import { saveLocations } from '../actions/locations'
 import { saveMaterials } from '../actions/materials'
 import { saveLocalWorkOrder } from '../actions/localWorkOrders';
 
+// Components
 import WoCard from '../components/WoCard'
-import { Plugins } from '@capacitor/core'
-
-const { Modals } = Plugins
+import Loading from '../components/Loading'
 
 class Dashboard extends Component {
 
@@ -43,10 +42,10 @@ class Dashboard extends Component {
     ionViewWillEnter() {
         const { token, dispatch, workOrders, user, inventory, assets, labor, locations, materials } = this.props
 
-        if (workOrders && user && inventory && assets && labor && locations) {
+        if (workOrders) {
             this.setState({ loading: false })
-            return
         }
+
 
         if (!workOrders) {
             getWorkOrders({ token: token })
@@ -66,6 +65,7 @@ class Dashboard extends Component {
                     return
                 })
         }
+
 
 
         if (!user) {
@@ -156,6 +156,7 @@ class Dashboard extends Component {
         //             // this.setState({ loading: false })
         //         }
         //     })
+        console.log('test')
         if (localWorkOrders && localWorkOrders[wonum]) {
 
             this.props.history.push('/wo/' + wonum)
@@ -169,27 +170,41 @@ class Dashboard extends Component {
     }
 
     handleHazardVerificationClick = async (data) => {
-        const { dispatch } = this.props
+        const { token, dispatch } = this.props
         const { currentWonum } = this.state
         if (data.length != 3) {
             this.setState({ showHazardVerification: false })
             return
         }
-        const localWorkOrder = {
-            wonum: currentWonum,
-            comments: [
-                'Tengo permiso para trabajo Aprobado para trabajos riesgosos',
-                'Cuento con el equipo y protección necesaria',
-                'Realicé LoTo antes de intervenir el equipo'
-            ],
-            laborTransactions: [],
-            materialTransactions: [],
-            attachments: []
-        }
 
-        dispatch(saveLocalWorkOrder(localWorkOrder))
+        console.log('HAZARD_VERIFICATION_SENT')
 
-        this.props.history.push('/wo/' + currentWonum)
+        this.setState({ loading: true })
+        getWorkOrder({ wonum: currentWonum, token: token })
+            .then((data) => data.json())
+            .then((response) => {
+                if (response.status == 'OK') {
+                    const localWorkOrder = {
+                        wonum: currentWonum,
+                        comments: [
+                            'Tengo permiso para trabajo Aprobado para trabajos riesgosos',
+                            'Cuento con el equipo y protección necesaria',
+                            'Realicé LoTo antes de intervenir el equipo'
+                        ],
+                        laborTransactions: [],
+                        materialTransactions: [],
+                        attachments: [],
+                        ...response.payload
+                    }
+                   
+                    dispatch(saveCurrentWorkOrder(localWorkOrder))
+                    dispatch(saveLocalWorkOrder(localWorkOrder))
+                    this.setState({ loading: false, showHazardVerification: false })
+                    this.props.history.push('/wo/' + currentWonum)
+
+                }
+            })
+
     }
 
     handleRefreshClick = async (e) => {
@@ -214,21 +229,20 @@ class Dashboard extends Component {
             })
     }
 
-    async showAlert(message) {
-        await Modals.alert({
-            title: 'Error',
-            message,
-        })
+    showAlert = (msg, title) => {
+        this.setState({ showAlert: true, alertMsg: msg, alertTitle: title })
     }
 
     render() {
         const { workOrders } = this.props
         const { loading, showHazardVerification } = this.state
 
+
+
         return (
             <IonPage>
-                <IonHeader>
-                    <IonToolbar color="dark">
+                <IonHeader style={{ display: loading && 'none' }}>
+                    <IonToolbar color="primary">
                         <IonButtons slot="start">
                             <IonMenuButton />
                         </IonButtons>
@@ -239,15 +253,8 @@ class Dashboard extends Component {
                     </IonToolbar>
                 </IonHeader>
 
-                <IonContent>
-                    <IonRefresher slot="fixed" >
-                        <IonRefresherContent
-                            pullingIcon="arrow-dropdown"
-                            pullingText="Pull to refresh"
-                            refreshingSpinner="circles"
-                            refreshingText="Refreshing...">
-                        </IonRefresherContent>
-                    </IonRefresher>
+                <IonContent className="dashboard-bg">
+
 
                     {
                         workOrders && loading == false ?
@@ -255,9 +262,7 @@ class Dashboard extends Component {
                                 <WoCard key={wo.wonum} wo={wo} handleWorkOrderClick={this.handleWorkOrderClick} />
                             ))
                             :
-                            <div className="spinnerCenter">
-                                <IonSpinner name="crescent" style={{ textAlign: 'center' }} />
-                            </div>
+                            <Loading />
                     }
 
                     <IonAlert
@@ -315,7 +320,7 @@ class Dashboard extends Component {
 
 function mapStateToProps({ auth, workOrders, user, inventory, assets, labor, comments, locations, materials, localWorkOrders }) {
     return {
-        token: auth.token,
+        token: auth && auth.token,
         workOrders: workOrders && workOrders.workOrders,
         user,
         inventory,

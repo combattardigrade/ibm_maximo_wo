@@ -100,7 +100,7 @@ class SelectFailureCodeModal extends Component {
         return (
             <IonModal isOpen={showSelectFailureCodeModal}>
                 <IonHeader>
-                    <IonToolbar color="dark">
+                    <IonToolbar color="primary">
                         <IonTitle>Seleccionar Código de Falla</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => handleToggleSelectFailureCodeModal(false)}>Cerrar</ion-button>
@@ -146,11 +146,11 @@ class SelectFailureCodeModal extends Component {
                                                 <IonRow>
 
                                                     <IonCol size="6">
-                                                        <IonLabel className="dataTitle">Descripción</IonLabel>
+                                                        <IonLabel className={failureCode._rowstamp == this.state.selectedFailureCode._rowstamp ? 'dataTitle white' : 'dataTitle'}>Descripción</IonLabel>
                                                         <IonLabel className="dataField">{failureCode.description}</IonLabel>
                                                     </IonCol>
                                                     <IonCol size="6">
-                                                        <IonLabel className="dataTitle">Código</IonLabel>
+                                                        <IonLabel className={failureCode._rowstamp == this.state.selectedFailureCode._rowstamp ? 'dataTitle white' : 'dataTitle'}>Código</IonLabel>
                                                         <IonLabel className="dataField">{failureCode.failureCode}</IonLabel>
                                                     </IonCol>
                                                 </IonRow>

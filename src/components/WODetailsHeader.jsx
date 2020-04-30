@@ -27,16 +27,28 @@ class WoDetailsHeader extends Component {
                         <IonRow>
                             <IonCol size="3">
                                 <IonLabel className="dataSubtitle">Código: </IonLabel>
-                                <IonLabel className="dataSubtitle">Descripción: </IonLabel>
-                                <IonLabel className="dataSubtitle">Fecha de inicio: </IonLabel>
-                                <IonLabel className="dataSubtitle">Activo: </IonLabel>
+                                
+                                
+                                
                             </IonCol>
                             <IonCol size="9">
                                 <IonLabel className="dataField">{'wonum' in currentWorkOrder ? currentWorkOrder.wonum : '-'}</IonLabel>
-                                <IonLabel className="dataField">{'description' in currentWorkOrder ? currentWorkOrder.description : '-'}</IonLabel>
-                                <IonLabel className="dataField">{'targstartdate' in currentWorkOrder ? currentWorkOrder.targstartdate : '-'}</IonLabel>
-                                <IonLabel className="dataField">{'assetDescription' in currentWorkOrder ? currentWorkOrder.assetDescription : '-'}</IonLabel>
+                                
+                                
+                                
                             </IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol size="3"><IonLabel className="dataSubtitle">Descripción: </IonLabel></IonCol>
+                            <IonCol size="9"><IonLabel className="dataField">{'description' in currentWorkOrder ? currentWorkOrder.description : '-'}</IonLabel></IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol size="3"><IonLabel className="dataSubtitle">Fecha de inicio: </IonLabel></IonCol>
+                            <IonCol size="9"><IonLabel className="dataField">{'targstartdate' in currentWorkOrder ? currentWorkOrder.targstartdate : '-'}</IonLabel></IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol size="3"><IonLabel className="dataSubtitle">Activo: </IonLabel></IonCol>
+                            <IonCol size="9"><IonLabel className="dataField">{'assetDescription' in currentWorkOrder ? currentWorkOrder.assetDescription : '-'}</IonLabel></IonCol>
                         </IonRow>
                     </IonGrid>
                 </IonItem>

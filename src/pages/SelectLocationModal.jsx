@@ -86,7 +86,7 @@ class SelectLocationModal extends Component {
         return (
             <IonModal isOpen={showSelectLocationModal}>
                 <IonHeader>
-                    <IonToolbar color="dark">
+                    <IonToolbar color="primary">
                         <IonTitle>Seleccionar Ubicación</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => handleToggleSelectLocationModal(false)}>Cerrar</ion-button>
@@ -132,11 +132,11 @@ class SelectLocationModal extends Component {
                                                 <IonRow>
 
                                                     <IonCol size="6">
-                                                        <IonLabel className="dataTitle">Ubicación</IonLabel>
+                                                        <IonLabel className={location._rowstamp == this.state.selectedLocation._rowstamp ? 'dataTitle white' : 'dataTitle'}>Ubicación</IonLabel>
                                                         <IonLabel className="dataField">{location.location}</IonLabel>
                                                     </IonCol>
                                                     <IonCol size="6">
-                                                        <IonLabel className="dataTitle">ID</IonLabel>
+                                                        <IonLabel className={location._rowstamp == this.state.selectedLocation._rowstamp ? 'dataTitle white' : 'dataTitle'}>ID</IonLabel>
                                                         <IonLabel className="dataField">{location.siteid}</IonLabel>
                                                     </IonCol>
                                                 </IonRow>
