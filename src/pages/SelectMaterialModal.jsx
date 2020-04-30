@@ -101,7 +101,7 @@ class SelectMaterialModal extends Component {
         return (
             <IonModal isOpen={showSelectMaterialModal}>
                 <IonHeader>
-                    <IonToolbar color="dark">
+                    <IonToolbar color="primary">
                         <IonTitle>Seleccionar Material</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => handleToggleSelectMaterialModal(false)}>Cerrar</ion-button>
@@ -149,11 +149,11 @@ class SelectMaterialModal extends Component {
                                                     <IonRow>
 
                                                         <IonCol size="6">
-                                                            <IonLabel className="dataTitle">Descripción</IonLabel>
+                                                            <IonLabel className={ material._rowstamp == this.state.selectedMaterial._rowstamp ? 'dataTittle white' : 'dataTitle'}>Descripción</IonLabel>
                                                             <IonLabel className="dataField">{material.description.substring(0,30)}</IonLabel>
                                                         </IonCol>
                                                         <IonCol size="6">
-                                                            <IonLabel className="dataTitle">Código</IonLabel>
+                                                            <IonLabel className={ material._rowstamp == this.state.selectedMaterial._rowstamp ? 'dataTittle white' : 'dataTitle'}>Código</IonLabel>
                                                             <IonLabel className="dataField">{material.itemnum}</IonLabel>
                                                         </IonCol>
                                                     </IonRow>

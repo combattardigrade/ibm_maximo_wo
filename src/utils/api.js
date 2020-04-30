@@ -257,3 +257,13 @@ export function findMaterial(params) {
     })
 }
 
+export function createReportOfWorkDone(params) {
+    return fetch(API + '/createReportOfWorkDone', {
+        method: 'POST',
+        body: JSON.stringify(params),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}

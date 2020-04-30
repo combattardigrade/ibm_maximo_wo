@@ -33,10 +33,11 @@ class MaterialModal extends Component {
         this.setState({ showSelectMaterialModal: value })
     }
 
+
     handleSubmitMaterialClick = (material) => {
         console.log(material)
         this.setState({ showSelectMaterialModal: false, selectedMaterial: material })
-        
+
     }
 
     render() {
@@ -47,7 +48,7 @@ class MaterialModal extends Component {
             <Fragment>
                 <IonModal isOpen={this.props.showMaterialModal}>
                     <IonHeader >
-                        <IonToolbar color="dark">
+                        <IonToolbar color="primary">
                             <IonTitle>Materiales</IonTitle>
                         </IonToolbar>
                     </IonHeader>
@@ -82,10 +83,10 @@ class MaterialModal extends Component {
                                             <Fragment>
                                                 <IonCol size="10">
                                                     <IonLabel className="dataTitle">Material</IonLabel>
-                                                    <IonLabel className="dataField">{selectedMaterial.itemnum} - {selectedMaterial.description.substring(0,30)}... </IonLabel>
+                                                    <IonLabel className="dataField">{selectedMaterial.itemnum} - {selectedMaterial.description.substring(0, 30)}... </IonLabel>
                                                 </IonCol>
                                                 <IonCol size="2">
-                                                    <IonButton onClick={() => this.handleToggleSelectLocationModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={swapHorizontalOutline}></IonIcon></IonButton>
+                                                    <IonButton onClick={() => this.handleToggleSelectMaterialModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={swapHorizontalOutline}></IonIcon></IonButton>
                                                 </IonCol>
                                             </Fragment>
                                             :
@@ -108,7 +109,7 @@ class MaterialModal extends Component {
                                 <IonRow>
                                     <IonCol size="12">
                                         <IonLabel className="dataTitle">Descripción</IonLabel>
-                                <IonTextarea readonly className="dataField" placeholder="Descripción del Material seleccionado">{ selectedMaterial && selectedMaterial.description}</IonTextarea>
+                                        <IonTextarea readonly className="dataField" placeholder="Descripción del Material seleccionado">{selectedMaterial && selectedMaterial.description}</IonTextarea>
                                     </IonCol>
                                 </IonRow>
                             </IonGrid>
@@ -117,7 +118,7 @@ class MaterialModal extends Component {
                             <IonGrid>
                                 <IonRow>
                                     <IonCol size="6"><IonLabel className="dataTitle">Existencia</IonLabel></IonCol>
-                                <IonCol size="6"><IonInput readonly className="dataField" placeholder="Existencias del Material">{ selectedMaterial && selectedMaterial.curbal }</IonInput></IonCol>
+                                    <IonCol size="6"><IonInput readonly className="dataField" placeholder="Existencias del Material">{selectedMaterial && selectedMaterial.curbal}</IonInput></IonCol>
                                 </IonRow>
                             </IonGrid>
                         </IonItem>
@@ -125,7 +126,15 @@ class MaterialModal extends Component {
                             <IonGrid>
                                 <IonRow>
                                     <IonCol size="6"><IonLabel className="dataTitle">Estante</IonLabel></IonCol>
-                                    <IonCol size="6"><IonInput readonly className="dataField" placeholder="Estante del Material">{ selectedMaterial && selectedMaterial.binnum }</IonInput></IonCol>
+                                    <IonCol size="6"><IonInput readonly className="dataField" placeholder="Estante del Material">{selectedMaterial && selectedMaterial.binnum}</IonInput></IonCol>
+                                </IonRow>
+                            </IonGrid>
+                        </IonItem>
+                        <IonItem lines="none">
+                            <IonGrid>
+                                <IonRow>
+                                    <IonCol size="6"><IonLabel className="dataTitle">Cantidad</IonLabel></IonCol>
+                                    <IonCol size="6"><IonInput readonly className="dataField" placeholder="Cantidad del Material">{selectedMaterial && selectedMaterial.binnum}</IonInput></IonCol>
                                 </IonRow>
                             </IonGrid>
                         </IonItem>
@@ -133,26 +142,17 @@ class MaterialModal extends Component {
                             <IonGrid>
                                 <IonRow>
                                     <IonCol size="6"><IonLabel className="dataTitle">Tarea</IonLabel></IonCol>
-                                    <IonCol size="6"><IonInput readonly className="dataField" placeholder="Tarea del Material"></IonInput></IonCol>
-                                </IonRow>
-                            </IonGrid>
-                        </IonItem>
-
-                        <IonItem lines="none">
-                            <IonGrid>
-                                <IonRow>
-                                    <IonCol size="6"><IonLabel className="dataTitle">Cantidad</IonLabel></IonCol>
-                                    <IonCol size="6"><IonInput readonly className="dataField" placeholder="Cantidad del Material">{ selectedMaterial && selectedMaterial.binnum }</IonInput></IonCol>
+                                    <IonCol size="6"><IonInput readonly className="dataField" ></IonInput></IonCol>
                                 </IonRow>
                             </IonGrid>
                         </IonItem>
                     </IonContent>
                     <IonRow>
                         <IonCol><IonButton expand="full" color="light" onClick={() => this.props.handleToggleMaterialModal(false)}>Cancelar</IonButton></IonCol>
-                        <IonCol><IonButton expand="full" onClick={() => this.props.handleToggleMaterialModal(false)}>Aceptar</IonButton></IonCol>
+                        <IonCol><IonButton expand="full" onClick={() => this.props.handleSubmitMaterialClick(this.state.selectedMaterial)}>Aceptar</IonButton></IonCol>
                     </IonRow>
                 </IonModal>
-                { console.log(this.state.showSelectMaterialModal)}
+                {console.log(this.state.showSelectMaterialModal)}
                 {
                     showSelectMaterialModal == true &&
                     <SelectMaterialModal
