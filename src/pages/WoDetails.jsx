@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import {
     IonIcon, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar,
     IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonButton,
-    IonToast,
+    IonToast, IonAlert,
 } from '@ionic/react';
 import {
     timeOutline, clipboardOutline, paperPlaneOutline
@@ -14,6 +14,7 @@ import ExploreContainer from '../components/ExploreContainer';
 import WoDetailsHeader from '../components/WODetailsHeader';
 import './Page.css';
 import './Maximo.css'
+import './WoDetails.css'
 
 // Components
 import Timer from 'react-compound-timer'
@@ -32,7 +33,8 @@ class WoDetails extends Component {
         showToast: false,
         serverMsg: '',
         serverStatus: '',
-        timerActive: false
+        timerActive: false,
+        showCompleteWOVerification: false,
     }
 
 
@@ -58,11 +60,7 @@ class WoDetails extends Component {
 
     }
 
-    handleCompleteWO = (e) => {
-        e.preventDefault()
-
-        
-    }
+    
 
     handleStartTimer = (e) => {
         e.preventDefault()
@@ -157,36 +155,36 @@ class WoDetails extends Component {
                                         ?
                                         <IonButton onClick={this.handleStartWO} color="light" expand="full">INICIAR</IonButton>
                                         :
-                                        <IonButton onClick={this.handleCompleteWO} color="light" expand="full">FINALIZAR</IonButton>
-                                        // this.state.timerActive ?
-                                        //     <IonRow>
-                                        //         <IonCol>
-                                        //             <Timer
-                                        //                 initialTime={0}
-                                        //                 startImmediately={false}
+                                        <IonButton onClick={this.props.handleCompleteWO} color="light" expand="full">FINALIZAR</IonButton>
+                                    // this.state.timerActive ?
+                                    //     <IonRow>
+                                    //         <IonCol>
+                                    //             <Timer
+                                    //                 initialTime={0}
+                                    //                 startImmediately={false}
 
-                                        //             >
-                                        //                 {
-                                        //                     ({ start, resume, pause, stop, reset, timerState }) => (
-                                        //                         <Fragment>
-                                        //                             <Timer.Hours formatValue={value => value.toString().length === 1 ? `0${value}:` : `${value}:`} />
-                                        //                             <Timer.Minutes formatValue={value => value.toString().length === 1 ? `0${value}:` : `${value}:`} />
-                                        //                             <Timer.Seconds formatValue={value => value.toString().length === 1 ? `0${value}` : `${value}`} />
-                                        //                         </Fragment>
-                                        //                     )
-                                        //                 }
-                                        //             </Timer>
-                                        //         </IonCol>
-                                        //         <IonCol>
+                                    //             >
+                                    //                 {
+                                    //                     ({ start, resume, pause, stop, reset, timerState }) => (
+                                    //                         <Fragment>
+                                    //                             <Timer.Hours formatValue={value => value.toString().length === 1 ? `0${value}:` : `${value}:`} />
+                                    //                             <Timer.Minutes formatValue={value => value.toString().length === 1 ? `0${value}:` : `${value}:`} />
+                                    //                             <Timer.Seconds formatValue={value => value.toString().length === 1 ? `0${value}` : `${value}`} />
+                                    //                         </Fragment>
+                                    //                     )
+                                    //                 }
+                                    //             </Timer>
+                                    //         </IonCol>
+                                    //         <IonCol>
 
-                                        //         </IonCol>
-                                        //     </IonRow>
-                                        //     :
-                                        //     <IonRow>
-                                        //         <IonCol><IonButton onClick={this.handleStartTimer} fill={null} expand="block" style={{ width: '40px !important' }}><IonIcon color="primary" style={{ fontSize: '32px' }} icon={timeOutline}></IonIcon></IonButton></IonCol>
-                                        //         <IonCol><IonButton onClick={this.handleStartTimer} fill={null} expand="block" style={{ width: '35px !important' }}><IonIcon color="primary" style={{ fontSize: '28px' }} icon={clipboardOutline}></IonIcon></IonButton></IonCol>
-                                        //         <IonCol><IonButton> Finalizar</IonButton></IonCol>
-                                        //     </IonRow>
+                                    //         </IonCol>
+                                    //     </IonRow>
+                                    //     :
+                                    //     <IonRow>
+                                    //         <IonCol><IonButton onClick={this.handleStartTimer} fill={null} expand="block" style={{ width: '40px !important' }}><IonIcon color="primary" style={{ fontSize: '32px' }} icon={timeOutline}></IonIcon></IonButton></IonCol>
+                                    //         <IonCol><IonButton onClick={this.handleStartTimer} fill={null} expand="block" style={{ width: '35px !important' }}><IonIcon color="primary" style={{ fontSize: '28px' }} icon={clipboardOutline}></IonIcon></IonButton></IonCol>
+                                    //         <IonCol><IonButton> Finalizar</IonButton></IonCol>
+                                    //     </IonRow>
                                 }
 
                             </IonCol>
@@ -264,6 +262,66 @@ class WoDetails extends Component {
                         </div>
                     )
                 }
+                
+
+
+                <IonAlert
+                    isOpen={this.state.showCompleteWOVerification2}
+                    header={'Verificación'}
+                    inputs={[
+                        {
+                            name: 'checkbox1',
+                            value: 'true',
+                            type: 'checkbox',
+                            label: 'Área del activo limpia y ordenada. Se realizó inspección visual (de arriba abajo) del área intervenida, se ha eliminado material residual externo al activo (lubricantes, metálicos, plásticos, etc.).',
+                            checked: false,
+                            className: 'first-input'
+                        },
+                        {
+                            name: 'checkbox2',
+                            value: 'true',
+                            type: 'checkbox',
+                            label: 'Las guardas/barreras de seguridad han sido ubicadas en su lugar.',
+                            checked: false,
+                        },
+                        {
+                            name: 'checkbox3',
+                            value: 'true',
+                            type: 'checkbox',
+                            label: 'Se han removido todas las refacciones herramientas, materiales externos, paños de limpieza y todo el material utilizado.',
+                            checked: false,
+                        },
+                        {
+                            name: 'checkbox4',
+                            value: 'true',
+                            type: 'checkbox',
+                            label: 'En caso de que se requiera saneamiento y limpieza, el supervisor de seguridad alimenticia fue notificado.',
+                            checked: false,
+                        },
+                        {
+                            name: 'supervisor',
+                            type: 'text',
+                            placeholder: 'Supervisor',
+                            label: 'test'
+                        }
+                    ]}
+                    buttons={[
+                        {
+                            text: 'Cancelar',
+                            role: 'cancel',
+                            handler: () => {
+                                this.setState({ showCompleteWOVerification: false })
+                            }
+                        },
+                        {
+                            text: 'Enviar',
+
+                            handler: (data) => {
+                                this.handleHazardVerificationClick(data)
+                            }
+                        }
+                    ]}
+                />
 
                 <IonToast
                     isOpen={this.state.showToast}
@@ -280,9 +338,10 @@ class WoDetails extends Component {
     }
 };
 
-function mapStateToProps({ auth, workOrders }) {
+function mapStateToProps({ auth, workOrders, localWorkOrders }) {
     return {
         token: auth.token,
+        localWorkOrders
     }
 }
 

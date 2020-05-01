@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 
 import {
@@ -7,7 +7,8 @@ import {
     IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar,
     IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow,
     IonCol, IonTabs, IonTab, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon,
-    IonFab, IonFabButton, IonModal, IonButton, IonBackButton, IonInput, IonSpinner
+    IonFab, IonFabButton, IonModal, IonButton, IonBackButton, IonInput, IonSpinner,
+    IonCheckbox, IonText
 } from '@ionic/react';
 import { Redirect, Route } from 'react-router-dom';
 import {
@@ -46,7 +47,13 @@ class WorkOrder extends Component {
         loading: true,
         safetyDetails: '',
         taskid: '',
-        wonum: ''
+        wonum: '',
+        showCompleteWOVerification: false,
+        checkbox1: false,
+        checkbox2: false,
+        checkbox3: false,
+        checkbox4: false,
+        supervisor: ''
     }
 
     handleToggleLaborModal = (value, taskid) => {
@@ -121,6 +128,32 @@ class WorkOrder extends Component {
 
     }
 
+    supervisorChange = (e) => this.setState({ supervisor: e.target.value })
+
+    handleCloseCompleteWoPopup = (e) => {
+        this.setState({ showCompleteWOVerification: false })
+    }
+
+    handleCompleteWO = (e) => {
+        e.preventDefault()
+
+        document.body.className += 'backdrop-no-scroll'
+
+        // show confirmation pop up
+        this.setState({ showCompleteWOVerification: true })
+        return
+
+        const { localWorkOrders, currentWorkOrder, token, dispatch } = this.props
+
+        // complete tasks?
+        // material txs
+
+        // attachments
+        const localWorkOrder = Object.values(localWorkOrders).filter(w => w.wonum == currentWorkOrder.wonum)[0]
+        console.log(localWorkOrder)
+        // Send comments
+    }
+
     render() {
         const { currentWorkOrder, safetyDetails, localWorkOrder } = this.props
         const { showLaborModal, showMaterialModal, showCommentModal, loading } = this.state
@@ -148,7 +181,7 @@ class WorkOrder extends Component {
 
                                 <div>
                                     <ion-tab tab="tab-details">
-                                        <ion-nav><WoDetails currentWorkOrder={currentWorkOrder} safetyDetails={safetyDetails && safetyDetails} /></ion-nav>
+                                        <ion-nav><WoDetails currentWorkOrder={currentWorkOrder} safetyDetails={safetyDetails && safetyDetails} handleCompleteWO={this.handleCompleteWO} /></ion-nav>
                                     </ion-tab>
 
                                     <ion-tab tab="tab-tasks">
@@ -237,7 +270,53 @@ class WorkOrder extends Component {
                     <CommentModal handleToggleCommentModal={this.handleToggleCommentModal} showCommentModal={showCommentModal} />
 
 
+
                 </IonContent>
+                {
+                    this.state.showCompleteWOVerification &&
+                    <Fragment>
+                        <div onClick={this.handleCloseCompleteWoPopup} className="custom-backdrop"></div>
+                        <div className="popup-container">
+                            <div className="popup-header">
+                                <h2 className="popup-title">Verificación</h2>
+                            </div>
+                            <div className="popup-body">
+                                <IonItem lines="full">
+                                    <IonCheckbox onClick={() => this.setState({ checkbox1: !this.state.checkbox1 })} checked={this.state.checkbox1} slot="start" color="primary" />
+                                    <IonText style={{ textAlign: 'justify', padding: '10px 0px', fontSize: '14px' }}>Área del activo limpia y ordenada. Se realizó inspección visual (de arriba abajo) del área intervenida, se ha eliminado material residual externo al activo (lubricantes, metálicos, plásticos, etc.</IonText>
+                                </IonItem>
+                                <IonItem lines="full">
+                                    <IonCheckbox onClick={() => this.setState({ checkbox2: !this.state.checkbox2 })} checked={this.state.checkbox2} slot="start" color="primary" />
+                                    <IonText style={{ textAlign: 'justify', padding: '10px 0px', fontSize: '14px' }}>Las guardas/barreras de seguridad han sido ubicadas en su lugar.</IonText>
+                                </IonItem>
+                                <IonItem lines="full">
+                                    <IonCheckbox onClick={() => this.setState({ checkbox3: !this.state.checkbox3 })} checked={this.state.checkbox3} slot="start" color="primary" />
+                                    <IonText style={{ textAlign: 'justify', padding: '10px 0px', fontSize: '14px' }}>Se han removido todas las refacciones, herramientas, materiales externos, paños de limpieza y todo material utilizado.</IonText>
+                                </IonItem>
+                                <IonItem lines="none">
+                                    <IonCheckbox onClick={() => this.setState({ checkbox4: !this.state.checkbox4 })} checked={this.state.checkbox4} slot="start" color="primary" />
+                                    <IonText style={{ textAlign: 'justify', padding: '10px 0px', fontSize: '14px' }}>En caso de que se requiriera saneamiento y limpieza el supervisor fue notificado el supervisor de seguridad alimenticia fue notificado.</IonText>
+                                </IonItem>
+                                {
+                                    this.state.checkbox4 &&
+                                    <IonItem lines="none" style={{ borderTop: '1px solid #d9d9d9' }}>
+                                        <div style={{ padding: '5px 0px', width: '100%' }}>
+                                            <IonInput onChange={this.state.supervisorChange} value={this.state.supervisor} type="text" placeholder="Ingresa el nombre del supervisor" />
+                                        </div>
+                                    </IonItem>
+                                }
+
+
+                            </div>
+                            <div className="popup-footer">
+                                <div>
+                                    <IonButton onClick={this.handleCloseCompleteWoPopup} fill="clear">Cancelar</IonButton>
+                                    <IonButton fill="clear">Enviar</IonButton>
+                                </div>
+                            </div>
+                        </div>
+                    </Fragment>
+                }
             </IonPage >
 
         );
