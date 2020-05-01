@@ -156,9 +156,8 @@ class Dashboard extends Component {
         //             // this.setState({ loading: false })
         //         }
         //     })
-        console.log('test')
+        
         if (localWorkOrders && localWorkOrders[wonum]) {
-
             this.props.history.push('/wo/' + wonum)
             return
         }

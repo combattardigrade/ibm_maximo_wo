@@ -125,7 +125,7 @@ class AssetsList extends Component {
         return (
             <IonPage>
                 <IonHeader>
-                    <IonToolbar>
+                    <IonToolbar color="primary">
                         <IonButtons slot="start" onClick={e => { e.preventDefault(); this.handleBackBtn() }}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
@@ -169,7 +169,7 @@ class AssetsList extends Component {
 
                                                     <IonCol>
                                                         <IonLabel className="dataTitle">Activo</IonLabel>
-                                                        <IonLabel className="dataField">{asset.description}</IonLabel>
+                                                        <IonLabel className="dataField">{asset.description.substr(0,15)}</IonLabel>
                                                     </IonCol>
                                                     <IonCol>
                                                         <IonLabel className="dataTitle">Código</IonLabel>
@@ -179,7 +179,7 @@ class AssetsList extends Component {
                                                 <IonRow>
                                                     <IonCol>
                                                         <IonLabel className="dataTitle">Ubicación</IonLabel>
-                                                        <IonLabel className="dataField">{asset.location}</IonLabel>
+                                                        <IonLabel className="dataField">{asset.location.substr(0,15)}</IonLabel>
                                                     </IonCol>
                                                     <IonCol>
                                                         <IonLabel className="dataTitle">Planta:</IonLabel>

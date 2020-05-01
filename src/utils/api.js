@@ -267,3 +267,26 @@ export function createReportOfWorkDone(params) {
         }
     })
 }
+
+export function createReportOfScheduledWork(params) {
+    return fetch(API + '/createReportOfScheduledWork', {
+        method: 'POST',
+        body: JSON.stringify(params),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function updateWOStatus(params) {
+    return fetch(API + '/wo/status', {
+        method: 'PUT',
+        body: JSON.stringify(params),
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+

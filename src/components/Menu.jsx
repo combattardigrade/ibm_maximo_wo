@@ -16,7 +16,11 @@ import { connect } from 'react-redux'
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { archiveOutline, archiveSharp, bookmarkOutline, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp, personCircleOutline } from 'ionicons/icons';
 import './Menu.css';
-import { menuController } from '@ionic/core';
+import { menuController, } from '@ionic/core';
+
+import {
+  shieldCheckmarkOutline, calendarOutline, searchOutline, layersOutline, cubeOutline, logOutOutline
+} from 'ionicons/icons'
 
 // Actions
 import { userLogout } from '../actions/auth'
@@ -47,40 +51,41 @@ class Menu extends Component {
     const { user } = this.props
 
     return (
-      <IonMenu contentId="main" type="overlay">
-        <IonContent >
-          <IonList id="inbox-list">
+      <IonMenu contentId="main" type="overlay" c>
+        <IonContent>
+          <IonList id="inbox-list" style={{ width: "100%" }}>
             <IonRow>
-              <IonCol size="2"><IonIcon style={{ fontSize: '50px' }} icon={personCircleOutline} /></IonCol>
-              <IonCol size="8"><IonListHeader style={{ paddingTop: '10px' }}>{user && user.displayName}</IonListHeader></IonCol>
+              <IonCol style={{ textAlign: 'center' }}><IonIcon style={{ fontSize: '6em' }} icon={personCircleOutline} /></IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol style={{ textAlign: 'center' }}><IonLabel style={{ fontWeight: 'bold' }}>{user && user.displayName}</IonLabel></IonCol>
             </IonRow>
           </IonList>
-
           <IonList id="labels-list">
             <IonListHeader>Menú</IonListHeader>
 
             <IonItem lines="none" onClick={e => { e.preventDefault(); this.handlePage('workDone') }}>
-              <IonLabel>Reporte de trabajo realizado</IonLabel>
+              <IonIcon style={{ fontSize: '1.6em', paddingTop: '3px', marginRight: '10px' }} color="primary" icon={shieldCheckmarkOutline}></IonIcon><IonLabel> Reporte de trabajo realizado</IonLabel>
             </IonItem>
 
-            <IonItem lines="none" >
-              <IonLabel>Reporte de trabajo a programar</IonLabel>
+            <IonItem lines="none" onClick={e => { e.preventDefault(); this.handlePage('scheduledWork') }}>
+              <IonIcon style={{ fontSize: '1.6em', paddingTop: '3px', marginRight: '10px' }} color="primary" icon={calendarOutline}></IonIcon><IonLabel> Reporte de trabajo a programar</IonLabel>
             </IonItem>
 
             <IonItem lines="none" onClick={e => { e.preventDefault(); this.handlePage('woSearch') }}>
-              <IonLabel>Búsqueda de Órdenes</IonLabel>
+              <IonIcon style={{ fontSize: '1.6em', paddingTop: '3px', marginRight: '10px' }} color="primary" icon={searchOutline}></IonIcon><IonLabel> Búsqueda de Órdenes</IonLabel>
             </IonItem>
 
             <IonItem lines="none" onClick={e => { e.preventDefault(); this.handlePage('inventory') }}>
-              <IonLabel>Inventario</IonLabel>
+              <IonIcon style={{ fontSize: '1.6em', paddingTop: '3px', marginRight: '10px' }} color="primary" icon={layersOutline}></IonIcon><IonLabel> Inventario</IonLabel>
             </IonItem>
 
             <IonItem lines="none" onClick={e => { e.preventDefault(); this.handlePage('assets') }} >
-              <IonLabel>Activos</IonLabel>
+              <IonIcon style={{ fontSize: '1.6em', paddingTop: '3px', marginRight: '10px' }} color="primary" icon={cubeOutline}></IonIcon><IonLabel> Activos</IonLabel>
             </IonItem>
           </IonList>
           <IonItem lines="none" style={{ position: 'absolute', bottom: '20px' }} onClick={this.handleUserLogout} >
-            <IonLabel>Cerrar sesión</IonLabel>
+            <IonIcon style={{ fontSize: '1.6em', paddingTop: '3px', marginRight: '10px' }} color="primary" icon={logOutOutline}></IonIcon><IonLabel> Cerrar sesión</IonLabel>
           </IonItem>
         </IonContent>
       </IonMenu>

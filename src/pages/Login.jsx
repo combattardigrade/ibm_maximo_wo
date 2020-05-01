@@ -122,13 +122,13 @@ class Login extends Component {
                             <IonGrid>
                                 <IonRow>
                                     <IonCol size="12" style={{ paddingBottom: '0px', paddingLeft: '8px', paddingRight: '8px' }}>
-                                        <IonButton onClick={this.handleSubmit} color="primary" expand="full" >Ingresar</IonButton>
+                                        <IonButton style={{'--background':'#0db0bf'}} onClick={this.handleSubmit}  expand="full" >Ingresar</IonButton>
                                     </IonCol>
                                 </IonRow>
                             </IonGrid>
                         </form>
                         <div style={{ bottom: '20px', position: 'absolute' }}>
-                            <IonNote onClick={e => { e.preventDefault(); this.goToPage('signup') }} style={{ fontSize: '0.8em', color: 'white' }}>Configuración de Conexión</IonNote>
+                            {/* <IonNote onClick={e => { e.preventDefault(); this.goToPage('signup') }} style={{ fontSize: '0.8em', color: 'white' }}>Configuración de Conexión</IonNote> */}
                         </div>
                     </div>
                 </IonContent>

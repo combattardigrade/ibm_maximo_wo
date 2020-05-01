@@ -129,7 +129,7 @@ class WorkOrder extends Component {
         return (
             <IonPage>
                 <IonHeader>
-                    <IonToolbar color="dark">
+                    <IonToolbar color="primary">
                         <IonButtons slot="start" onClick={e => { e.preventDefault(); this.handleBackBtn() }}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
@@ -207,7 +207,7 @@ class WorkOrder extends Component {
 
 
                     <ion-fab horizontal="end" vertical="bottom" slot="fixed">
-                        <ion-fab-button color="dark">
+                        <ion-fab-button color="primary">
                             <ion-icon style={{ color: 'white' }} icon={addOutline}></ion-icon>
                         </ion-fab-button>
                         <ion-fab-list side="top">

@@ -25,24 +25,18 @@ import TimeField from 'react-simple-timefield'
 import Loading from '../components/Loading'
 
 // API
-import { createReportOfWorkDone } from '../utils/api'
+import { createReportOfScheduledWork } from '../utils/api'
 
-class WorkDone extends Component {
+class ScheduledWork extends Component {
 
     state = {
-        showMaterialModal: false,
         showSelectAssetModal: false,
         showSelectLocationModal: false,
-        showSelectFailureCodeModal: false,
         selectedAsset: '',
         selectedLocation: '',
-        selectedFailureCode: '',
-        selectedMaterial: '',
         workType: '',
         priority: 1,
         description: '',
-        timeWorked: '0:00',
-        downtime: '0:00',
         comments: '',
         serverMsg: '',
         serverStatus: '',
@@ -54,22 +48,11 @@ class WorkDone extends Component {
     handleSubmitAssetClick = (asset) => {
         console.log(asset)
         this.setState({ showSelectAssetModal: false, selectedAsset: asset, selectedLocation: { siteid: asset.siteid, location: asset.location } })
-
     }
 
     handleSubmitLocationClick = (location) => {
         console.log(location)
         this.setState({ showSelectLocationModal: false, selectedLocation: location })
-    }
-
-    handleSubmitFailureCodeClick = (failureCode) => {
-        console.log(failureCode)
-        this.setState({ showSelectFailureCodeModal: false, selectedFailureCode: failureCode })
-    }
-
-    handleSubmitMaterialClick = (material) => {
-        console.log(material)
-        this.setState({ showMaterialModal: false, selectedMaterial: material })
     }
 
     // Toggle Modals
@@ -82,18 +65,6 @@ class WorkDone extends Component {
     handleToggleSelectLocationModal = (value) => {
         console.log('SHOW_SELECT_LOCATION_MODAL')
         this.setState({ showSelectLocationModal: value })
-    }
-
-    // Toggle Select Failure Code Modal
-    handleToggleSelectFailureCodeModal = (value) => {
-        console.log('SHOW_SELECT_FAILURECODE_MODAL')
-        this.setState({ showSelectFailureCodeModal: value })
-
-    }
-
-    handleToggleMaterialModal = (value) => {
-        console.log('SHOW_MATERIAL_MODAL')
-        this.setState({ showMaterialModal: value })
     }
 
     // handle description change
@@ -116,16 +87,6 @@ class WorkDone extends Component {
         this.setState({ priority: e.target.value })
     }
 
-    handleTimeWorkedChange = (e, timeWorked) => {
-        e.preventDefault()
-        this.setState({ timeWorked: timeWorked })
-    }
-
-    handleDownTimeChange = (e, downtime) => {
-        e.preventDefault()
-        this.setState({ downtime: downtime })
-    }
-
     handleCommentsChange = (e) => {
         e.preventDefault()
         this.setState({ comments: e.target.value })
@@ -134,10 +95,10 @@ class WorkDone extends Component {
     handleSubmitBtn = (e) => {
         e.preventDefault()
 
-        const { token } = this.props
+        const { user, token } = this.props
         const {
-            description, selectedAsset, selectedLocation, selectedFailureCode, selectedMaterial,
-            workType, priority, timeWorked, downtime, comments
+            description, selectedAsset, selectedLocation,
+            workType, priority, comments,
         } = this.state
 
         if (!description) {
@@ -153,12 +114,7 @@ class WorkDone extends Component {
         if (!selectedLocation || selectedLocation.siteid == null || selectedLocation.location == null) {
             this.setState({ serverMsg: 'Selecciona una ubicación', serverStatus: 'ERROR', showToast: true })
             return
-        }
-
-        if (!selectedFailureCode) {
-            this.setState({ serverMsg: 'Selecciona el código de la falla', serverStatus: 'ERROR', showToast: true })
-            return
-        }
+        }        
 
         if (!workType) {
             this.setState({ serverMsg: 'Selecciona el Tipo de Trabajo realizado', serverStatus: 'ERROR', showToast: true })
@@ -168,17 +124,7 @@ class WorkDone extends Component {
         if (!priority) {
             this.setState({ serverMsg: 'Selecciona la prioridad del trabajo realizado', serverStatus: 'ERROR', showToast: true })
             return
-        }
-
-        if (!timeWorked) {
-            this.setState({ serverMsg: 'Ingresa el tiempo trabajado', serverStatus: 'ERROR', showToast: true })
-            return
-        }
-
-        if (!downtime && workType === 'EM') {
-            this.setState({ serverMsg: 'Ingresa el tiempo de inactividad', serverStatus: 'ERROR', showToast: true })
-            return
-        }
+        }        
 
         if (!comments) {
             this.setState({ serverMsg: 'Ingresa comentarios adicionales del trabajo realizado', serverStatus: 'ERROR', showToast: true })
@@ -193,15 +139,13 @@ class WorkDone extends Component {
             siteid: selectedLocation.siteid,
             location: selectedLocation.location,
             worktype: workType,
-            wopriority: priority,
-            downtime,
+            wopriority: priority,            
             description_longdescription: comments,
-            failurecode: selectedFailureCode.failureCode,
-            actlabhrs: timeWorked,
+            supervisor: user.supervisor,
             token,
         }
 
-        createReportOfWorkDone(params)
+        createReportOfScheduledWork(params)
             .then(data => data.json())
             .then((res) => {
                 if (res.status === 'OK') {
@@ -209,12 +153,9 @@ class WorkDone extends Component {
                     this.setState({
                         description: '',
                         selectedAsset: '',
-                        selectedLocation: '',
-                        selectedFailureCode: '',
+                        selectedLocation: '',                        
                         workType: '',
-                        priority: '',
-                        timeWorked: '',
-                        downtime: '',
+                        priority: '',                        
                         comments: '',
                         serverMsg: res.message,
                         serverStatus: 'OK',
@@ -241,10 +182,11 @@ class WorkDone extends Component {
         this.props.history.goBack()
     }
 
-    render() {        
+    render() {
+
         const {
-            showSelectAssetModal, showSelectLocationModal, showMaterialModal, showSelectFailureCodeModal,
-            selectedAsset, selectedLocation, selectedMaterial, workType, priority, selectedFailureCode, loading
+            showSelectAssetModal, showSelectLocationModal, selectedAsset, selectedLocation,
+            workType, priority, loading
         } = this.state
 
         if (loading) {
@@ -258,7 +200,7 @@ class WorkDone extends Component {
                         <IonButtons slot="start" onClick={e => { e.preventDefault(); this.handleBackBtn() }}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
-                        <IonTitle>Reporte de Trabajo Realizado</IonTitle>
+                        <IonTitle style={{ fontSize: '18px' }}>Reporte de Trabajo a Programar</IonTitle>
                     </IonToolbar>
                 </IonHeader>
 
@@ -267,11 +209,11 @@ class WorkDone extends Component {
                     <IonItem lines="full">
                         <IonGrid>
                             <IonRow>
-                                <IonCol><IonLabel className="dataTitle">Indicar Trabajo Realizado</IonLabel></IonCol>
+                                <IonCol><IonLabel className="dataTitle">Indicar Trabajo a Programar</IonLabel></IonCol>
                             </IonRow>
                             <IonRow>
                                 <IonTextarea
-                                    placeholder="Ingresa la descripción del trabajo realizado..."
+                                    placeholder="Ingresa la descripción del trabajo a programar..."
                                     maxlength="50000"
                                     className="dataField"
                                     rows="3"
@@ -380,36 +322,6 @@ class WorkDone extends Component {
                         </IonGrid>
                     </IonItem>
 
-
-
-
-                    <IonItem lines="full">
-                        <IonGrid>
-                            <IonRow >
-                                <IonCol size="12" >
-                                    <IonLabel className="dataTitle">Horas Trabajadas</IonLabel>
-                                    <TimeField style={{ width: '50px', textAlign: 'center' }} value={this.state.timeWorked} onChange={this.handleTimeWorkedChange} />
-                                </IonCol>
-
-                            </IonRow>
-                        </IonGrid>
-                    </IonItem>
-
-                    {
-                        this.state.workType === 'EM' &&
-                        <IonItem lines="full">
-                            <IonGrid>
-                                <IonRow >
-                                    <IonCol size="12" >
-                                        <IonLabel className="dataTitle">Tiempo de Inactividad</IonLabel>
-                                        <TimeField style={{ width: '50px', textAlign: 'center', }} value={this.state.downtime} onChange={this.handleDownTimeChange} />
-                                    </IonCol>
-                                </IonRow>
-                            </IonGrid>
-                        </IonItem>
-                    }
-
-
                     <IonItem lines="full">
                         <IonGrid>
                             <IonRow >
@@ -423,71 +335,9 @@ class WorkDone extends Component {
                                         onIonChange={this.handleCommentsChange}
                                         value={this.state.comments}
                                     >
-
                                     </IonTextarea>
                                 </IonCol>
 
-                            </IonRow>
-                        </IonGrid>
-                    </IonItem>
-
-                    <IonItem lines="full">
-                        <IonGrid>
-                            <IonRow style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                                {
-                                    selectedFailureCode
-                                        ?
-                                        <Fragment>
-                                            <IonCol size="10">
-                                                <IonLabel className="dataTitle">Código de Falla</IonLabel>
-                                                <IonLabel className="dataField">{selectedFailureCode.failureCode} - {selectedFailureCode.description}</IonLabel>
-                                            </IonCol>
-                                            <IonCol size="2">
-                                                <IonButton onClick={() => this.handleToggleSelectFailureCodeModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={swapHorizontalOutline}></IonIcon></IonButton>
-                                            </IonCol>
-                                        </Fragment>
-                                        :
-                                        <Fragment>
-                                            <IonCol size="10">
-                                                <IonLabel className="dataTitle">Código de Falla</IonLabel>
-                                                <IonLabel className="dataField">No hay ningún código seleccionado</IonLabel>
-                                            </IonCol>
-                                            <IonCol size="2">
-                                                <IonButton onClick={() => this.handleToggleSelectFailureCodeModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={addCircle}></IonIcon></IonButton>
-                                            </IonCol>
-                                        </Fragment>
-                                }
-                            </IonRow>
-                        </IonGrid>
-                    </IonItem>
-
-                    <IonItem lines="full">
-                        <IonGrid>
-                            <IonRow style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-                                {
-                                    selectedMaterial
-                                        ?
-                                        <Fragment>
-                                            <IonCol size="10">
-                                                <IonLabel className="dataTitle">Material</IonLabel>
-                                                <IonLabel className="dataField">Itemnum:{selectedMaterial.itemnum} Cantidad:{selectedMaterial.quantity}</IonLabel>
-                                            </IonCol>
-                                            <IonCol size="2">
-                                                <IonButton onClick={() => this.handleToggleMaterialModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={swapHorizontalOutline}></IonIcon></IonButton>
-                                            </IonCol>
-                                        </Fragment>
-                                        :
-                                        <Fragment>
-                                            <IonCol size="10">
-                                                <IonLabel className="dataTitle">Material</IonLabel>
-                                                <IonLabel className="dataField">No hay ningún código seleccionado</IonLabel>
-                                            </IonCol>
-                                            <IonCol size="2">
-                                                <IonButton onClick={() => this.handleToggleMaterialModal(true)} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={addCircle}></IonIcon></IonButton>
-                                            </IonCol>
-                                        </Fragment>
-
-                                }
                             </IonRow>
                         </IonGrid>
                     </IonItem>
@@ -515,18 +365,12 @@ class WorkDone extends Component {
                             <ion-icon style={{ color: 'white' }} icon={addOutline}></ion-icon>
                         </ion-fab-button>
                         <ion-fab-list side="top">
-
                             <ion-fab-button color="light">
                                 <ion-icon icon={documentAttachOutline}></ion-icon>
                             </ion-fab-button>
                             <ion-fab-button color="light">
                                 <ion-icon icon={cameraOutline}></ion-icon>
                             </ion-fab-button>
-
-                            <ion-fab-button color="light" onClick={() => this.handleToggleMaterialModal(true)}>
-                                <ion-icon icon={hammerOutline}></ion-icon>
-                            </ion-fab-button>
-
                         </ion-fab-list>
                     </ion-fab>
 
@@ -540,16 +384,6 @@ class WorkDone extends Component {
                         handleToggleSelectLocationModal={this.handleToggleSelectLocationModal}
                         showSelectLocationModal={showSelectLocationModal}
                         handleSubmitLocationClick={this.handleSubmitLocationClick}
-                    />
-                    <SelectFailureCodeModal
-                        handleToggleSelectFailureCodeModal={this.handleToggleSelectFailureCodeModal}
-                        showSelectFailureCodeModal={showSelectFailureCodeModal}
-                        handleSubmitFailureCodeClick={this.handleSubmitFailureCodeClick}
-                    />
-                    <MaterialModal
-                        handleToggleMaterialModal={this.handleToggleMaterialModal}
-                        showMaterialModal={showMaterialModal}
-                        handleSubmitMaterialClick={this.handleSubmitMaterialClick}
                     />
 
                     <IonToast
@@ -567,10 +401,11 @@ class WorkDone extends Component {
     }
 };
 
-function mapStateToProps({ auth }) {
+function mapStateToProps({ auth, user }) {
     return {
-        token: auth && auth.token
+        token: auth && auth.token,
+        user,
     }
 }
 
-export default connect(mapStateToProps)(WorkDone)
+export default connect(mapStateToProps)(ScheduledWork)

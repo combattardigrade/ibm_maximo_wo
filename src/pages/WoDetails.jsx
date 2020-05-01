@@ -1,6 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
-import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonButton } from '@ionic/react';
+import {
+    IonIcon, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar,
+    IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonButton,
+    IonToast,
+} from '@ionic/react';
+import {
+    timeOutline, clipboardOutline, paperPlaneOutline
+} from 'ionicons/icons'
 
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
@@ -8,10 +15,59 @@ import WoDetailsHeader from '../components/WODetailsHeader';
 import './Page.css';
 import './Maximo.css'
 
+// Components
+import Timer from 'react-compound-timer'
+
+
+// API
+import { updateWOStatus } from '../utils/api'
+
+// Actions
+import { updateCurrentWOStatus } from '../actions/workOrders'
+
 
 class WoDetails extends Component {
 
+    state = {
+        showToast: false,
+        serverMsg: '',
+        serverStatus: '',
+        timerActive: false
+    }
 
+
+    handleStartWO = (e) => {
+        e.preventDefault()
+
+        const { currentWorkOrder, token, dispatch } = this.props
+        const woHref = currentWorkOrder.href
+        const status = 'INPRG'
+
+        updateWOStatus({ woHref, status, token })
+            .then(data => data.json())
+            .then((res) => {
+                if (res.status === 'OK') {
+                    // update local status
+                    dispatch(updateCurrentWOStatus(status))
+                    // show toast
+                    this.setState({
+                        showToast: true, serverMsg: res.message, serverStatus: 'OK'
+                    })
+                }
+            })
+
+    }
+
+    handleCompleteWO = (e) => {
+        e.preventDefault()
+
+        
+    }
+
+    handleStartTimer = (e) => {
+        e.preventDefault()
+        this.setState({ timerActive: true })
+    }
 
 
     render() {
@@ -20,7 +76,7 @@ class WoDetails extends Component {
         if (!currentWorkOrder) {
             return <div>Loading</div>
         }
-       
+
 
         return (
             <IonContent>
@@ -96,7 +152,43 @@ class WoDetails extends Component {
                                 <IonLabel className="dataField">{'status' in currentWorkOrder ? currentWorkOrder.status : '-'}</IonLabel>
                             </IonCol>
                             <IonCol size="6">
-                                <IonButton color="light" expand="full">INICIAR</IonButton>
+                                {
+                                    currentWorkOrder.status === 'APPR'
+                                        ?
+                                        <IonButton onClick={this.handleStartWO} color="light" expand="full">INICIAR</IonButton>
+                                        :
+                                        <IonButton onClick={this.handleCompleteWO} color="light" expand="full">FINALIZAR</IonButton>
+                                        // this.state.timerActive ?
+                                        //     <IonRow>
+                                        //         <IonCol>
+                                        //             <Timer
+                                        //                 initialTime={0}
+                                        //                 startImmediately={false}
+
+                                        //             >
+                                        //                 {
+                                        //                     ({ start, resume, pause, stop, reset, timerState }) => (
+                                        //                         <Fragment>
+                                        //                             <Timer.Hours formatValue={value => value.toString().length === 1 ? `0${value}:` : `${value}:`} />
+                                        //                             <Timer.Minutes formatValue={value => value.toString().length === 1 ? `0${value}:` : `${value}:`} />
+                                        //                             <Timer.Seconds formatValue={value => value.toString().length === 1 ? `0${value}` : `${value}`} />
+                                        //                         </Fragment>
+                                        //                     )
+                                        //                 }
+                                        //             </Timer>
+                                        //         </IonCol>
+                                        //         <IonCol>
+
+                                        //         </IonCol>
+                                        //     </IonRow>
+                                        //     :
+                                        //     <IonRow>
+                                        //         <IonCol><IonButton onClick={this.handleStartTimer} fill={null} expand="block" style={{ width: '40px !important' }}><IonIcon color="primary" style={{ fontSize: '32px' }} icon={timeOutline}></IonIcon></IonButton></IonCol>
+                                        //         <IonCol><IonButton onClick={this.handleStartTimer} fill={null} expand="block" style={{ width: '35px !important' }}><IonIcon color="primary" style={{ fontSize: '28px' }} icon={clipboardOutline}></IonIcon></IonButton></IonCol>
+                                        //         <IonCol><IonButton> Finalizar</IonButton></IonCol>
+                                        //     </IonRow>
+                                }
+
                             </IonCol>
                         </IonRow>
                     </IonGrid>
@@ -124,7 +216,7 @@ class WoDetails extends Component {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonLabel className="dataField">{'siteid' in currentWorkOrder ? currentWorkOrder.siteid : '-'}</IonLabel>
+                                <IonLabel className="dataField">{'siteid' in currentWorkOrder ? currentWorkOrder.location : '-'}</IonLabel>
                             </IonCol>
                         </IonRow>
                     </IonGrid>
@@ -172,6 +264,15 @@ class WoDetails extends Component {
                         </div>
                     )
                 }
+
+                <IonToast
+                    isOpen={this.state.showToast}
+                    message={this.state.serverMsg}
+                    position="bottom"
+                    color={this.state.serverStatus === 'OK' ? 'success' : 'danger'}
+                    duration={5000}
+                    onDidDismiss={() => this.setState({ showToast: false })}
+                />
 
             </IonContent>
 

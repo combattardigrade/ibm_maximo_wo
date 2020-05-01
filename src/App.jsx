@@ -36,7 +36,7 @@ import { saveUser } from './actions/user'
 import AssetsList from './pages/AssetsList';
 import Inventory from './pages/Inventory'
 import WoSearch from './pages/WoSearch'
-
+import ScheduledWork from  './pages/ScheduledWork'
 
 class App extends Component {
 
@@ -71,6 +71,7 @@ class App extends Component {
               <PrivateRoute path="/assets" component={AssetsList} auth={auth} />
               <PrivateRoute path="/inventory" component={Inventory} auth={auth} />
               <PrivateRoute path='/workDone' component={WorkDone} auth={auth} />
+              <PrivateRoute path='/scheduledWork' component={ScheduledWork} auth={auth} />
             </IonRouterOutlet>
           </IonSplitPane>
         </IonReactRouter>

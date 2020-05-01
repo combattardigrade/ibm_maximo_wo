@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {
-    IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonLabel,
+    IonButtons, IonContent, IonHeader, IonAlert, IonPage, IonTitle, IonToolbar, IonItem, IonLabel,
     IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonNote, IonIcon, IonInput, IonButton,
     IonSelect, IonSelectOption, IonSpinner
 
@@ -15,18 +15,29 @@ import './Page.css';
 import './Maximo.css'
 import { Plugins } from '@capacitor/core'
 import { getWorkOrders, findWorkOrder } from '../utils/api'
-import { saveWorkOrders } from '../actions/workOrders'
+
+// API
+import {
+    getWorkOrder,
+} from '../utils/api'
+
+// Actions
+import { saveWorkOrders, saveCurrentWorkOrder,  } from '../actions/workOrders'
+import { saveLocalWorkOrder } from '../actions/localWorkOrders'
+
 import WoCard from '../components/WoCard'
 const { Modals } = Plugins
-// Modals
+
 
 
 class WoSearch extends Component {
 
-    state = {        
+    state = {
         loading: false,
         searchMethod: 'wonum',
         searchValue: '',
+        showHazardVerification: false,
+        currentWonum: ''
     }
 
     handleBackBtn = () => {
@@ -42,7 +53,12 @@ class WoSearch extends Component {
     }
 
     handleWorkOrderClick = async (wonum) => {
-        this.props.history.push('/wo/' + wonum)
+        const { localWorkOrders } = this.props
+        if (localWorkOrders && localWorkOrders[wonum]) {
+            this.props.history.push('/wo/' + wonum)
+            return
+        }
+        this.setState({ showHazardVerification: true, currentWonum: wonum })
     }
 
     showAlert(message) {
@@ -50,7 +66,45 @@ class WoSearch extends Component {
             title: 'Error',
             message,
         })
-    }    
+    }
+
+    handleHazardVerificationClick = async (data) => {
+        const { token, dispatch } = this.props
+        const { currentWonum } = this.state
+        if (data.length != 3) {
+            this.setState({ showHazardVerification: false })
+            return
+        }
+
+        console.log('HAZARD_VERIFICATION_SENT')
+
+        this.setState({ loading: true })
+        getWorkOrder({ wonum: currentWonum, token: token })
+            .then((data) => data.json())
+            .then((response) => {
+                if (response.status == 'OK') {
+                    const localWorkOrder = {
+                        wonum: currentWonum,
+                        comments: [
+                            'Tengo permiso para trabajo Aprobado para trabajos riesgosos',
+                            'Cuento con el equipo y protección necesaria',
+                            'Realicé LoTo antes de intervenir el equipo'
+                        ],
+                        laborTransactions: [],
+                        materialTransactions: [],
+                        attachments: [],
+                        ...response.payload
+                    }
+
+                    dispatch(saveCurrentWorkOrder(localWorkOrder))
+                    dispatch(saveLocalWorkOrder(localWorkOrder))
+                    this.setState({ loading: false, showHazardVerification: false })
+                    this.props.history.push('/wo/' + currentWonum)
+
+                }
+            })
+
+    }
 
     handleSearchClick = (e) => {
         e.preventDefault()
@@ -60,24 +114,24 @@ class WoSearch extends Component {
 
         if (!searchValue || !searchMethod) {
             getWorkOrders({ token: token })
-            .then(data => data.json())
-            .then(response => {
-                if (!('status' in response) || response.status == 'ERROR') {
-                    console.log(response)
+                .then(data => data.json())
+                .then(response => {
+                    if (!('status' in response) || response.status == 'ERROR') {
+                        console.log(response)
+                        this.showAlert('Ocurrió un error al intentar obtener las órdenes de trabajo. Por favor, inténtalo nuevamente')
+                        return
+                    }
+                    dispatch(saveWorkOrders(response.payload))
+                    this.setState({ loading: false })
+                })
+                .catch((err) => {
+                    console.log(err)
                     this.showAlert('Ocurrió un error al intentar obtener las órdenes de trabajo. Por favor, inténtalo nuevamente')
                     return
-                }
-                dispatch(saveWorkOrders(response.payload))
-                this.setState({loading: false})
-            })
-            .catch((err) => {
-                console.log(err)
-                this.showAlert('Ocurrió un error al intentar obtener las órdenes de trabajo. Por favor, inténtalo nuevamente')
-                return
-            })
+                })
             return
         }
-        
+
         findWorkOrder({ method: searchMethod, value: searchValue, token: token })
             .then(data => data.json())
             .then(response => {
@@ -89,7 +143,7 @@ class WoSearch extends Component {
             })
     }
 
-    componentDidMount() {       
+    componentDidMount() {
         const { token, dispatch } = this.props
 
         getWorkOrders({ token: token })
@@ -117,7 +171,7 @@ class WoSearch extends Component {
         return (
             <IonPage>
                 <IonHeader>
-                    <IonToolbar>
+                    <IonToolbar color="primary">
                         <IonButtons slot="start" onClick={e => { e.preventDefault(); this.handleBackBtn() }}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
@@ -159,17 +213,61 @@ class WoSearch extends Component {
                                 }
                             </div>
                     }
-                    
+
+                    <IonAlert
+                        isOpen={this.state.showHazardVerification}
+                        header={'Verificación'}
+                        inputs={[
+                            {
+                                name: 'checkbox1',
+                                value: 'true',
+                                type: 'checkbox',
+                                label: 'Tengo permiso de trabajo Aprobado para trabajos riesgosos.',
+                                checked: false,
+                            },
+                            {
+                                name: 'checkbox2',
+                                value: 'true',
+                                type: 'checkbox',
+                                label: 'Cuento con el equipo y protección necesaria.',
+                                checked: false,
+                            },
+                            {
+                                name: 'checkbox3',
+                                value: 'true',
+                                type: 'checkbox',
+                                label: 'Realicé LoTo antes de intervenir equipo.',
+                                checked: false,
+                            }
+                        ]}
+                        buttons={[
+                            {
+                                text: 'Cancelar',
+                                role: 'cancel',
+                                handler: () => {
+                                    this.setState({ showHazardVerification: false })
+                                }
+                            },
+                            {
+                                text: 'Enviar',
+
+                                handler: (data) => {
+                                    this.handleHazardVerificationClick(data)
+                                }
+                            }
+                        ]}
+                    />
                 </IonContent>
             </IonPage>
         );
     }
 };
 
-function mapStateToProps({ auth, workOrders, inventory }) {
+function mapStateToProps({ auth, workOrders, localWorkOrders }) {
     return {
         token: auth.token,
-        workOrders: workOrders && workOrders.workOrders
+        workOrders: workOrders && workOrders.workOrders,
+        localWorkOrders
     }
 }
 

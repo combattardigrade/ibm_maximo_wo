@@ -12,7 +12,7 @@ class WoActual extends Component {
 
     render() {
         const { currentWorkOrder, handleToggleMaterialModal, localWorkOrder } = this.props
-        
+
         return (
             <IonContent>
                 <WoDetailsHeader currentWorkOrder={currentWorkOrder} />
@@ -22,10 +22,10 @@ class WoActual extends Component {
                 </IonItem>
 
                 {
-                    
+
                     currentWorkOrder && 'labtrans' in currentWorkOrder
                         ?
-                        
+
                         currentWorkOrder.labtrans.map((labor) => {
                             let start = moment(labor.starttime)
                             let end = moment(labor.finishdatetime)
@@ -59,12 +59,13 @@ class WoActual extends Component {
 
                         })
                         :
-                        localWorkOrder.laborTransactions.length > 0 ? null : <IonItem><IonLabel className="dataField">No se encontraron registros</IonLabel></IonItem>
+                        <IonItem><IonLabel className="dataField">No se encontraron registros</IonLabel></IonItem>
 
-                       
+
                 }
                 {
-                     localWorkOrder.laborTransactions.map((labor,index) => {
+                    localWorkOrder && 'laborTransactions' in localWorkOrder &&
+                    localWorkOrder.laborTransactions.map((labor, index) => {
                         let start = moment(labor.starttime)
                         let end = moment(labor.finishdatetime)
                         let duration = moment.duration(end.diff(start))
@@ -94,7 +95,7 @@ class WoActual extends Component {
                                 </IonGrid>
                             </IonItem>
                         )
-                    })                    
+                    })
                 }
 
 
