@@ -14,7 +14,7 @@ import ExploreContainer from '../components/ExploreContainer';
 import WoDetailsHeader from '../components/WODetailsHeader';
 import './Page.css';
 import './Maximo.css'
-import './WoDetails.css'
+
 
 // Components
 import Timer from 'react-compound-timer'
@@ -57,7 +57,6 @@ class WoDetails extends Component {
                     })
                 }
             })
-
     }
 
     

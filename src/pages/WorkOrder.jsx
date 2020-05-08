@@ -135,16 +135,30 @@ class WorkOrder extends Component {
     }
 
     handleCompleteWO = (e) => {
-        e.preventDefault()
-
-        document.body.className += 'backdrop-no-scroll'
-
+        e.preventDefault()        
         // show confirmation pop up
         this.setState({ showCompleteWOVerification: true })
         return
+    }
 
+    handleSendWOBtn = (e) => {
+        const { checkbox1, checkbox2, checkbox3, checkbox4, supervisor } = this.state
         const { localWorkOrders, currentWorkOrder, token, dispatch } = this.props
 
+
+        if (!checkbox1 || !checkbox2 || !checkbox3) {
+            return
+        }
+
+        if(checkbox4 && !supervisor) {
+            return
+        }
+
+        const params = {
+            
+        }
+
+        
         // complete tasks?
         // material txs
 
@@ -282,7 +296,7 @@ class WorkOrder extends Component {
                             </div>
                             <div className="popup-body">
                                 <IonItem lines="full">
-                                    <IonCheckbox onClick={() => this.setState({ checkbox1: !this.state.checkbox1 })} checked={this.state.checkbox1} slot="start" color="primary" />
+                                    <IonCheckbox color="danger" onClick={() => this.setState({ checkbox1: !this.state.checkbox1 })} checked={this.state.checkbox1} slot="start" color="primary" />
                                     <IonText style={{ textAlign: 'justify', padding: '10px 0px', fontSize: '14px' }}>Área del activo limpia y ordenada. Se realizó inspección visual (de arriba abajo) del área intervenida, se ha eliminado material residual externo al activo (lubricantes, metálicos, plásticos, etc.</IonText>
                                 </IonItem>
                                 <IonItem lines="full">
@@ -311,7 +325,7 @@ class WorkOrder extends Component {
                             <div className="popup-footer">
                                 <div>
                                     <IonButton onClick={this.handleCloseCompleteWoPopup} fill="clear">Cancelar</IonButton>
-                                    <IonButton fill="clear">Enviar</IonButton>
+                                    <IonButton onClick={this.handleSendWOBtn} fill="clear">Enviar</IonButton>
                                 </div>
                             </div>
                         </div>

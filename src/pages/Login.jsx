@@ -29,9 +29,13 @@ class Login extends Component {
     }
 
     componentDidMount() {
+        const { token } = this.props
         this.setState({ loading: false })
         try {
-            if (this.props.location.state.logout === true) {
+            if (token) {
+                this.props.history.replace('/dashboard')
+                return
+            } else if (this.props.location.state.logout === true) {
                 const { state } = this.props.location
                 const stateCopy = { ...state }
                 delete stateCopy.logout
@@ -39,6 +43,7 @@ class Login extends Component {
                 setTimeout(() => {
                     window.location.reload()
                 }, 100)
+                return
             }
         } catch (e) {
 
@@ -87,7 +92,7 @@ class Login extends Component {
         this.setState({ loading: false })
         // redirect to dashboard
         this.props.history.replace('/dashboard')
-        
+
     }
 
 
@@ -102,7 +107,7 @@ class Login extends Component {
 
         return (
             <IonPage>
-                <IonContent color="dark" style={{backgroundImage: "url('../components/bg.png') 0 0/100% 100% no-repeat"}}>
+                <IonContent color="dark" style={{ backgroundImage: "url('../components/bg.png') 0 0/100% 100% no-repeat" }}>
                     <div className='authPage'>
                         <form onSubmit={this.handleSubmit} style={{ width: '100%' }} >
                             <div style={{ textAlign: 'center' }}>
@@ -122,7 +127,7 @@ class Login extends Component {
                             <IonGrid>
                                 <IonRow>
                                     <IonCol size="12" style={{ paddingBottom: '0px', paddingLeft: '8px', paddingRight: '8px' }}>
-                                        <IonButton style={{'--background':'#0db0bf'}} onClick={this.handleSubmit}  expand="full" >Ingresar</IonButton>
+                                        <IonButton style={{ '--background': '#0db0bf' }} onClick={this.handleSubmit} expand="full" >Ingresar</IonButton>
                                     </IonCol>
                                 </IonRow>
                             </IonGrid>
@@ -148,9 +153,9 @@ class Login extends Component {
     }
 }
 
-function mapStateToProps() {
+function mapStateToProps({ auth }) {
     return {
-
+        token: auth && auth.token,
     }
 }
 

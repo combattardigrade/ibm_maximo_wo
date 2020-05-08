@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.softbot.maximo;
 
 import android.os.Bundle;
 

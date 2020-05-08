@@ -55,7 +55,7 @@ class Menu extends Component {
         <IonContent>
           <IonList id="inbox-list" style={{ width: "100%" }}>
             <IonRow>
-              <IonCol style={{ textAlign: 'center' }}><IonIcon style={{ fontSize: '6em' }} icon={personCircleOutline} /></IonCol>
+              <IonCol style={{ textAlign: 'center' }}><IonIcon color="primary" style={{ fontSize: '6em' }} icon={personCircleOutline} /></IonCol>
             </IonRow>
             <IonRow>
               <IonCol style={{ textAlign: 'center' }}><IonLabel style={{ fontWeight: 'bold' }}>{user && user.displayName}</IonLabel></IonCol>

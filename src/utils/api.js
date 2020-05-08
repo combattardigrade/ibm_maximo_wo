@@ -1,4 +1,4 @@
-const API = 'http://localhost:3000/api'
+const API = 'http://155.138.226.217:3002/api'
 
 export function login(params) {
     return fetch(API + '/authentication', {

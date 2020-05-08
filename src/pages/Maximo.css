@@ -114,3 +114,49 @@ ion-content.dashboard-bg {
 ion-content.auth-bg {
     --background: url('../components/bg.png') 0 0/100% 100% no-repeat;
 }
+
+.popup-container {
+    z-index: 1001;
+    background-color: white;
+    position: fixed;
+    height: 400px;
+    
+    top: 20%;
+    left:20px;
+    right: 0;
+    max-width: 90%;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14), 0 9px 46px 8px rgba(0,0,0,.12);
+    box-shadow: 0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14), 0 9px 46px 8px rgba(0,0,0,.12);
+}
+.popup-header {
+    padding-left: unset;
+    padding-right: unset;
+    -webkit-padding-start: 23px;
+    padding-inline-start: 23px;
+    -webkit-padding-end: 23px;
+    padding-inline-end: 23px;
+    border-bottom: 1px solid #d9d9d9;
+}
+.popup-title {
+    font-size: 18px;
+}
+.popup-footer {
+    position: absolute;
+    bottom: 0px !important;
+    right: 0px !important;
+    border-top: 1px solid #d9d9d9;
+    width: 100%;
+    text-align: right;
+}
+.popup-body {
+    height: 300px;
+    overflow-y: scroll;
+}
+.custom-backdrop {
+    position: absolute;
+    width: 4000px;
+    height: 1000px;
+    background: #0000004d;
+    z-index: 1000;
+}
