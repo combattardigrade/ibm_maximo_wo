@@ -112,7 +112,7 @@ class ScheduledWork extends Component {
         const { user, token } = this.props
         const {
             description, selectedAsset, selectedLocation,
-            workType, priority, comments,
+            workType, priority, comments, reportPhotos
         } = this.state
 
         if (!description) {
@@ -156,6 +156,7 @@ class ScheduledWork extends Component {
             wopriority: priority,
             description_longdescription: comments,
             supervisor: user.supervisor,
+            reportPhotos,
             token,
         }
 
@@ -171,6 +172,8 @@ class ScheduledWork extends Component {
                         workType: '',
                         priority: '',
                         comments: '',
+                        reportPhotos: '',
+                        showPhotoPreview: false,
                         serverMsg: res.message,
                         serverStatus: 'OK',
                         showToast: true,

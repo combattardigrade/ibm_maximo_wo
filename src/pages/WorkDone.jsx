@@ -150,7 +150,7 @@ class WorkDone extends Component {
         const { token } = this.props
         const {
             description, selectedAsset, selectedLocation, selectedFailureCode, selectedMaterial,
-            workType, priority, timeWorked, downtime, comments
+            workType, priority, timeWorked, downtime, comments, reportPhotos
         } = this.state
 
         if (!description) {
@@ -211,6 +211,7 @@ class WorkDone extends Component {
             description_longdescription: comments,
             failurecode: selectedFailureCode.failureCode,
             actlabhrs: timeWorked,
+            reportPhotos,
             token,
         }
 
@@ -229,6 +230,8 @@ class WorkDone extends Component {
                         timeWorked: '',
                         downtime: '',
                         comments: '',
+                        reportPhotos: '',
+                        showPhotoPreview: false,
                         serverMsg: res.message,
                         serverStatus: 'OK',
                         showToast: true,
