@@ -342,7 +342,7 @@ class WorkDone extends Component {
             .subscribe(
                 (matches) => {
                     console.log(matches)
-                    this.setState({ description: matches[0] })
+                    this.setState({ description: this.state.description + ' ' + matches[0] })
                 },
                 (err) => {
                     console.log(err)
@@ -399,7 +399,7 @@ class WorkDone extends Component {
             .subscribe(
                 (matches) => {
                     console.log(matches)
-                    this.setState({ comments: matches[0] })
+                    this.setState({ comments: this.state.comments + ' ' + matches[0] })
                 },
                 (err) => {
                     console.log(err)
@@ -724,7 +724,7 @@ class WorkDone extends Component {
                                         this.state.reportPhotos.map((photo, i) => (
                                             <IonCol size="3" key={i}>
                                                 <IonButton onClick={e => { e.preventDefault(); this.handleDeletePhoto(i) }} color="danger" style={{ position: 'absolute', right: '0' }} fill="clear"><IonIcon icon={closeCircle}></IonIcon></IonButton>
-                                                <img onClick={ e => { e.preventDefault(); PhotoViewer.show(`data:image/jpeg;base64,${photo}`); }} style={{ height: '100%', width: '100%', marginTop: '10px', borderRadius: '5px' }} src={`data:image/jpeg;base64,${photo}`} />
+                                                <img onClick={e => { e.preventDefault(); PhotoViewer.show(`data:image/jpeg;base64,${photo}`); }} style={{ height: '100%', width: '100%', marginTop: '10px', borderRadius: '5px' }} src={`data:image/jpeg;base64,${photo}`} />
                                             </IonCol>
                                         ))
                                         :
