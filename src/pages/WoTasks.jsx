@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { IonButtons, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonNote, IonIcon, IonButton } from '@ionic/react';
-import { checkmarkOutline, closeOutline } from 'ionicons/icons'
+import { checkmarkOutline, closeOutline, closeCircle, checkmarkCircle } from 'ionicons/icons'
 
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
@@ -34,7 +34,7 @@ class WoTasks extends Component {
             .then(response => {
                 console.log(response)
                 if (response.status == 'OK') {
-                    
+
                     dispatch(saveCurrentWorkOrder({
                         ...currentWorkOrder,
                         woactivity: currentWorkOrder.woactivity.map((task) => {
@@ -77,36 +77,34 @@ class WoTasks extends Component {
             <IonContent>
 
                 <WoDetailsHeader currentWorkOrder={currentWorkOrder} />
-                <IonItem>
+                <IonItem lines="full" >
                     <IonLabel className="dataTitle">Tareas:</IonLabel>
                 </IonItem>
                 {
-                    currentWorkOrder && 'woactivity' in currentWorkOrder 
+                    currentWorkOrder && 'woactivity' in currentWorkOrder
                         ?
                         currentWorkOrder.woactivity.sort((t1, t2) => parseInt(t1.taskid) - parseInt(t2.taskid)).map(task => (
-                            <IonItem lines="full" key={task.taskid} button detail onClick={e => {e.preventDefault(); this.setState({taskLongDescription:task.description_longdescription,showTaskDescModal:true})}}>
+                            <IonItem lines="full" key={task.taskid} button detail onClick={e => { e.preventDefault(); this.setState({ taskLongDescription: 'description_longdescription' in task ? task.description_longdescription : task.description, showTaskDescModal: true }) }}>
                                 <IonGrid>
                                     <IonRow>
-                                        <IonCol size="2" style={{ textAlign: 'center' }}>
+                                        <IonCol size="2" style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                                             {
                                                 task.status != 'COMP'
                                                     ?
-                                                    <IonButton onClick={e => { e.preventDefault(); this.handleCompleteTaskClick(task.href) }} fill="clear" style={{ height: '100%', width: '100%' }}><IonIcon style={{ fontSize: '28px', }} icon={closeOutline}></IonIcon></IonButton>
+                                                    <IonButton  style={{ height: '100%', width: '100%' }} onClick={e => { e.stopPropagation(); this.handleCompleteTaskClick(task.href) }} fill="clear" ><IonIcon style={{ fontSize: '24px', }} icon={closeCircle}></IonIcon></IonButton>
                                                     :
-                                                    <IonIcon style={{ fontSize: '28px', paddingTop: '10px' }} icon={checkmarkOutline}></IonIcon>
+                                                    <IonButton onClick={e => { e.stopPropagation(); }}  fill="clear" color="dark"> <IonIcon style={{ fontSize: '24px' }} icon={checkmarkCircle}></IonIcon></IonButton>
                                             }
 
                                         </IonCol>
-                                        <IonCol size="3" >
-                                            <IonLabel className="dataSubtitle">Tarea: </IonLabel>
-                                            <IonLabel className="dataSubtitle">Descripción: </IonLabel>
-                                            <IonLabel className="dataSubtitle">Estado: </IonLabel>
+                                        <IonCol style={{paddingLeft:'20px'}}>
+                                            <IonLabel className="dataField"><span className="dataSubtitle">Tarea:</span> {'taskid' in task ? task.taskid : '-'}</IonLabel>
+                                            <IonLabel className="dataField"><span className="dataSubtitle">Descripción:</span> {'description' in task ? task.description.substring(0,30) : '-'}</IonLabel>
+                                            <IonLabel className="dataField"><span className="dataSubtitle">Estado:</span> {'status' in task ? task.status : '-'}</IonLabel>
+                                            
+                                            
                                         </IonCol>
-                                        <IonCol>
-                                            <IonLabel className="dataField">{'taskid' in task ? task.taskid : '-'}</IonLabel>
-                                            <IonLabel className="dataField">{'description' in task ? task.description : '-'}</IonLabel>
-                                            <IonLabel className="dataField">{'status' in task ? task.status : '-'}</IonLabel>
-                                        </IonCol>
+                                        
                                     </IonRow>
                                 </IonGrid>
                             </IonItem>

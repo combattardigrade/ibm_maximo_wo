@@ -291,5 +291,15 @@ export function updateWOStatus(params) {
     })
 }
 
+export function getWorkOrderTasks(params) {
+    return fetch(API + `/workOrderTasks/${params.wonum}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
 
 

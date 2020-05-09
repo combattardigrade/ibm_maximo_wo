@@ -22,7 +22,7 @@ class TaskDescModal extends Component {
         return (
             <IonModal isOpen={showTaskDescModal}>
                 <IonHeader>
-                    <IonToolbar>
+                    <IonToolbar color="primary">
                         <IonTitle>Descripción completa</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => handleToggleTaskDescModal(false)}>Cerrar</ion-button>
@@ -31,7 +31,7 @@ class TaskDescModal extends Component {
                 </IonHeader>
 
                 <IonContent>
-                    <IonItem >
+                    <IonItem lines="full">
                         <IonGrid>
                             <IonRow>
                                 <IonCol size="12">

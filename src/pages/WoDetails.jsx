@@ -80,6 +80,7 @@ class WoDetails extends Component {
                 {/* WO */}
                 <WoDetailsHeader currentWorkOrder={currentWorkOrder} />
                 {/* ASSET */}
+               
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>

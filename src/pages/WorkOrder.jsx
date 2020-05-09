@@ -135,7 +135,7 @@ class WorkOrder extends Component {
     }
 
     handleCompleteWO = (e) => {
-        e.preventDefault()        
+        e.preventDefault()
         // show confirmation pop up
         this.setState({ showCompleteWOVerification: true })
         return
@@ -150,15 +150,15 @@ class WorkOrder extends Component {
             return
         }
 
-        if(checkbox4 && !supervisor) {
+        if (checkbox4 && !supervisor) {
             return
         }
 
         const params = {
-            
+
         }
 
-        
+
         // complete tasks?
         // material txs
 
@@ -180,7 +180,7 @@ class WorkOrder extends Component {
                         <IonButtons slot="start" onClick={e => { e.preventDefault(); this.handleBackBtn() }}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
-                        <IonTitle>Detalles de Orden de Trabajo</IonTitle>
+                        <IonTitle>Orden de Trabajo {currentWorkOrder.wonum}</IonTitle>
                         <IonButtons slot="end">
                             <IonButton onClick={this.handleRefreshClick}><IonIcon icon={refreshOutline}></IonIcon></IonButton>
                         </IonButtons>
@@ -223,7 +223,7 @@ class WorkOrder extends Component {
                                     </ion-tab>
                                 </div>
 
-                                <ion-tab-bar slot="top">
+                                <ion-tab-bar slot="top" style={{ '--background': '#f5f5f5' }}>
                                     <ion-tab-button tab="tab-details">
                                         <ion-icon name="calendar"></ion-icon>
                                         <ion-label>Detalles</ion-label>

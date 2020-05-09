@@ -22,7 +22,7 @@ class WoLongDescModal extends Component {
         return (
             <IonModal isOpen={showLongDescModal}>
                 <IonHeader>
-                    <IonToolbar>
+                    <IonToolbar color="primary">
                         <IonTitle>Descripción completa</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => handleToggleLongDescModal(false)}>Cerrar</ion-button>
@@ -31,7 +31,7 @@ class WoLongDescModal extends Component {
                 </IonHeader>
 
                 <IonContent>
-                    <IonItem >
+                    <IonItem lines="full">
                         <IonGrid>
                             <IonRow>
                                 <IonCol size="12">
