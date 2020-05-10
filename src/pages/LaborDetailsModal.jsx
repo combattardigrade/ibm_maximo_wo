@@ -4,7 +4,7 @@ import {
     IonContent, IonHeader, IonTitle, IonToolbar,
     IonItem, IonLabel, IonGrid, IonRow,
     IonCol, IonIcon, IonSelect, IonSelectOption,
-    IonModal, IonButton, IonInput, IonSpinner, IonDatetime
+    IonModal, IonButton, IonInput, IonSpinner, IonDatetime, IonAlert
 } from '@ionic/react';
 import {
     searchOutline
@@ -20,6 +20,9 @@ class LaborDetailsModal extends Component {
         endDate: '',
         endTime: '',
         duration: '0.0',
+        showAlert: false,
+        alertTitle: '',
+        alertMsg: ''
     }
 
     handleDatePickerChange = date => this.setState({ date })
@@ -30,23 +33,47 @@ class LaborDetailsModal extends Component {
         endDate = new Date(endDate)
         const diffTime = Math.abs(endDate - startDate)
         const duration = (diffTime / (1000 * 60 * 60)).toFixed(2)
+        if(startDate >= endDate) {
+            this.showAlert('Ingresa una duración válida', 'Error')
+            return
+        }
         this.setState({ duration })
     }
 
     handleLaborDetailsSubmit = (e) => {
         e.preventDefault()
-        const { currentWorkOrder, labor, dispatch } = this.props
+        console.log('CREATE_LABOR_TX')
+        const { currentWorkOrder, labor, dispatch, handleToggleLaborDetailsModal, handleToggleLaborModal } = this.props
         const { duration, startDate, endDate } = this.state
-       
+
+        if (!labor || !duration || !startDate || !endDate) {
+            console.log('MISSING_REQUIRED_ARGUMENTS')
+            this.showAlert('Ingresa los datos requeridos', 'Error')
+            return
+        }
+
+        if (parseFloat(duration) <= 0 || isNaN(duration)) {
+            this.showAlert('Ingresa una duración válida', 'Error')
+            return
+        }
+
         const laborTransaction = {
-            wonum: currentWorkOrder.wonum, 
+            wonum: currentWorkOrder.wonum,
             duration,
             starttime: startDate,
             finishdatetime: endDate,
             ...labor
-        }
-        
+        }        
+
         dispatch(saveLaborTransaction(laborTransaction))
+        handleToggleLaborModal(false)
+        handleToggleLaborDetailsModal(false)
+        
+        return
+    }
+
+    showAlert = (msg, title) => {
+        this.setState({ showAlert: true, alertMsg: msg, alertTitle: title })
     }
 
     render() {
@@ -56,8 +83,7 @@ class LaborDetailsModal extends Component {
         return (
             <IonModal isOpen={this.props.showLaborDetailsModal}>
                 <IonHeader>
-                    <IonToolbar color="dark">
-
+                    <IonToolbar color="primary">
                         <IonTitle>Detalles de la Mano de Obra</IonTitle>
                     </IonToolbar>
                 </IonHeader>
@@ -98,7 +124,7 @@ class LaborDetailsModal extends Component {
                             </IonRow>
                         </IonGrid>
                     </IonItem>
-                    <IonItem>
+                    <IonItem lines="full">
                         <IonGrid>
                             <IonRow>
                                 <IonCol>
@@ -110,9 +136,20 @@ class LaborDetailsModal extends Component {
                     </IonItem>
                 </IonContent>
                 <IonRow>
-                    <IonCol><IonButton expand="full" color="light" onClick={() => this.props.handleToggleLaborDetailsModal(false)}>Cancelar</IonButton></IonCol>
+                    <IonCol><IonButton expand="full" color="light" onClick={(e) => { e.preventDefault(); this.props.handleToggleLaborDetailsModal(false); }}>Cancelar</IonButton></IonCol>
                     <IonCol><IonButton expand="full" onClick={this.handleLaborDetailsSubmit}>Aceptar</IonButton></IonCol>
                 </IonRow>
+                <IonAlert
+                    isOpen={this.state.showAlert}
+                    header={this.state.alertTitle}
+                    message={this.state.alertMsg}
+                    buttons={[{
+                        text: 'OK',
+                        handler: () => {
+                            this.setState({ showAlert: false })
+                        }
+                    }]}
+                />
             </IonModal>
         )
     }

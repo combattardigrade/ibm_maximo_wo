@@ -72,12 +72,11 @@ class LaborModal extends Component {
 
     handleSubmitLaborClick = (e) => {
         e.preventDefault()
-        
-        this.setState({showLaborDetailsModal: true})
+        this.setState({ showLaborDetailsModal: true })
     }
 
-    handleToggleLaborDetailsModal = (value) => {        
-        this.setState({showLaborDetailsModal: value})
+    handleToggleLaborDetailsModal = (value) => {
+        this.setState({ showLaborDetailsModal: value })
     }
 
     componentDidMount() {
@@ -101,14 +100,14 @@ class LaborModal extends Component {
 
     render() {
 
-        const { taskid, labor } = this.props
+        const { labor } = this.props
         const { loading, selectedLabor } = this.state
 
         return (
             <Fragment>
                 <IonModal isOpen={this.props.showLaborModal}>
                     <IonHeader>
-                        <IonToolbar>
+                        <IonToolbar color="primary">
 
                             <IonTitle>Seleccionar Mano de Obra</IonTitle>
                         </IonToolbar>
@@ -166,14 +165,15 @@ class LaborModal extends Component {
                     </IonContent>
                     <IonRow>
                         <IonCol><IonButton expand="full" color="light" onClick={() => this.props.handleToggleLaborModal(false)}>Cancelar</IonButton></IonCol>
-                        <IonCol><IonButton disabled={this.state.selectedLabor ? false :  true} expand="full" onClick={this.handleSubmitLaborClick}>Aceptar</IonButton></IonCol>
+                        <IonCol><IonButton disabled={this.state.selectedLabor ? false : true} expand="full" onClick={this.handleSubmitLaborClick}>Aceptar</IonButton></IonCol>
                     </IonRow>
                 </IonModal>
                 {
                     this.state.showLaborDetailsModal && (
-                        <LaborDetailsModal 
+                        <LaborDetailsModal
                             showLaborDetailsModal={this.state.showLaborDetailsModal}
                             handleToggleLaborDetailsModal={this.handleToggleLaborDetailsModal}
+                            handleToggleLaborModal={this.props.handleToggleLaborModal}
                             labor={this.state.selectedLabor}
                         />
                     )

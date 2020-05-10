@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { IonButton, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonNote, IonIcon } from '@ionic/react';
-import { checkmarkOutline, closeOutline, hourglassOutline, addCircleOutline } from 'ionicons/icons'
+import { checkmarkOutline, closeOutline, hourglassOutline, addCircle } from 'ionicons/icons'
 
 import { RouteComponentProps } from 'react-router';
 import ExploreContainer from '../components/ExploreContainer';
@@ -8,11 +8,11 @@ import WoDetailsHeader from '../components/WODetailsHeader'
 import './Page.css';
 import { parse } from 'url';
 
-class WoPlanned extends Component {    
+class WoPlanned extends Component {
 
     render() {
 
-        const { currentWorkOrder, handleToggleLaborModal, handleToggleMaterialModal} = this.props
+        const { currentWorkOrder, handleToggleLaborModal, handleToggleMaterialModal } = this.props
 
         // Check if jobPlan has attributes
         if (!currentWorkOrder) {
@@ -53,7 +53,7 @@ class WoPlanned extends Component {
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Completado:</span> {labor.laborhrscompleted} hrs</IonLabel>
                                                 </IonCol>
                                                 <IonCol size="2">
-                                                    <IonButton onClick={e => {e.preventDefault(); handleToggleLaborModal(true,labor.taskid)}}  fill="clear" style={{ height: '100%', width: '100%' }}><IonIcon style={{ fontSize: '28px', }} icon={addCircleOutline}></IonIcon></IonButton>
+                                                    <IonButton onClick={e => { e.preventDefault(); handleToggleLaborModal(true) }} color="primary" fill="clear"><IonIcon style={{ fontSize: '1.4em' }} icon={addCircle}></IonIcon></IonButton>
                                                 </IonCol>
                                             </IonRow>
                                         </IonCol>
@@ -63,8 +63,8 @@ class WoPlanned extends Component {
                             </IonItem>
                         ))
                     )
-                    :
-                    <IonItem><IonLabel className="dataField">No se encontraron resultados</IonLabel></IonItem>
+                        :
+                        <IonItem><IonLabel className="dataField">No se encontraron resultados</IonLabel></IonItem>
                 }
 
 
@@ -92,15 +92,15 @@ class WoPlanned extends Component {
                                             <IonRow>
                                                 <IonCol size="5">
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Material:</span> {material.description}</IonLabel>
-                                                    <IonLabel className="dataField"><span className="dataSubtitle">Código:</span> {material.itemnum} hrs</IonLabel>
-                                                    <IonLabel className="dataField"><span className="dataSubtitle">Almacén:</span> {material.storelocsite} hrs</IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Código:</span> {material.itemnum}</IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Almacén:</span> {material.storelocsite}</IonLabel>
                                                 </IonCol>
                                                 <IonCol size="5">
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Cantidad:</span> {material.itemqty}</IonLabel>
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Cantidad usada:</span> {material.itemqtyused}</IonLabel>
                                                 </IonCol>
                                                 <IonCol size="2">
-                                                    <IonButton onClick={e => { e.preventDefault(); handleToggleMaterialModal(true, currentWorkOrder.wonum)}} fill="clear" style={{ height: '100%', width: '100%' }}><IonIcon style={{ fontSize: '28px', }} icon={addCircleOutline}></IonIcon></IonButton>
+                                                    <IonButton onClick={e => { e.preventDefault(); handleToggleMaterialModal(true, currentWorkOrder.wonum) }} fill="clear" ><IonIcon style={{ fontSize: '1.4em' }} icon={addCircle}></IonIcon></IonButton>
                                                 </IonCol>
                                             </IonRow>
                                         </IonCol>
@@ -111,10 +111,10 @@ class WoPlanned extends Component {
 
                         ))
                     )
-                    :
-                    <IonItem><IonLabel className="dataField">No se encontraron resultados</IonLabel></IonItem>
+                        :
+                        <IonItem><IonLabel className="dataField">No se encontraron resultados</IonLabel></IonItem>
                 }
-               
+
             </IonContent>
 
         );

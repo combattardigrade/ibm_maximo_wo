@@ -8,7 +8,7 @@ import {
     IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow,
     IonCol, IonTabs, IonTab, IonRouterOutlet, IonTabBar, IonTabButton, IonIcon,
     IonFab, IonFabButton, IonModal, IonButton, IonBackButton, IonInput, IonSpinner,
-    IonCheckbox, IonText
+    IonCheckbox, IonText, IonAlert
 } from '@ionic/react';
 import { Redirect, Route } from 'react-router-dom';
 import {
@@ -32,7 +32,11 @@ import LaborModal from './LaborModal'
 import MaterialModal from './MaterialModal'
 import CommentModal from './CommentModal'
 
+// Actions
 import { saveCurrentWorkOrder, saveWorkOrderSafety } from '../actions/workOrders'
+import  { saveMaterialTransaction }  from '../actions/localWorkOrders'
+
+// API
 import { getJobPlan, getWorkOrder, getAsset, getWOSafety } from '../utils/api'
 
 class WorkOrder extends Component {
@@ -46,20 +50,20 @@ class WorkOrder extends Component {
         asset: '',
         loading: true,
         safetyDetails: '',
-        taskid: '',
         wonum: '',
         showCompleteWOVerification: false,
         checkbox1: false,
         checkbox2: false,
         checkbox3: false,
         checkbox4: false,
-        supervisor: ''
+        supervisor: '',
+        showAlert: false,
+        alertTitle: '',
+        alertMsg: ''
     }
 
-    handleToggleLaborModal = (value, taskid) => {
-        taskid
-            ? this.setState({ showLaborModal: value, taskid: taskid })
-            : this.setState({ showLaborModal: value, taskid: '' })
+    handleToggleLaborModal = (value) => {
+        this.setState({ showLaborModal: value })
     }
 
     handleToggleMaterialModal = (value, wonum) => {
@@ -141,6 +145,26 @@ class WorkOrder extends Component {
         return
     }
 
+    handleSubmitMaterialClick = (material, materialUsed = 0, materialTask = null) => {
+        console.log('CREATE_MATERIAL_TX')
+        console.log(material)
+        const { currentWorkOrder, dispatch } = this.props       
+        
+
+        const materialTransaction = {
+            wonum: currentWorkOrder.wonum,            
+            ...material,
+            itemqtyused: materialUsed,
+            taskid: materialTask !== null ? materialTask : ''
+        }
+        
+        // Save material tx
+        dispatch(saveMaterialTransaction(materialTransaction))
+        // Hide material modal
+        this.setState({ showMaterialModal: false })
+        return
+    }
+
     handleSendWOBtn = (e) => {
         const { checkbox1, checkbox2, checkbox3, checkbox4, supervisor } = this.state
         const { localWorkOrders, currentWorkOrder, token, dispatch } = this.props
@@ -166,6 +190,10 @@ class WorkOrder extends Component {
         const localWorkOrder = Object.values(localWorkOrders).filter(w => w.wonum == currentWorkOrder.wonum)[0]
         console.log(localWorkOrder)
         // Send comments
+    }
+
+    showAlert = (msg, title) => {
+        this.setState({ showAlert: true, alertMsg: msg, alertTitle: title })
     }
 
     render() {
@@ -279,8 +307,8 @@ class WorkOrder extends Component {
                     </ion-fab>
 
                     {/* Modals */}
-                    <LaborModal handleToggleLaborModal={this.handleToggleLaborModal} showLaborModal={showLaborModal} taskid={this.state.taskid} />
-                    <MaterialModal handleToggleMaterialModal={this.handleToggleMaterialModal} showMaterialModal={showMaterialModal} wonum={this.state.wonum} />
+                    <LaborModal handleToggleLaborModal={this.handleToggleLaborModal} showLaborModal={showLaborModal} />
+                    <MaterialModal handleSubmitMaterialClick={this.handleSubmitMaterialClick} handleToggleMaterialModal={this.handleToggleMaterialModal} showMaterialModal={showMaterialModal} wonum={this.state.wonum} />
                     <CommentModal handleToggleCommentModal={this.handleToggleCommentModal} showCommentModal={showCommentModal} />
 
 
@@ -329,6 +357,17 @@ class WorkOrder extends Component {
                                 </div>
                             </div>
                         </div>
+                        <IonAlert
+                            isOpen={this.state.showAlert}
+                            header={this.state.alertTitle}
+                            message={this.state.alertMsg}
+                            buttons={[{
+                                text: 'OK',
+                                handler: () => {
+                                    this.setState({ showAlert: false })
+                                }
+                            }]}
+                        />
                     </Fragment>
                 }
             </IonPage >

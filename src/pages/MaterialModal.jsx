@@ -19,6 +19,10 @@ class MaterialModal extends Component {
         selectedMaterial: '',
         showSelectMaterialModal: false,
         showAlert: false,
+        alertTitle: '',
+        alertMsg: '',
+        materialUsed: '',
+        materialTask: '',
     }
 
     handleLocationSelectChange = (e) => {
@@ -27,17 +31,48 @@ class MaterialModal extends Component {
     }
 
     handleToggleSelectMaterialModal = (value) => {
-        const { handleToggleMaterialModal } = this.props
-        // handleToggleMaterialModal(false)
         console.log('SHOW_SELECT_MATERIAL_MODAL')
         this.setState({ showSelectMaterialModal: value })
+    }
+
+    handleSelectMaterialBtn = (e) => {
+        e.preventDefault()
+
+        if (!this.state.selectedLocation) {
+            this.showAlert('Selecciona una ubicación en la cual realizar la búsqueda', 'Error')
+            return
+        }
+
+        this.handleToggleSelectMaterialModal(true)
     }
 
 
     handleSubmitMaterialClick = (material) => {
         console.log(material)
-        this.setState({ showSelectMaterialModal: false, selectedMaterial: material })
+        this.setState({ showSelectMaterialModal: false, selectedMaterial: material,  })
+    }    
 
+    handleSubmitMaterialTx = (e) => {
+        const { selectedMaterial, materialUsed, materialTask } = this.state
+
+        if(!selectedMaterial) {
+            this.showAlert('Selecciona un material', 'Error')
+            return
+        }
+
+        if(!materialUsed) {
+            this.showAlert('Ingresa la cantidad utilizada de material', 'Error')
+            return
+        }
+
+        this.props.handleSubmitMaterialClick(this.state.selectedMaterial, this.state.materialUsed, this.state.materialTask)
+    }
+
+    materialUsedChange = (e) => this.setState({ materialUsed: e.target.value })
+    materialTaskChange = (e) => this.setState({materialTask: e.target.value})
+
+    showAlert = (msg, title) => {
+        this.setState({ showAlert: true, alertMsg: msg, alertTitle: title })
     }
 
     render() {
@@ -96,7 +131,7 @@ class MaterialModal extends Component {
                                                     <IonLabel className="dataField">No hay ningún Material seleccionado</IonLabel>
                                                 </IonCol>
                                                 <IonCol size="2">
-                                                    <IonButton onClick={() => { if (!this.state.selectedLocation) { this.setState({ showAlert: true }) } else { this.handleToggleSelectMaterialModal(true) } }} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={addCircle}></IonIcon></IonButton>
+                                                    <IonButton onClick={this.handleSelectMaterialBtn} color="primary" expand="full" fill="clear"><IonIcon style={{ fontSize: '2em' }} icon={addCircle}></IonIcon></IonButton>
                                                 </IonCol>
                                             </Fragment>
                                     }
@@ -117,42 +152,42 @@ class MaterialModal extends Component {
                         <IonItem lines="none">
                             <IonGrid>
                                 <IonRow>
-                                    <IonCol size="6"><IonLabel className="dataTitle">Existencia</IonLabel></IonCol>
-                                    <IonCol size="6"><IonInput readonly className="dataField" placeholder="Existencias del Material">{selectedMaterial && selectedMaterial.curbal}</IonInput></IonCol>
+                                    <IonCol size="4"><IonLabel className="dataTitle">Existencia</IonLabel></IonCol>
+                                    <IonCol size="8"><IonInput value={selectedMaterial && selectedMaterial.curbal} readonly className="dataField" placeholder="Existencias del Material" /></IonCol>
                                 </IonRow>
                             </IonGrid>
                         </IonItem>
                         <IonItem lines="none">
                             <IonGrid>
                                 <IonRow>
-                                    <IonCol size="6"><IonLabel className="dataTitle">Estante</IonLabel></IonCol>
-                                    <IonCol size="6"><IonInput readonly className="dataField" placeholder="Estante del Material">{selectedMaterial && selectedMaterial.binnum}</IonInput></IonCol>
+                                    <IonCol size="4"><IonLabel className="dataTitle">Estante</IonLabel></IonCol>
+                                    <IonCol size="8"><IonInput value={selectedMaterial && selectedMaterial.binnum} readonly className="dataField" placeholder="Estante del Material" /></IonCol>
                                 </IonRow>
                             </IonGrid>
                         </IonItem>
                         <IonItem lines="none">
                             <IonGrid>
                                 <IonRow>
-                                    <IonCol size="6"><IonLabel className="dataTitle">Cantidad</IonLabel></IonCol>
-                                    <IonCol size="6"><IonInput readonly className="dataField" placeholder="Cantidad del Material">{selectedMaterial && selectedMaterial.binnum}</IonInput></IonCol>
+                                    <IonCol size="4"><IonLabel className="dataTitle">Cantidad usada</IonLabel></IonCol>
+                                    <IonCol size="8"><IonInput value={this.state.materialUsed} onIonChange={this.materialUsedChange} className="dataField" placeholder="Cantidad del Material" /></IonCol>
                                 </IonRow>
                             </IonGrid>
                         </IonItem>
                         <IonItem lines="none">
                             <IonGrid>
                                 <IonRow>
-                                    <IonCol size="6"><IonLabel className="dataTitle">Tarea</IonLabel></IonCol>
-                                    <IonCol size="6"><IonInput readonly className="dataField" ></IonInput></IonCol>
+                                    <IonCol size="4"><IonLabel className="dataTitle">Tarea</IonLabel></IonCol>
+                                    <IonCol size="8"><IonInput value={this.state.materialTask} onIonChange={this.materialTaskChange} className="dataField" placeholder="Tarea en que se utilizó" /></IonCol>
                                 </IonRow>
                             </IonGrid>
                         </IonItem>
                     </IonContent>
                     <IonRow>
                         <IonCol><IonButton expand="full" color="light" onClick={() => this.props.handleToggleMaterialModal(false)}>Cancelar</IonButton></IonCol>
-                        <IonCol><IonButton expand="full" onClick={() => this.props.handleSubmitMaterialClick(this.state.selectedMaterial)}>Aceptar</IonButton></IonCol>
+                        <IonCol><IonButton expand="full" onClick={this.handleSubmitMaterialTx}>Aceptar</IonButton></IonCol>
                     </IonRow>
                 </IonModal>
-                {console.log(this.state.showSelectMaterialModal)}
+                
                 {
                     showSelectMaterialModal == true &&
                     <SelectMaterialModal
@@ -163,23 +198,28 @@ class MaterialModal extends Component {
                     />
                 }
 
+                
                 <IonAlert
                     isOpen={this.state.showAlert}
-                    onDidDismiss={() => this.setState({ showAlert: false })}
-                    header={'Alerta'}
-                    message={'Selecciona una ubicación en la cual realizar la búsqueda'}
-                    buttons={['OK']}
+                    header={this.state.alertTitle}
+                    message={this.state.alertMsg}
+                    buttons={[{
+                        text: 'OK',
+                        handler: () => {
+                            this.setState({ showAlert: false })
+                        }
+                    }]}
                 />
             </Fragment>
         )
     }
 }
 
-function mapStateToProps({ auth, locations }) {
+function mapStateToProps({ auth, locations, workOrders }) {
     return {
         token: auth.token,
-        locations: locations
-
+        locations: locations,
+        currentWorkOrder: workOrders && workOrders.currentWorkOrder
     }
 }
 

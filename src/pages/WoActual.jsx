@@ -17,85 +17,42 @@ class WoActual extends Component {
             <IonContent>
                 <WoDetailsHeader currentWorkOrder={currentWorkOrder} />
 
-                <IonItem>
+                <IonItem lines="full">
                     <IonLabel className="dataTitle">Mano de obra:</IonLabel>
                 </IonItem>
-
                 {
-
-                    currentWorkOrder && 'labtrans' in currentWorkOrder
+                    localWorkOrder && 'laborTransactions' in localWorkOrder
                         ?
-
-                        currentWorkOrder.labtrans.map((labor) => {
+                        localWorkOrder.laborTransactions.map((labor, index) => {
                             let start = moment(labor.starttime)
                             let end = moment(labor.finishdatetime)
                             let duration = moment.duration(end.diff(start))
                             let hours = (duration.asHours()).toFixed(2)
 
                             return (
-                                <IonItem lines="full" key={labor.wplaborid}>
+                                <IonItem lines="full" key={index}>
                                     <IonGrid>
                                         <IonRow>
                                             <IonCol size="2" style={{ textAlign: 'center' }}>
                                                 <IonIcon style={{ fontSize: '28px', paddingTop: '10px' }} icon={checkmarkOutline}></IonIcon>
                                             </IonCol>
-                                            <IonCol>
+                                            <IonCol size="10">
                                                 <IonRow>
-                                                    <IonCol size="5">
-                                                        <IonLabel className="dataField"><span className="dataSubtitle">Oficio:</span> {'craft' in labor ? labor.craft : '-'}</IonLabel>
+                                                    <IonCol size="6">
+                                                        <IonLabel className="dataField"><span className="dataSubtitle">Oficio:</span> {'craft' in labor ? labor.person[0].craft : '-'}</IonLabel>
                                                         <IonLabel className="dataField"><span className="dataSubtitle">Duración:</span> {hours ? hours : '0'} hrs</IonLabel>
                                                     </IonCol>
-                                                    <IonCol size="5">
+                                                    <IonCol size="4">
                                                         <IonLabel className="dataField"><span className="dataSubtitle">Tarea:</span> {'taskid' in labor ? labor.taskid : '-'}</IonLabel>
-
                                                     </IonCol>
-
                                                 </IonRow>
                                             </IonCol>
                                         </IonRow>
                                     </IonGrid>
                                 </IonItem>
                             )
-
                         })
-                        :
-                        <IonItem><IonLabel className="dataField">No se encontraron registros</IonLabel></IonItem>
-
-
-                }
-                {
-                    localWorkOrder && 'laborTransactions' in localWorkOrder &&
-                    localWorkOrder.laborTransactions.map((labor, index) => {
-                        let start = moment(labor.starttime)
-                        let end = moment(labor.finishdatetime)
-                        let duration = moment.duration(end.diff(start))
-                        let hours = (duration.asHours()).toFixed(2)
-
-                        return (
-                            <IonItem lines="full" key={labor.wplaborid} key={index}>
-                                <IonGrid>
-                                    <IonRow>
-                                        <IonCol size="2" style={{ textAlign: 'center' }}>
-                                            <IonIcon style={{ fontSize: '28px', paddingTop: '10px' }} icon={checkmarkOutline}></IonIcon>
-                                        </IonCol>
-                                        <IonCol>
-                                            <IonRow>
-                                                <IonCol size="5">
-                                                    <IonLabel className="dataField"><span className="dataSubtitle">Oficio:</span> {'craft' in labor ? labor.person[0].craft : '-'}</IonLabel>
-                                                    <IonLabel className="dataField"><span className="dataSubtitle">Duración:</span> {hours ? hours : '0'} hrs</IonLabel>
-                                                </IonCol>
-                                                <IonCol size="5">
-                                                    <IonLabel className="dataField"><span className="dataSubtitle">Tarea:</span> {'taskid' in labor ? labor.taskid : '-'}</IonLabel>
-
-                                                </IonCol>
-
-                                            </IonRow>
-                                        </IonCol>
-                                    </IonRow>
-                                </IonGrid>
-                            </IonItem>
-                        )
-                    })
+                        : <IonItem><IonLabel className="dataField">No se encontraron registros</IonLabel></IonItem>
                 }
 
 
@@ -105,21 +62,19 @@ class WoActual extends Component {
                 </IonItem>
 
                 {
-                    currentWorkOrder && 'matusetrans' in currentWorkOrder
-                        ?
-                        currentWorkOrder.matusetrans.map((material) => (
-
-                            <IonItem lines="full" key={material.matusetransid}>
+                    localWorkOrder && 'materialTransactions' in localWorkOrder ?
+                        localWorkOrder.materialTransactions.map((material, index) => (
+                            <IonItem lines="full" key={index}>
                                 <IonGrid>
                                     <IonRow>
                                         <IonCol size="2" style={{ textAlign: 'center' }}>
                                             <IonIcon style={{ fontSize: '28px', paddingTop: '10px' }} icon={checkmarkOutline}></IonIcon>
                                         </IonCol>
-                                        <IonCol>
+                                        <IonCol size="10">
                                             <IonRow>
                                                 <IonCol size="5">
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Material:</span> {material.description}</IonLabel>
-                                                    <IonLabel className="dataField"><span className="dataSubtitle">Código:</span> {material.itemnum} hrs</IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Código:</span> {material.itemnum} </IonLabel>
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Almacén:</span> {material.storelocsite} hrs</IonLabel>
                                                 </IonCol>
                                                 <IonCol size="5">
@@ -130,12 +85,11 @@ class WoActual extends Component {
                                             </IonRow>
                                         </IonCol>
                                     </IonRow>
-
                                 </IonGrid>
                             </IonItem>
                         ))
-                        :
-                        <IonItem><IonLabel className="dataField">No se encontraron registros</IonLabel></IonItem>
+                        : <IonItem><IonLabel className="dataField">No se encontraron registros</IonLabel></IonItem>
+
                 }
 
                 <IonItem>
