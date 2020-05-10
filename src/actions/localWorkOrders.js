@@ -2,7 +2,8 @@ export const SAVE_LOCAL_WORK_ORDER = 'SAVE_LOCAL_WORK_ORDER'
 export const SAVE_LABOR_TRANSACTION = 'SAVE_LABOR_TRANSACTION'
 export const SAVE_MATERIAL_TRANSACTION = 'SAVE_MATERIAL_TRANSACTION'
 export const SAVE_COMMENT = 'SAVE_COMMENT'
-
+export const SAVE_ATTACHMENT = 'SAVE_ATTACHMENT'
+export const DELETE_ATTACHMENT = 'DELETE_ATTACHMENT'
 
 export function saveLocalWorkOrder(localWorkOrder) {    
     return {
@@ -29,5 +30,19 @@ export function saveComment(comment) {
     return {
         type: SAVE_COMMENT,
         comment
+    }
+}
+
+export function saveAttachment(attachment) {
+    return {
+        type: SAVE_ATTACHMENT,
+        attachment
+    }
+}
+
+export function deleteAttachment(attachment) {
+    return {
+        type: DELETE_ATTACHMENT,
+        attachment
     }
 }

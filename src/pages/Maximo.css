@@ -2,7 +2,6 @@
     font-weight: bold;
     font-size: 12px !important;
     color: #005cff !important;
-
 }
 
 .white {
@@ -10,7 +9,7 @@
 }
 
 .dataField {
-    font-size:15px !important;
+    font-size: 15px !important;
 }
 
 .searchResultIcon {
@@ -120,15 +119,15 @@ ion-content.auth-bg {
     background-color: white;
     position: fixed;
     height: 400px;
-    
     top: 20%;
-    left:20px;
+    left: 20px;
     right: 0;
     max-width: 90%;
     border-radius: 4px;
-    -webkit-box-shadow: 0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14), 0 9px 46px 8px rgba(0,0,0,.12);
-    box-shadow: 0 11px 15px -7px rgba(0,0,0,.2), 0 24px 38px 3px rgba(0,0,0,.14), 0 9px 46px 8px rgba(0,0,0,.12);
+    -webkit-box-shadow: 0 11px 15px -7px rgba(0, 0, 0, .2), 0 24px 38px 3px rgba(0, 0, 0, .14), 0 9px 46px 8px rgba(0, 0, 0, .12);
+    box-shadow: 0 11px 15px -7px rgba(0, 0, 0, .2), 0 24px 38px 3px rgba(0, 0, 0, .14), 0 9px 46px 8px rgba(0, 0, 0, .12);
 }
+
 .popup-header {
     padding-left: unset;
     padding-right: unset;
@@ -138,9 +137,11 @@ ion-content.auth-bg {
     padding-inline-end: 23px;
     border-bottom: 1px solid #d9d9d9;
 }
+
 .popup-title {
     font-size: 18px;
 }
+
 .popup-footer {
     position: absolute;
     bottom: 0px !important;
@@ -149,10 +150,12 @@ ion-content.auth-bg {
     width: 100%;
     text-align: right;
 }
+
 .popup-body {
     height: 300px;
     overflow-y: scroll;
 }
+
 .custom-backdrop {
     position: absolute;
     width: 4000px;
@@ -160,3 +163,27 @@ ion-content.auth-bg {
     background: #0000004d;
     z-index: 1000;
 }
+
+ion-fab-button {
+    margin-left: 75px;
+    overflow: visible;
+    position: relative;
+}
+
+ion-fab-list ion-label {
+    font-size: 12px;
+    position: relative;
+    top: 40px;
+    right: 45px;
+    color: white;
+    background-color: black;
+    /* line-height: 24px; */
+    padding: 5px 8px;
+    border-radius: 4px;
+}
+
+/* ion-fab ion-badge {
+    position: relative;
+    top: 10px;
+    left: 140px;
+} */

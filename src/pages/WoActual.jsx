@@ -1,14 +1,29 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { IonButton, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonNote, IonIcon, IonTextarea } from '@ionic/react';
-import { checkmarkOutline, closeOutline, addCircleOutline, hourglassOutline } from 'ionicons/icons'
+import { checkmarkOutline, closeCircle, addCircleOutline, hourglassOutline } from 'ionicons/icons'
 
-import { RouteComponentProps } from 'react-router';
-import ExploreContainer from '../components/ExploreContainer';
+// Components
 import WoDetailsHeader from '../components/WODetailsHeader'
+
+// Styles
 import './Page.css';
+
+// Actions
+import { deleteAttachment } from '../actions/localWorkOrders'
+
+// Plugins
+import { PhotoViewer } from '@ionic-native/photo-viewer'
+
+// Libraries
 const moment = require('moment')
 
 class WoActual extends Component {
+
+    handleDeletePhoto = (photoIndex) => {
+        const { currentWorkOrder, dispatch } = this.props
+        dispatch(deleteAttachment({ wonum: currentWorkOrder.wonum, index: photoIndex }))
+    }
 
     render() {
         const { currentWorkOrder, handleToggleMaterialModal, localWorkOrder } = this.props
@@ -121,7 +136,18 @@ class WoActual extends Component {
                             <IonCol><IonLabel className="dataTitle">Adjuntos:</IonLabel></IonCol>
                         </IonRow>
                         <IonRow>
-                            <IonCol></IonCol>
+                            {
+                                localWorkOrder && 'attachments' in localWorkOrder && localWorkOrder.attachments.length > 0
+                                    ?
+                                    localWorkOrder.attachments.map((photo, i) => (
+                                        <IonCol size="3" key={i}>
+                                            <IonButton onClick={e => { e.preventDefault(); this.handleDeletePhoto(i) }} color="danger" style={{ position: 'absolute', right: '0' }} fill="clear"><IonIcon icon={closeCircle}></IonIcon></IonButton>
+                                            <img onClick={e => { e.preventDefault(); PhotoViewer.show(`data:image/jpeg;base64,${photo}`); }} style={{ height: '100%', width: '100%', marginTop: '10px', borderRadius: '5px' }} src={`data:image/jpeg;base64,${photo}`} />
+                                        </IonCol>
+                                    ))
+                                    :
+                                    <IonRow><IonCol><IonLabel className="dataField">No hay archivos adjuntos</IonLabel></IonCol></IonRow>
+                            }
                         </IonRow>
                     </IonGrid>
 
@@ -133,4 +159,10 @@ class WoActual extends Component {
     }
 };
 
-export default WoActual;
+function mapStateToProps() {
+    return {
+       
+    }
+}
+
+export default connect(mapStateToProps)(WoActual)

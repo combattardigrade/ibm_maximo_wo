@@ -34,10 +34,15 @@ import CommentModal from './CommentModal'
 
 // Actions
 import { saveCurrentWorkOrder, saveWorkOrderSafety } from '../actions/workOrders'
-import  { saveMaterialTransaction }  from '../actions/localWorkOrders'
+import { saveMaterialTransaction, saveAttachment } from '../actions/localWorkOrders'
 
 // API
 import { getJobPlan, getWorkOrder, getAsset, getWOSafety } from '../utils/api'
+
+// Plugins
+import { PhotoViewer } from '@ionic-native/photo-viewer'
+import { Plugins } from '@capacitor/core'
+const { Camera } = Plugins
 
 class WorkOrder extends Component {
 
@@ -57,6 +62,8 @@ class WorkOrder extends Component {
         checkbox3: false,
         checkbox4: false,
         supervisor: '',
+        reportPhotos: [],
+        showPhotoPreview: false,
         showAlert: false,
         alertTitle: '',
         alertMsg: ''
@@ -132,6 +139,54 @@ class WorkOrder extends Component {
 
     }
 
+    handleTakePhotoBtn = async (e) => {
+        e.preventDefault()
+        console.log('TAKE_PHOTO_BTN')
+        const { currentWorkOrder, dispatch } = this.props
+
+        const options = {
+            allowEditing: false,
+            quality: 30,
+            resultType: 'Base64',
+            saveGallery: true,
+            source: 'CAMERA',
+            direction: 'REAR'
+        }
+
+        try {
+            const photoData = await Camera.getPhoto(options)
+            dispatch(saveAttachment({ wonum: currentWorkOrder.wonum, data: photoData.base64String }))
+        }
+        catch (err) {
+            console.log(err)
+            this.showAlert('message' in err ? err.message : 'Ocurrió un error al intentar añadir la fotografía')
+            return
+        }
+    }
+
+    handleGalleryBtn = async (e) => {
+        e.preventDefault()
+        console.log('GALLERY_BTN')
+        const { currentWorkOrder, dispatch } = this.props
+
+        const options = {
+            allowEditing: false,
+            quality: 30,
+            resultType: 'Base64',
+            source: 'PHOTOS'
+        }
+
+        try {
+            const photoData = await Camera.getPhoto(options)
+            dispatch(saveAttachment({ wonum: currentWorkOrder.wonum, data: photoData.base64String }))
+        }
+        catch (err) {
+            console.log(err)
+            this.showAlert('message' in err ? err.message : 'Ocurrió un erro al intentar añadir la fotografía')
+            return
+        }
+    }
+
     supervisorChange = (e) => this.setState({ supervisor: e.target.value })
 
     handleCloseCompleteWoPopup = (e) => {
@@ -148,16 +203,16 @@ class WorkOrder extends Component {
     handleSubmitMaterialClick = (material, materialUsed = 0, materialTask = null) => {
         console.log('CREATE_MATERIAL_TX')
         console.log(material)
-        const { currentWorkOrder, dispatch } = this.props       
-        
+        const { currentWorkOrder, dispatch } = this.props
+
 
         const materialTransaction = {
-            wonum: currentWorkOrder.wonum,            
+            wonum: currentWorkOrder.wonum,
             ...material,
             itemqtyused: materialUsed,
             taskid: materialTask !== null ? materialTask : ''
         }
-        
+
         // Save material tx
         dispatch(saveMaterialTransaction(materialTransaction))
         // Hide material modal
@@ -282,27 +337,36 @@ class WorkOrder extends Component {
 
 
                     <ion-fab horizontal="end" vertical="bottom" slot="fixed">
+
                         <ion-fab-button color="primary">
                             <ion-icon style={{ color: 'white' }} icon={addOutline}></ion-icon>
                         </ion-fab-button>
                         <ion-fab-list side="top">
 
-                            <ion-fab-button color="light">
+                            <ion-fab-button color="primary" onClick={this.handleGalleryBtn}>
                                 <ion-icon icon={documentAttachOutline}></ion-icon>
                             </ion-fab-button>
-                            <ion-fab-button color="light">
+                            <ion-label>Añadir Documento</ion-label>
+
+                            <ion-fab-button color="primary" onClick={this.handleTakePhotoBtn}>
                                 <ion-icon icon={cameraOutline}></ion-icon>
                             </ion-fab-button>
-                            <ion-fab-button color="light" onClick={() => this.handleToggleCommentModal(true)}>
+                            <ion-label>Añadir Fotografía</ion-label>
+
+                            <ion-fab-button color="primary" onClick={() => this.handleToggleCommentModal(true)}>
                                 <ion-icon icon={documentTextOutline}></ion-icon>
                             </ion-fab-button>
-                            <ion-fab-button color="light" onClick={() => this.handleToggleMaterialModal(true)}>
+                            <ion-label>Añadir Comentario</ion-label>
+
+                            <ion-fab-button color="primary" onClick={() => this.handleToggleMaterialModal(true)}>
                                 <ion-icon icon={hammerOutline}></ion-icon>
                             </ion-fab-button>
+                            <ion-label>Añadir Materiales</ion-label>
 
-                            <ion-fab-button color="light" onClick={() => this.handleToggleLaborModal(true)}>
+                            <ion-fab-button color="primary" onClick={() => this.handleToggleLaborModal(true)}>
                                 <ion-icon icon={peopleOutline} ></ion-icon>
                             </ion-fab-button>
+                            <ion-label style={{ right: '55px' }}>Añadir Mano de Obra</ion-label>
                         </ion-fab-list>
                     </ion-fab>
 
