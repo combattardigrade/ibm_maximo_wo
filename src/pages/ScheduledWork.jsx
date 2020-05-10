@@ -598,9 +598,13 @@ class ScheduledWork extends Component {
                             <ion-fab-button color="light" onClick={this.handleGalleryBtn}>
                                 <ion-icon icon={documentAttachOutline}></ion-icon>
                             </ion-fab-button>
+                            <ion-label>Añadir Documento</ion-label>
+
                             <ion-fab-button color="light" onClick={this.handleTakePhotoBtn}>
                                 <ion-icon icon={cameraOutline}></ion-icon>
                             </ion-fab-button>
+                            <ion-label>Añadir Fotografía</ion-label>
+                            
                         </ion-fab-list>
                     </ion-fab>
 

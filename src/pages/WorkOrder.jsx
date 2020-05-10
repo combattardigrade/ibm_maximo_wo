@@ -343,27 +343,27 @@ class WorkOrder extends Component {
                         </ion-fab-button>
                         <ion-fab-list side="top">
 
-                            <ion-fab-button color="primary" onClick={this.handleGalleryBtn}>
+                            <ion-fab-button color="light" onClick={this.handleGalleryBtn}>
                                 <ion-icon icon={documentAttachOutline}></ion-icon>
                             </ion-fab-button>
                             <ion-label>Añadir Documento</ion-label>
 
-                            <ion-fab-button color="primary" onClick={this.handleTakePhotoBtn}>
+                            <ion-fab-button color="light" onClick={this.handleTakePhotoBtn}>
                                 <ion-icon icon={cameraOutline}></ion-icon>
                             </ion-fab-button>
                             <ion-label>Añadir Fotografía</ion-label>
 
-                            <ion-fab-button color="primary" onClick={() => this.handleToggleCommentModal(true)}>
+                            <ion-fab-button color="light" onClick={() => this.handleToggleCommentModal(true)}>
                                 <ion-icon icon={documentTextOutline}></ion-icon>
                             </ion-fab-button>
                             <ion-label>Añadir Comentario</ion-label>
 
-                            <ion-fab-button color="primary" onClick={() => this.handleToggleMaterialModal(true)}>
+                            <ion-fab-button color="light" onClick={() => this.handleToggleMaterialModal(true)}>
                                 <ion-icon icon={hammerOutline}></ion-icon>
                             </ion-fab-button>
                             <ion-label>Añadir Materiales</ion-label>
 
-                            <ion-fab-button color="primary" onClick={() => this.handleToggleLaborModal(true)}>
+                            <ion-fab-button color="light" onClick={() => this.handleToggleLaborModal(true)}>
                                 <ion-icon icon={peopleOutline} ></ion-icon>
                             </ion-fab-button>
                             <ion-label style={{ right: '55px' }}>Añadir Mano de Obra</ion-label>

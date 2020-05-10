@@ -88,9 +88,9 @@ class WoActual extends Component {
                                         <IonCol size="10">
                                             <IonRow>
                                                 <IonCol size="5">
-                                                    <IonLabel className="dataField"><span className="dataSubtitle">Material:</span> {material.description}</IonLabel>
-                                                    <IonLabel className="dataField"><span className="dataSubtitle">Código:</span> {material.itemnum} </IonLabel>
-                                                    <IonLabel className="dataField"><span className="dataSubtitle">Almacén:</span> {material.storelocsite} hrs</IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Material:</span> {material.description.substring(0,15)}</IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Código:</span> {material.itemnum.substring(0,15)} </IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Almacén:</span> {material.storelocsite}</IonLabel>
                                                 </IonCol>
                                                 <IonCol size="5">
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Cantidad:</span> {material.itemqty}</IonLabel>

@@ -7,14 +7,19 @@ import {
 import {
     refreshOutline, save
 } from 'ionicons/icons'
+
+// Styles
 import './Page.css';
 import './Maximo.css'
+
+// API
 import {
     getWorkOrders, getWhoAmI, getInventory, getAssets,
     getWorkOrder, checkWOHazardVerification,
     sendWOHazardVerification, getLaborCatalog, getLocations,
     getMaterials,
 } from '../utils/api'
+
 // Actions
 import { saveWorkOrders, saveCurrentWorkOrder, saveWorkOrderSafety } from '../actions/workOrders'
 import { saveUser } from '../actions/user'
@@ -28,6 +33,9 @@ import { saveLocalWorkOrder } from '../actions/localWorkOrders';
 // Components
 import WoCard from '../components/WoCard'
 import Loading from '../components/Loading'
+
+// Plugins
+
 
 class Dashboard extends Component {
 
@@ -157,6 +165,7 @@ class Dashboard extends Component {
         //         }
         //     })
         
+        
         if (localWorkOrders && localWorkOrders[wonum]) {
             this.props.history.push('/wo/' + wonum)
             return
@@ -195,7 +204,7 @@ class Dashboard extends Component {
                         attachments: [],
                         ...response.payload
                     }
-                   
+
                     dispatch(saveCurrentWorkOrder(localWorkOrder))
                     dispatch(saveLocalWorkOrder(localWorkOrder))
                     this.setState({ loading: false, showHazardVerification: false })
@@ -207,7 +216,7 @@ class Dashboard extends Component {
     }
 
     handleRefreshClick = async (e) => {
-        e.preventDefault()
+        e.preventDefault()     
         const { token, dispatch } = this.props
         this.setState({ loading: true })
         getWorkOrders({ token: token })

@@ -33,6 +33,9 @@ class WoDetails extends Component {
         showToast: false,
         serverMsg: '',
         serverStatus: '',
+        showAlert: false,
+        alertTitle: '',
+        alertMsg: '',
         timerActive: false,
         showCompleteWOVerification: false,
     }
@@ -59,7 +62,38 @@ class WoDetails extends Component {
             })
     }
 
-    
+    handleConfirmWaitingMaterial = (e) => {
+        e.preventDefault()
+        console.log('CONFIRM_WAITING_MATERIAL')
+        this.showAlert("¿Estás seguro que quieres actualizar el estado de la OT a 'En Espera de Materiales' (WMATL) ?", "Confirmación")
+        return
+    }
+
+    handleWaitingMaterialSubmit = () => {
+        
+        console.log('UPDATE_WO_STATUS_WMATL')
+        const { currentWorkOrder, token, dispatch } = this.props
+        const woHref = currentWorkOrder.href
+        const status = 'WMATL'
+
+        updateWOStatus({ woHref, status, token })
+            .then(data => data.json())
+            .then((res) => {
+                if (res.status === 'OK') {
+                    // update local status
+                    dispatch(updateCurrentWOStatus(status))
+                    // show toast
+                    this.setState({
+                        showToast: true, serverMsg: res.message, serverStatus: 'OK'
+                    })
+                }
+            })
+    }
+
+    showAlert = (msg, title) => {
+        this.setState({ showAlert: true, alertMsg: msg, alertTitle: title })
+    }
+
 
     handleStartTimer = (e) => {
         e.preventDefault()
@@ -80,7 +114,7 @@ class WoDetails extends Component {
                 {/* WO */}
                 <WoDetailsHeader currentWorkOrder={currentWorkOrder} />
                 {/* ASSET */}
-               
+
                 <IonItem lines="full">
                     <IonGrid>
                         <IonRow>
@@ -155,7 +189,16 @@ class WoDetails extends Component {
                                         ?
                                         <IonButton onClick={this.handleStartWO} color="light" expand="full">INICIAR</IonButton>
                                         :
-                                        <IonButton onClick={this.props.handleCompleteWO} color="light" expand="full">FINALIZAR</IonButton>
+
+                                        currentWorkOrder.status === 'INPRG'
+                                            ?
+                                            <Fragment>
+                                                <IonButton onClick={this.handleConfirmWaitingMaterial} color="light" expand="full">EN ESPERA DE MAT</IonButton>
+                                                <IonButton onClick={this.props.handleCompleteWO} color="primary" expand="full">DOCUMENTAR</IonButton>
+                                            </Fragment>
+                                            : <IonButton onClick={this.props.handleCompleteWO} color="primary" expand="full">DOCUMENTAR</IonButton>
+
+
                                     // this.state.timerActive ?
                                     //     <IonRow>
                                     //         <IonCol>
@@ -185,8 +228,8 @@ class WoDetails extends Component {
                                     //         <IonCol><IonButton onClick={this.handleStartTimer} fill={null} expand="block" style={{ width: '35px !important' }}><IonIcon color="primary" style={{ fontSize: '28px' }} icon={clipboardOutline}></IonIcon></IonButton></IonCol>
                                     //         <IonCol><IonButton> Finalizar</IonButton></IonCol>
                                     //     </IonRow>
-                                }
 
+                                }
                             </IonCol>
                         </IonRow>
                     </IonGrid>
@@ -262,62 +305,25 @@ class WoDetails extends Component {
                         </div>
                     )
                 }
-                
+
 
 
                 <IonAlert
-                    isOpen={this.state.showCompleteWOVerification2}
-                    header={'Verificación'}
-                    inputs={[
-                        {
-                            name: 'checkbox1',
-                            value: 'true',
-                            type: 'checkbox',
-                            label: 'Área del activo limpia y ordenada. Se realizó inspección visual (de arriba abajo) del área intervenida, se ha eliminado material residual externo al activo (lubricantes, metálicos, plásticos, etc.).',
-                            checked: false,
-                            className: 'first-input'
-                        },
-                        {
-                            name: 'checkbox2',
-                            value: 'true',
-                            type: 'checkbox',
-                            label: 'Las guardas/barreras de seguridad han sido ubicadas en su lugar.',
-                            checked: false,
-                        },
-                        {
-                            name: 'checkbox3',
-                            value: 'true',
-                            type: 'checkbox',
-                            label: 'Se han removido todas las refacciones herramientas, materiales externos, paños de limpieza y todo el material utilizado.',
-                            checked: false,
-                        },
-                        {
-                            name: 'checkbox4',
-                            value: 'true',
-                            type: 'checkbox',
-                            label: 'En caso de que se requiera saneamiento y limpieza, el supervisor de seguridad alimenticia fue notificado.',
-                            checked: false,
-                        },
-                        {
-                            name: 'supervisor',
-                            type: 'text',
-                            placeholder: 'Supervisor',
-                            label: 'test'
-                        }
-                    ]}
+                    isOpen={this.state.showAlert}
+                    header={this.state.alertTitle}
+                    message={this.state.alertMsg}
                     buttons={[
                         {
                             text: 'Cancelar',
                             role: 'cancel',
                             handler: () => {
-                                this.setState({ showCompleteWOVerification: false })
+                                this.setState({ showAlert: false })
                             }
                         },
                         {
-                            text: 'Enviar',
-
+                            text: 'Confirmar',
                             handler: (data) => {
-                                this.handleHazardVerificationClick(data)
+                                this.handleWaitingMaterialSubmit(data)
                             }
                         }
                     ]}
