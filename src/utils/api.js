@@ -1,5 +1,5 @@
 // const API = 'http://155.138.226.217:3002/api'
-const API = 'http://genesisblock.ddns.net:3000/api'
+const API = 'http://192.168.0.173:3000/api'
 
 export function login(params) {
     return fetch(API + '/authentication', {
@@ -294,6 +294,17 @@ export function updateWOStatus(params) {
 export function getWorkOrderTasks(params) {
     return fetch(API + `/workOrderTasks/${params.wonum}`, {
         method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + params.token
+        }
+    })
+}
+
+export function sendWODocumentation(params) {
+    return fetch(API + `/wo/doc`, {
+        method: 'POST',
+        body: JSON.stringify(params),
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + params.token

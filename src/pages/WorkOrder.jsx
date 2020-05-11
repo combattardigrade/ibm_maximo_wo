@@ -33,11 +33,11 @@ import MaterialModal from './MaterialModal'
 import CommentModal from './CommentModal'
 
 // Actions
-import { saveCurrentWorkOrder, saveWorkOrderSafety } from '../actions/workOrders'
+import { saveCurrentWorkOrder, saveWorkOrderSafety, updateCurrentWOStatus } from '../actions/workOrders'
 import { saveMaterialTransaction, saveAttachment } from '../actions/localWorkOrders'
 
 // API
-import { getJobPlan, getWorkOrder, getAsset, getWOSafety } from '../utils/api'
+import { getJobPlan, getWorkOrder, getAsset, getWOSafety, sendWODocumentation } from '../utils/api'
 
 // Plugins
 import { PhotoViewer } from '@ionic-native/photo-viewer'
@@ -222,7 +222,7 @@ class WorkOrder extends Component {
 
     handleSendWOBtn = (e) => {
         const { checkbox1, checkbox2, checkbox3, checkbox4, supervisor } = this.state
-        const { localWorkOrders, currentWorkOrder, token, dispatch } = this.props
+        const { localWorkOrder, currentWorkOrder, token, dispatch } = this.props
 
 
         if (!checkbox1 || !checkbox2 || !checkbox3) {
@@ -231,20 +231,30 @@ class WorkOrder extends Component {
 
         if (checkbox4 && !supervisor) {
             return
-        }
+        }     
 
         const params = {
-
+            woHref: currentWorkOrder.href,
+            comments: localWorkOrder.comments,
+            attachments: localWorkOrder.attachments,
+            materialTransactions: localWorkOrder.materialTransactions,
+            laborTransactions: localWorkOrder.laborTransactions, 
+            token,           
         }
 
-
-        // complete tasks?
-        // material txs
-
-        // attachments
-        const localWorkOrder = Object.values(localWorkOrders).filter(w => w.wonum == currentWorkOrder.wonum)[0]
-        console.log(localWorkOrder)
-        // Send comments
+        sendWODocumentation(params)
+            .then(data => data.json())
+            .then((res) => {
+                console.log(res)
+                if(res.status === 'OK') {
+                    // update local status
+                    // dispatch(updateCurrentWOStatus('DOC'))
+                    // show toast
+                    this.setState({
+                        showToast: true, serverMsg: res.message, serverStatus: 'OK'
+                    })
+                }
+            })
     }
 
     showAlert = (msg, title) => {
@@ -407,7 +417,7 @@ class WorkOrder extends Component {
                                     this.state.checkbox4 &&
                                     <IonItem lines="none" style={{ borderTop: '1px solid #d9d9d9' }}>
                                         <div style={{ padding: '5px 0px', width: '100%' }}>
-                                            <IonInput onChange={this.state.supervisorChange} value={this.state.supervisor} type="text" placeholder="Ingresa el nombre del supervisor" />
+                                            <IonInput onChange={this.state.supervisorChange} value={this.state.supervisor} type="text" placeholder="Ingresa el supervisor" />
                                         </div>
                                     </IonItem>
                                 }

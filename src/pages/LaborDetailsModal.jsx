@@ -32,12 +32,22 @@ class LaborDetailsModal extends Component {
         startDate = new Date(startDate)
         endDate = new Date(endDate)
         const diffTime = Math.abs(endDate - startDate)
+        console.log(this.millisecondsToTime(diffTime))
         const duration = (diffTime / (1000 * 60 * 60)).toFixed(2)
-        if(startDate >= endDate) {
+        if (startDate >= endDate) {
             this.showAlert('Ingresa una duración válida', 'Error')
             return
         }
         this.setState({ duration })
+    }
+
+
+
+    millisecondsToTime = (milli) => {
+
+        var hours = Math.floor(milli / 60 * 60 * 1000);        
+        var minutes = Math.floor(milli / 60 * 1000);        
+        return hours + ":" + minutes;
     }
 
     handleLaborDetailsSubmit = (e) => {
@@ -63,12 +73,12 @@ class LaborDetailsModal extends Component {
             starttime: startDate,
             finishdatetime: endDate,
             ...labor
-        }        
+        }
 
         dispatch(saveLaborTransaction(laborTransaction))
         handleToggleLaborModal(false)
         handleToggleLaborDetailsModal(false)
-        
+
         return
     }
 

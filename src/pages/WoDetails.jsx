@@ -305,7 +305,7 @@ class WoDetails extends Component {
                         </div>
                     )
                 }
-
+                
 
 
                 <IonAlert
