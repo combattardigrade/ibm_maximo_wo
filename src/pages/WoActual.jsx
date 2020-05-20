@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { IonButton, IonContent, IonHeader, IonMenuButton, IonPage, IonTitle, IonToolbar, IonItem, IonLabel, IonRefresher, IonRefresherContent, IonGrid, IonRow, IonCol, IonNote, IonIcon, IonTextarea } from '@ionic/react';
-import { checkmarkOutline, closeCircle, addCircleOutline, hourglassOutline } from 'ionicons/icons'
+import { checkmarkOutline, closeCircle, addCircleOutline, hourglassOutline, closeCircleOutline } from 'ionicons/icons'
 
 // Components
 import WoDetailsHeader from '../components/WODetailsHeader'
@@ -10,7 +10,7 @@ import WoDetailsHeader from '../components/WODetailsHeader'
 import './Page.css';
 
 // Actions
-import { deleteAttachment } from '../actions/localWorkOrders'
+import { deleteAttachment, removeLaborTransaction, removeMaterialTransaction } from '../actions/localWorkOrders'
 
 // Plugins
 import { PhotoViewer } from '@ionic-native/photo-viewer'
@@ -23,6 +23,16 @@ class WoActual extends Component {
     handleDeletePhoto = (photoIndex) => {
         const { currentWorkOrder, dispatch } = this.props
         dispatch(deleteAttachment({ wonum: currentWorkOrder.wonum, index: photoIndex }))
+    }
+
+    handleDeleteLaborTx = (txIndex) => {
+        const { currentWorkOrder, dispatch } = this.props
+        dispatch(removeLaborTransaction({ wonum: currentWorkOrder.wonum, index: txIndex }))
+    }
+
+    handleDeleteMaterialTx = (txIndex) => {
+        const { currentWorkOrder, dispatch } = this.props
+        dispatch(removeMaterialTransaction({ wonum: currentWorkOrder.wonum, index: txIndex}))
     }
 
     render() {
@@ -48,8 +58,8 @@ class WoActual extends Component {
                                 <IonItem lines="full" key={index}>
                                     <IonGrid>
                                         <IonRow>
-                                            <IonCol size="2" style={{ textAlign: 'center' }}>
-                                                <IonIcon style={{ fontSize: '28px', paddingTop: '10px' }} icon={checkmarkOutline}></IonIcon>
+                                            <IonCol size="1" style={{ textAlign: 'center' }}>
+                                                <IonIcon color="success" style={{ fontSize: '28px', paddingTop: '10px' }} icon={checkmarkOutline}></IonIcon>
                                             </IonCol>
                                             <IonCol size="10">
                                                 <IonRow>
@@ -61,6 +71,9 @@ class WoActual extends Component {
                                                         <IonLabel className="dataField"><span className="dataSubtitle">Tarea:</span> {'taskid' in labor ? labor.taskid : '-'}</IonLabel>
                                                     </IonCol>
                                                 </IonRow>
+                                            </IonCol>
+                                            <IonCol size="1" style={{justifyItems:'center'}}>
+                                                <IonIcon onClick={(e) => { e.preventDefault(); this.handleDeleteLaborTx(index); }} color="danger" style={{ fontSize: '28px', paddingTop: '10px' }} icon={closeCircleOutline}></IonIcon>
                                             </IonCol>
                                         </IonRow>
                                     </IonGrid>
@@ -82,22 +95,24 @@ class WoActual extends Component {
                             <IonItem lines="full" key={index}>
                                 <IonGrid>
                                     <IonRow>
-                                        <IonCol size="2" style={{ textAlign: 'center' }}>
-                                            <IonIcon style={{ fontSize: '28px', paddingTop: '10px' }} icon={checkmarkOutline}></IonIcon>
+                                        <IonCol size="1" style={{ textAlign: 'center' }}>
+                                            <IonIcon color="success" style={{ fontSize: '28px', paddingTop: '10px' }} icon={checkmarkOutline}></IonIcon>
                                         </IonCol>
                                         <IonCol size="10">
                                             <IonRow>
                                                 <IonCol size="5">
-                                                    <IonLabel className="dataField"><span className="dataSubtitle">Material:</span> {material.description.substring(0,15)}</IonLabel>
-                                                    <IonLabel className="dataField"><span className="dataSubtitle">Código:</span> {material.itemnum.substring(0,15)} </IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Material:</span> {material.description.substring(0, 15)}</IonLabel>
+                                                    <IonLabel className="dataField"><span className="dataSubtitle">Código:</span> {material.itemnum.substring(0, 15)} </IonLabel>
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Almacén:</span> {material.storelocsite}</IonLabel>
                                                 </IonCol>
                                                 <IonCol size="5">
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Cantidad:</span> {material.itemqty}</IonLabel>
                                                     <IonLabel className="dataField"><span className="dataSubtitle">Cantidad usada:</span> {material.itemqtyused}</IonLabel>
                                                 </IonCol>
-
                                             </IonRow>
+                                        </IonCol>
+                                        <IonCol size="1">
+                                            <IonIcon onClick={(e) => { e.preventDefault(); this.handleDeleteMaterialTx(index); }} color="danger" style={{ fontSize: '28px', paddingTop: '10px' }} icon={closeCircleOutline}></IonIcon>
                                         </IonCol>
                                     </IonRow>
                                 </IonGrid>
@@ -161,7 +176,7 @@ class WoActual extends Component {
 
 function mapStateToProps() {
     return {
-       
+
     }
 }
 

@@ -144,7 +144,7 @@ class MaterialModal extends Component {
                                 <IonRow>
                                     <IonCol size="12">
                                         <IonLabel className="dataTitle">Descripción</IonLabel>
-                                        <IonTextarea readonly className="dataField" placeholder="Descripción del Material seleccionado">{selectedMaterial && selectedMaterial.description}</IonTextarea>
+                                        <IonTextarea value={selectedMaterial && selectedMaterial.description} readonly className="dataField" placeholder="Descripción del Material seleccionado"/>
                                     </IonCol>
                                 </IonRow>
                             </IonGrid>

@@ -1,7 +1,8 @@
 import {
     SAVE_LOCAL_WORK_ORDER, SAVE_LABOR_TRANSACTION,
     SAVE_MATERIAL_TRANSACTION, SAVE_COMMENT,
-    SAVE_ATTACHMENT, DELETE_ATTACHMENT
+    SAVE_ATTACHMENT, DELETE_ATTACHMENT,
+    REMOVE_LABOR_TRANSACTION, REMOVE_MATERIAL_TRANSACTION
 } from '../actions/localWorkOrders'
 
 
@@ -52,6 +53,24 @@ export default function localWorkOrders(state = null, action) {
                 [action.attachment.wonum]: {
                     ...state[action.attachment.wonum],
                     attachments: state[action.attachment.wonum].attachments.filter((a, i) => action.attachment.index !== i)
+                }
+            }
+        }
+        case REMOVE_LABOR_TRANSACTION: {
+            return {
+                ...state,
+                [action.laborTransaction.wonum]: {
+                    ...state[action.laborTransaction.wonum],
+                    laborTransactions: state[action.laborTransaction.wonum].laborTransactions.filter((l, i) => action.laborTransaction.index !== i)
+                }
+            }
+        }
+        case REMOVE_MATERIAL_TRANSACTION: {
+            return {
+                ...state,
+                [action.materialTransaction.wonum]: {
+                    ...state[action.materialTransaction.wonum],
+                    materialTransactions: state[action.materialTransaction.wonum].materialTransactions.filter((m, i) => action.materialTransaction.index !== i)
                 }
             }
         }

@@ -223,8 +223,7 @@ class WorkOrder extends Component {
     handleSendWOBtn = (e) => {
         const { checkbox1, checkbox2, checkbox3, checkbox4, supervisor } = this.state
         const { localWorkOrder, currentWorkOrder, token, dispatch } = this.props
-
-
+        
         if (!checkbox1 || !checkbox2 || !checkbox3) {
             return
         }
@@ -241,7 +240,7 @@ class WorkOrder extends Component {
             laborTransactions: localWorkOrder.laborTransactions, 
             token,           
         }
-
+        
         sendWODocumentation(params)
             .then(data => data.json())
             .then((res) => {
@@ -269,7 +268,7 @@ class WorkOrder extends Component {
         return (
             <IonPage>
                 <IonHeader>
-                    <IonToolbar color="primary">
+                    <IonToolbar color="dark">
                         <IonButtons slot="start" onClick={e => { e.preventDefault(); this.handleBackBtn() }}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>
