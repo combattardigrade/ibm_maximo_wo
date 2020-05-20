@@ -100,7 +100,7 @@ class SelectFailureCodeModal extends Component {
         return (
             <IonModal isOpen={showSelectFailureCodeModal}>
                 <IonHeader>
-                    <IonToolbar color="primary">
+                    <IonToolbar color="dark">
                         <IonTitle>Seleccionar Código de Falla</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => handleToggleSelectFailureCodeModal(false)}>Cerrar</ion-button>

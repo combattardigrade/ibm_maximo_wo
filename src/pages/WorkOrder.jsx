@@ -221,6 +221,8 @@ class WorkOrder extends Component {
     }
 
     handleSendWOBtn = (e) => {
+        e.preventDefault()
+        console.log('SEND_WO_DOCUMENTATION')
         const { checkbox1, checkbox2, checkbox3, checkbox4, supervisor } = this.state
         const { localWorkOrder, currentWorkOrder, token, dispatch } = this.props
         
@@ -240,6 +242,8 @@ class WorkOrder extends Component {
             laborTransactions: localWorkOrder.laborTransactions, 
             token,           
         }
+
+        console.log(params)
         
         sendWODocumentation(params)
             .then(data => data.json())
@@ -252,7 +256,13 @@ class WorkOrder extends Component {
                     this.setState({
                         showToast: true, serverMsg: res.message, serverStatus: 'OK'
                     })
+                } else {
+                    this.setState({ showToast: true, serverMsg: res.message, serverStatus: 'ERROR'})
                 }
+            })
+            .catch((err) => {
+                console.log(err)
+                this.setState({ showToast: true, serverMsg: err.message, serverStatus: 'ERROR' })
             })
     }
 

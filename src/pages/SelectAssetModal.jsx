@@ -88,7 +88,7 @@ class SelectAssetModal extends Component {
         return (
             <IonModal isOpen={showSelectAssetModal}>
                 <IonHeader>
-                    <IonToolbar color="primary">
+                    <IonToolbar color="dark">
                         <IonTitle>Seleccionar Activo</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => handleToggleSelectAssetModal(false)}>Cerrar</ion-button>

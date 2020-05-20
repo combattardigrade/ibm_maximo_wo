@@ -83,7 +83,7 @@ class MaterialModal extends Component {
             <Fragment>
                 <IonModal isOpen={this.props.showMaterialModal}>
                     <IonHeader >
-                        <IonToolbar color="primary">
+                        <IonToolbar color="dark">
                             <IonTitle>Materiales</IonTitle>
                         </IonToolbar>
                     </IonHeader>

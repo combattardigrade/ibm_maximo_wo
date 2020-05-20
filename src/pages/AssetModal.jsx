@@ -24,7 +24,7 @@ class AssetModal extends Component {
         return (
             <IonModal isOpen={showAssetModal}>
                 <IonHeader>
-                    <IonToolbar color="primary">
+                    <IonToolbar color="dark">
                         <IonTitle>Activo {asset.assetnum}</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => this.props.handleToggleAssetModal(false)}>Cerrar</ion-button>

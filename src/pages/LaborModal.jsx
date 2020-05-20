@@ -107,7 +107,7 @@ class LaborModal extends Component {
             <Fragment>
                 <IonModal isOpen={this.props.showLaborModal}>
                     <IonHeader>
-                        <IonToolbar color="primary">
+                        <IonToolbar color="dark">
 
                             <IonTitle>Seleccionar Mano de Obra</IonTitle>
                         </IonToolbar>

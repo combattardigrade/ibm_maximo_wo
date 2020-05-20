@@ -118,7 +118,7 @@ class Inventory extends Component {
         return (
             <IonPage>
                 <IonHeader>
-                    <IonToolbar color="primary">
+                    <IonToolbar color="dark">
                         <IonButtons slot="start" onClick={e => { e.preventDefault(); this.handleBackBtn() }}>
                             <IonIcon style={{ fontSize: '28px' }} icon={chevronBackOutline}></IonIcon>
                         </IonButtons>

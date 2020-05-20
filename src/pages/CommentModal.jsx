@@ -112,7 +112,7 @@ class CommentModal extends Component {
         return (
             <IonModal isOpen={this.props.showCommentModal}>
                 <IonHeader>
-                    <IonToolbar color="primary">
+                    <IonToolbar color="dark">
                         <IonTitle>Comentario Adicional</IonTitle>
                     </IonToolbar>
                 </IonHeader>

@@ -21,7 +21,7 @@ class ItemModal extends Component {
         return (
             <IonModal isOpen={showItemModal}>
                 <IonHeader>
-                    <IonToolbar>
+                    <IonToolbar color="dark">
                         <IonTitle>Refacción {item.itemnum}</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => this.props.handleToggleItemModal(false)}>Cerrar</ion-button>

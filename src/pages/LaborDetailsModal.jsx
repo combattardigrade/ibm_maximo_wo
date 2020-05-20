@@ -93,7 +93,7 @@ class LaborDetailsModal extends Component {
         return (
             <IonModal isOpen={this.props.showLaborDetailsModal}>
                 <IonHeader>
-                    <IonToolbar color="primary">
+                    <IonToolbar color="dark">
                         <IonTitle>Detalles de la Mano de Obra</IonTitle>
                     </IonToolbar>
                 </IonHeader>

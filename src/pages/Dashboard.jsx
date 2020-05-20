@@ -250,7 +250,7 @@ class Dashboard extends Component {
         return (
             <IonPage>
                 <IonHeader style={{ display: loading && 'none' }}>
-                    <IonToolbar color="primary">
+                    <IonToolbar color="dark">
                         <IonButtons slot="start">
                             <IonMenuButton />
                         </IonButtons>

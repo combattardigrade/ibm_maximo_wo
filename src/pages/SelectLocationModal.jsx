@@ -86,7 +86,7 @@ class SelectLocationModal extends Component {
         return (
             <IonModal isOpen={showSelectLocationModal}>
                 <IonHeader>
-                    <IonToolbar color="primary">
+                    <IonToolbar color="dark">
                         <IonTitle>Seleccionar Ubicación</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => handleToggleSelectLocationModal(false)}>Cerrar</ion-button>

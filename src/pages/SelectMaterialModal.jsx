@@ -101,7 +101,7 @@ class SelectMaterialModal extends Component {
         return (
             <IonModal isOpen={showSelectMaterialModal}>
                 <IonHeader>
-                    <IonToolbar color="primary">
+                    <IonToolbar color="dark">
                         <IonTitle>Seleccionar Material</IonTitle>
                         <ion-buttons slot="end">
                             <ion-button onClick={() => handleToggleSelectMaterialModal(false)}>Cerrar</ion-button>
