@@ -12,6 +12,8 @@ import {
 
 import { saveLaborTransaction } from '../actions/localWorkOrders'
 
+import moment from 'moment'
+
 class LaborDetailsModal extends Component {
 
     state = {
@@ -29,26 +31,29 @@ class LaborDetailsModal extends Component {
 
     calculateDuration = () => {
         let { startDate, endDate } = this.state
-        startDate = new Date(startDate)
-        endDate = new Date(endDate)
-        const diffTime = Math.abs(endDate - startDate)
-        console.log(this.millisecondsToTime(diffTime))
-        const duration = (diffTime / (1000 * 60 * 60)).toFixed(2)
-        if (startDate >= endDate) {
+
+        if(!startDate || !endDate) {
+            this.setState({ duration: 0.0 })
+            return
+        }
+
+        // Parse dates
+        startDate = moment(startDate)
+        endDate = moment(endDate)
+        
+        // Calculate duration
+        const diffTime = endDate.diff(startDate, 'minutes')
+        const duration = (parseFloat(diffTime) / 60.0).toFixed(2)
+        
+        // Check it's a valid duration
+        if (duration < 0) {
             this.showAlert('Ingresa una duración válida', 'Error')
             return
         }
+
         this.setState({ duration })
     }
 
-
-
-    millisecondsToTime = (milli) => {
-
-        var hours = Math.floor(milli / 60 * 60 * 1000);        
-        var minutes = Math.floor(milli / 60 * 1000);        
-        return hours + ":" + minutes;
-    }
 
     handleLaborDetailsSubmit = (e) => {
         e.preventDefault()
@@ -56,14 +61,29 @@ class LaborDetailsModal extends Component {
         const { currentWorkOrder, labor, dispatch, handleToggleLaborDetailsModal, handleToggleLaborModal } = this.props
         const { duration, startDate, endDate } = this.state
 
-        if (!labor || !duration || !startDate || !endDate) {
-            console.log('MISSING_REQUIRED_ARGUMENTS')
-            this.showAlert('Ingresa los datos requeridos', 'Error')
+        if(!labor) {
+            this.showAlert('Selecciona una mano de obra válida', 'Error')
+            return
+        }
+        
+        if(!duration) {
+            this.showAlert('Ingresa una duración válida', 'Error')
             return
         }
 
-        if (parseFloat(duration) <= 0 || isNaN(duration)) {
-            this.showAlert('Ingresa una duración válida', 'Error')
+        if(!startDate) {
+            this.showAlert('Ingresa una fecha de inicio válida', 'Error')
+            return
+        }
+
+        if(!endDate) {
+            this.showAlert('Ingresa una fecha de finalización válida', 'Error')
+            return
+        }        
+
+        // Allow 0 duration?
+        if (parseFloat(duration) < 0 || isNaN(duration)) {
+            this.showAlert('Ingresa una duración válida. La duración ingresada es negativa', 'Error')
             return
         }
 
