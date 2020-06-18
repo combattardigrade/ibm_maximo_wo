@@ -54,6 +54,34 @@ class Dashboard extends Component {
             this.setState({ loading: false })
         }
 
+        if (!user) {
+            getWhoAmI({ token: token })
+                .then(data => data.json())
+                .then(response => {
+                    if (!('status' in response) || response.status == 'ERROR') {
+                        console.log(response)
+                        return
+                    }
+
+                    dispatch(saveUser(response.payload))
+                    
+                    getLaborCatalog({ locationSite: response.payload.defaultSite, token: token })
+                        .then(data => data.json())
+                        .then((response) => {
+                            if (response.status == 'OK') {
+                                console.log(response.payload)
+                                dispatch(saveLaborCatalog(response.payload))
+                            }
+                        })
+                        .catch((err) => console.log(err))
+
+                    
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+
 
         if (!workOrders) {
             getWorkOrders({ token: token })
@@ -71,23 +99,6 @@ class Dashboard extends Component {
                     console.log(err)
                     this.showAlert('Ocurrió un error al intentar obtener las órdenes de trabajo. Por favor, inténtalo nuevamente')
                     return
-                })
-        }
-
-
-
-        if (!user) {
-            getWhoAmI({ token: token })
-                .then(data => data.json())
-                .then(response => {
-                    if (!('status' in response) || response.status == 'ERROR') {
-                        console.log(response)
-                        return
-                    }
-                    dispatch(saveUser(response.payload))
-                })
-                .catch((err) => {
-                    console.log(err)
                 })
         }
 
@@ -112,21 +123,7 @@ class Dashboard extends Component {
                 })
                 .catch((err) => console.log(err))
         }
-
-        if (!labor) {
-
-            getLaborCatalog({ token: token })
-                .then(data => data.json())
-                .then((response) => {
-                    if (response.status == 'OK') {
-                        console.log(response.payload)
-                        dispatch(saveLaborCatalog(response.payload))
-                    }
-                })
-                .catch((err) => console.log(err))
-        }
-
-
+  
         if (!locations) {
             getLocations({ token: token })
                 .then(data => data.json())
@@ -164,8 +161,8 @@ class Dashboard extends Component {
         //             // this.setState({ loading: false })
         //         }
         //     })
-        
-        
+
+
         if (localWorkOrders && localWorkOrders[wonum]) {
             this.props.history.push('/wo/' + wonum)
             return
@@ -216,7 +213,7 @@ class Dashboard extends Component {
     }
 
     handleRefreshClick = async (e) => {
-        e.preventDefault()     
+        e.preventDefault()
         const { token, dispatch } = this.props
         this.setState({ loading: true })
         getWorkOrders({ token: token })

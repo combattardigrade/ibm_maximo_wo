@@ -254,7 +254,7 @@ class WorkOrder extends Component {
                     // dispatch(updateCurrentWOStatus('DOC'))
                     // show toast
                     this.setState({
-                        showToast: true, serverMsg: res.message, serverStatus: 'OK'
+                        showToast: true, serverMsg: res.message, serverStatus: 'OK', showCompleteWOVerification: false
                     })
                 } else {
                     this.setState({ showToast: true, serverMsg: res.message, serverStatus: 'ERROR'})

@@ -80,10 +80,10 @@ class LaborModal extends Component {
     }
 
     componentDidMount() {
-        const { token, labor, dispatch } = this.props
+        const { user, token, labor, dispatch } = this.props
 
         if (!labor) {
-            getLaborCatalog({ token: token })
+            getLaborCatalog({ locationSite: user.defaultSite, token: token })
                 .then(data => data.json())
                 .then((response) => {
                     if (response.status == 'OK') {
