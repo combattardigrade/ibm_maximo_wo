@@ -101,7 +101,7 @@ class MaterialModal extends Component {
 
                                                     ))
                                                     :
-                                                    <IonSelectOption value="2"></IonSelectOption>
+                                                    <IonSelectOption value="2">No se encontraron almacenes</IonSelectOption>
                                             }
                                         </IonSelect>
                                     </IonCol>

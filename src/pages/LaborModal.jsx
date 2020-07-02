@@ -18,7 +18,7 @@ import LaborDetailsModal from './LaborDetailsModal'
 class LaborModal extends Component {
 
     state = {
-        searchMethod: 'personid',
+        searchMethod: 'laborcode',
         searchValue: '',
         loading: true,
         selectedLabor: '',
@@ -102,7 +102,7 @@ class LaborModal extends Component {
 
         const { labor } = this.props
         const { loading, selectedLabor } = this.state
-
+        
         return (
             <Fragment>
                 <IonModal isOpen={this.props.showLaborModal}>
@@ -118,7 +118,7 @@ class LaborModal extends Component {
                                     <IonCol style={{ paddingTop: '15px', fontWeight: 'bold' }}><IonLabel style={{ paddingLeft: '10px' }}>Buscar por:</IonLabel></IonCol>
                                     <IonCol >
                                         <IonSelect onIonChange={this.handleSelectChange} style={{ maxWidth: '100% !important', width: '100% !important' }} interface="popover" value={this.state.searchMethod} placeholder="Selecciona método">
-                                            <IonSelectOption value="personid">Código</IonSelectOption>
+                                            <IonSelectOption value="laborcode">Código</IonSelectOption>
                                             <IonSelectOption value="displayname">Nombre</IonSelectOption>
                                         </IonSelect>
                                     </IonCol>
@@ -151,7 +151,7 @@ class LaborModal extends Component {
                                     <IonItem lines="none" style={{ borderBottom: '1px solid #dedede' }} color={l.laborid == selectedLabor.laborid && 'primary'} key={l.laborid} button detail onClick={e => { e.preventDefault(); this.handleLaborClick(l) }}>
                                         <IonGrid>
                                             <IonRow>
-                                                <IonCol size="6"><IonLabel>{l.personid}</IonLabel></IonCol>
+                                                <IonCol size="6"><IonLabel>{l.laborcode}</IonLabel></IonCol>
                                                 <IonCol size="6"><IonLabel>{l.person[0].displayname}</IonLabel></IonCol>
                                             </IonRow>
                                         </IonGrid>
