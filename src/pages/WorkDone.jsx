@@ -474,7 +474,7 @@ class WorkDone extends Component {
                                 <IonCol>
                                     <IonTextarea
                                         placeholder="Ingresa la descripción del trabajo realizado..."
-                                        maxlength="50000"
+                                        maxlength="95"
                                         className="dataField"
                                         rows="3"
                                         onIonChange={this.handleDescriptionChange}

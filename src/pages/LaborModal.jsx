@@ -83,7 +83,7 @@ class LaborModal extends Component {
         const { user, token, labor, dispatch } = this.props
 
         if (!labor) {
-            getLaborCatalog({ locationSite: user.defaultSite, token: token })
+            getLaborCatalog({ token: token })
                 .then(data => data.json())
                 .then((response) => {
                     if (response.status == 'OK') {
@@ -102,7 +102,7 @@ class LaborModal extends Component {
 
         const { labor } = this.props
         const { loading, selectedLabor } = this.state
-        
+
         return (
             <Fragment>
                 <IonModal isOpen={this.props.showLaborModal}>
