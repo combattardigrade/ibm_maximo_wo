@@ -6,6 +6,7 @@ import {
     IonGrid, IonRow, IonCol, IonNote, IonIcon, IonTextarea, IonInput, IonItemDivider,
     IonToast, IonAlert
 } from '@ionic/react';
+
 import {
     addOutline, peopleOutline, hammerOutline, documentTextOutline, cameraOutline,
     documentAttachOutline, chevronBackOutline, searchOutline, addCircle, swapHorizontalOutline,
@@ -24,6 +25,8 @@ import MaterialModal from './MaterialModal'
 // Components
 import TimeField from 'react-simple-timefield'
 import Loading from '../components/Loading'
+import TimeRangePicker from '@wojtekmaj/react-timerange-picker';
+
 
 // API
 import { createReportOfWorkDone } from '../utils/api'
@@ -49,6 +52,7 @@ class WorkDone extends Component {
         priority: 1,
         description: '',
         timeWorked: '0:00',
+        
         downtime: '0:00',
         comments: '',
         serverMsg: '',
@@ -597,9 +601,8 @@ class WorkDone extends Component {
                             <IonRow >
                                 <IonCol size="12" >
                                     <IonLabel className="dataTitle">Horas Trabajadas</IonLabel>
-                                    <TimeField style={{ width: '50px', textAlign: 'center' }} value={this.state.timeWorked} onChange={this.handleTimeWorkedChange} />
+                                    <TimeField style={{ width: '120px', textAlign: 'center', fontSize: 28, padding: '5px 0px', marginTop: '15px', marginBottom: '10px', borderRadius: 3}} value={this.state.timeWorked} onChange={this.handleTimeWorkedChange} />
                                 </IonCol>
-
                             </IonRow>
                         </IonGrid>
                     </IonItem>
@@ -611,7 +614,7 @@ class WorkDone extends Component {
                                 <IonRow >
                                     <IonCol size="12" >
                                         <IonLabel className="dataTitle">Tiempo de Inactividad</IonLabel>
-                                        <TimeField style={{ width: '50px', textAlign: 'center', }} value={this.state.downtime} onChange={this.handleDownTimeChange} />
+                                        <TimeField style={{ width: '120px', textAlign: 'center', fontSize: 28, padding: '5px 0px', marginTop: '15px', marginBottom: '10px', borderRadius: 3}} value={this.state.downtime} onChange={this.handleDownTimeChange} />
                                     </IonCol>
                                 </IonRow>
                             </IonGrid>
