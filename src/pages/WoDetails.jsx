@@ -40,7 +40,6 @@ class WoDetails extends Component {
         showCompleteWOVerification: false,
     }
 
-
     handleStartWO = (e) => {
         e.preventDefault()
 
@@ -54,9 +53,11 @@ class WoDetails extends Component {
                 if (res.status === 'OK') {
                     // update local status
                     dispatch(updateCurrentWOStatus(status))
+                    // Prepare toast
+                    this.setState({ serverMsg: res.message, serverStatus: 'OK' })
                     // show toast
                     this.setState({
-                        showToast: true, serverMsg: res.message, serverStatus: 'OK'
+                        showToast: true,
                     })
                 }
             })
@@ -70,7 +71,7 @@ class WoDetails extends Component {
     }
 
     handleWaitingMaterialSubmit = () => {
-        
+
         console.log('UPDATE_WO_STATUS_WMATL')
         const { currentWorkOrder, token, dispatch } = this.props
         const woHref = currentWorkOrder.href
@@ -82,9 +83,11 @@ class WoDetails extends Component {
                 if (res.status === 'OK') {
                     // update local status
                     dispatch(updateCurrentWOStatus(status))
+                    // prepare toast
+                    this.setState({ serverMsg: res.message, serverStatus: 'OK' })
                     // show toast
                     this.setState({
-                        showToast: true, serverMsg: res.message, serverStatus: 'OK'
+                        showToast: true,
                     })
                 }
             })
@@ -305,7 +308,7 @@ class WoDetails extends Component {
                         </div>
                     )
                 }
-                
+
 
 
                 <IonAlert
@@ -334,7 +337,7 @@ class WoDetails extends Component {
                     message={this.state.serverMsg}
                     position="bottom"
                     color={this.state.serverStatus === 'OK' ? 'success' : 'danger'}
-                    duration={5000}
+                    duration={8000}
                     onDidDismiss={() => this.setState({ showToast: false })}
                 />
 

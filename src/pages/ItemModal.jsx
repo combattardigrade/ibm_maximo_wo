@@ -48,11 +48,11 @@ class ItemModal extends Component {
                                 <IonItem>
                                     <IonGrid>
                                         <IonRow>
-                                            <IonCol><IonLabel className="dataTitle">Descripción</IonLabel></IonCol>
+                                            <IonCol><IonLabel className="dataTitle" >Descripción</IonLabel></IonCol>
 
                                         </IonRow>
                                         <IonRow>
-                                            <IonCol><IonLabel>{item.itemDetails.description}</IonLabel></IonCol>
+                                            <IonCol><IonTextarea text-wrap>{item.itemDetails.description}</IonTextarea></IonCol>
                                         </IonRow>
                                     </IonGrid>
                                 </IonItem>

@@ -160,21 +160,22 @@ class Inventory extends Component {
                                             </IonCol>
                                             <IonCol size="10">
                                                 <IonRow>
-                                                    <IonCol size="6">
-                                                        <IonLabel className="dataTitle" style={{whiteSpace:'normal',overflow:'hidden',display:'block'}}>Item</IonLabel>
-                                                        <IonLabel className="dataField">{item.itemDetails.description.substring(1,30)}</IonLabel>
+                                                    <IonCol size="12">
+                                                        <IonLabel className="dataTitle" style={{ whiteSpace: 'normal', overflow: 'hidden', display: 'block' }}>Item</IonLabel>
+                                                        <IonLabel className="dataField">{item.itemDetails.description.length < 30 ? item.itemDetails.description : item.itemDetails.description.substring(1, 30) + '...'}</IonLabel>
                                                     </IonCol>
-                                                    <IonCol size="6">
+
+                                                </IonRow>
+                                                <IonRow>
+                                                    <IonCol size="4">
                                                         <IonLabel className="dataTitle">Código</IonLabel>
                                                         <IonLabel className="dataField">{item.itemnum}</IonLabel>
                                                     </IonCol>
-                                                </IonRow>
-                                                <IonRow>
-                                                    <IonCol size="6">
+                                                    <IonCol size="4">
                                                         <IonLabel className="dataTitle">Almacén</IonLabel>
                                                         <IonLabel className="dataField">{item.location}</IonLabel>
                                                     </IonCol>
-                                                    <IonCol size="6">
+                                                    <IonCol size="4">
                                                         <IonLabel className="dataTitle">Planta:</IonLabel>
                                                         <IonLabel className="dataField">{item.siteid}</IonLabel>
                                                     </IonCol>

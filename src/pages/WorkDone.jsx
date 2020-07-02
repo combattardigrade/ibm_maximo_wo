@@ -52,7 +52,7 @@ class WorkDone extends Component {
         priority: 1,
         description: '',
         timeWorked: '0:00',
-        
+
         downtime: '0:00',
         comments: '',
         serverMsg: '',
@@ -583,10 +583,10 @@ class WorkDone extends Component {
                                 <IonCol size="12" >
                                     <IonLabel className="dataTitle">Priodidad</IonLabel>
                                     <IonSelect onIonChange={this.handlePrioritySelect} value={this.state.workType == 'EM' ? '1' : this.state.priority} className="dataField" style={{ paddingLeft: '0px' }} placeholder="Seleccionar Tipo" okText="OK" cancelText="Cerrar">
-                                        <IonSelectOption value="1">1</IonSelectOption>
-                                        <IonSelectOption value="2">2</IonSelectOption>
-                                        <IonSelectOption value="3">3</IonSelectOption>
-                                        <IonSelectOption value="4">4</IonSelectOption>
+                                        <IonSelectOption value="1">1 - Urgente {'<'}1 (Ahora mismo) </IonSelectOption>
+                                        <IonSelectOption value="2">2 - Alta {'<'}24 horas</IonSelectOption>
+                                        <IonSelectOption value="3">3 - Media {'<'}14 días</IonSelectOption>
+                                        <IonSelectOption value="4">4 - Baja {'<'}30 días</IonSelectOption>
                                     </IonSelect>
                                 </IonCol>
                             </IonRow>
@@ -601,7 +601,7 @@ class WorkDone extends Component {
                             <IonRow >
                                 <IonCol size="12" >
                                     <IonLabel className="dataTitle">Horas Trabajadas</IonLabel>
-                                    <TimeField style={{ width: '120px', textAlign: 'center', fontSize: 28, padding: '5px 0px', marginTop: '15px', marginBottom: '10px', borderRadius: 3}} value={this.state.timeWorked} onChange={this.handleTimeWorkedChange} />
+                                    <TimeField style={{ width: '120px', textAlign: 'center', fontSize: 28, padding: '5px 0px', marginTop: '15px', marginBottom: '10px', borderRadius: 3 }} value={this.state.timeWorked} onChange={this.handleTimeWorkedChange} />
                                 </IonCol>
                             </IonRow>
                         </IonGrid>
@@ -614,7 +614,7 @@ class WorkDone extends Component {
                                 <IonRow >
                                     <IonCol size="12" >
                                         <IonLabel className="dataTitle">Tiempo de Inactividad</IonLabel>
-                                        <TimeField style={{ width: '120px', textAlign: 'center', fontSize: 28, padding: '5px 0px', marginTop: '15px', marginBottom: '10px', borderRadius: 3}} value={this.state.downtime} onChange={this.handleDownTimeChange} />
+                                        <TimeField style={{ width: '120px', textAlign: 'center', fontSize: 28, padding: '5px 0px', marginTop: '15px', marginBottom: '10px', borderRadius: 3 }} value={this.state.downtime} onChange={this.handleDownTimeChange} />
                                     </IonCol>
                                 </IonRow>
                             </IonGrid>
