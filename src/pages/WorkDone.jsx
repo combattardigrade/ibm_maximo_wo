@@ -566,7 +566,7 @@ class WorkDone extends Component {
                                     <IonSelect onIonChange={this.handleWorkTypeSelect} value={this.state.workType} className="dataField" style={{ paddingLeft: '0px' }} placeholder="Seleccionar Tipo" okText="OK" cancelText="Cerrar">
                                         <IonSelectOption value="EM">EM</IonSelectOption>
                                         <IonSelectOption value="CM">CM</IonSelectOption>
-                                        <IonSelectOption value="INPS">INPS</IonSelectOption>
+                                        <IonSelectOption value="INSP">INSP</IonSelectOption>
                                         <IonSelectOption value="LUB">LUB</IonSelectOption>
                                         <IonSelectOption value="TRN">TRN</IonSelectOption>
                                         <IonSelectOption value="HSE">HSE</IonSelectOption>
