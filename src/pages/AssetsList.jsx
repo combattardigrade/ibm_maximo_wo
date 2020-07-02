@@ -139,8 +139,9 @@ class AssetsList extends Component {
                             <IonCol size="4" style={{ paddingTop: '15px', fontWeight: 'bold' }}><IonLabel >Buscar por:</IonLabel></IonCol>
                             <IonCol size="8">
                                 <IonSelect onIonChange={this.handleSelectChange} style={{ maxWidth: '100% !important', width: '100% !important' }} interface="popover" value={this.state.searchMethod} placeholder="Selecciona método">
-                                    <IonSelectOption value="assetnum">assetnum</IonSelectOption>
-                                    <IonSelectOption value="location">ubicación</IonSelectOption>
+                                    <IonSelectOption value="assetnum">Código</IonSelectOption>
+                                    <IonSelectOption value="location">Ubicación</IonSelectOption>
+                                    <IonSelectOption value="description">Descripción</IonSelectOption>
                                 </IonSelect>
                             </IonCol>
                         </IonRow>
