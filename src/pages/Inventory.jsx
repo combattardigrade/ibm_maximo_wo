@@ -167,7 +167,7 @@ class Inventory extends Component {
 
                                                 </IonRow>
                                                 <IonRow>
-                                                    <IonCol size="4">
+                                                    <IonCol size="5">
                                                         <IonLabel className="dataTitle">Código</IonLabel>
                                                         <IonLabel className="dataField">{item.itemnum}</IonLabel>
                                                     </IonCol>
@@ -175,7 +175,7 @@ class Inventory extends Component {
                                                         <IonLabel className="dataTitle">Almacén</IonLabel>
                                                         <IonLabel className="dataField">{item.location}</IonLabel>
                                                     </IonCol>
-                                                    <IonCol size="4">
+                                                    <IonCol size="3">
                                                         <IonLabel className="dataTitle">Planta:</IonLabel>
                                                         <IonLabel className="dataField">{item.siteid}</IonLabel>
                                                     </IonCol>
